@@ -1,0 +1,26 @@
+;--------------------------------------------------------------------------------
+; 	My Git config file	\O/		
+;
+;--------------------------------------------------------------------------------
+
+
+
+[user]
+	name = Nils Wentzell
+	email = nils.wentzell@gmail.com
+[merge]
+	tool = vimdiff
+[core]
+	editor = vim
+[push]
+	default = current
+[pull]
+	default = current
+[diff]
+	submodule = log
+	tool = vimdiff
+[difftool]
+	prompt = false
+[alias]
+	d = difftool
+	permission-reset = !git diff -p -R | grep -E \"^(diff|(old|new) mode)\" | git apply

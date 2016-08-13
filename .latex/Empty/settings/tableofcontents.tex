@@ -1,0 +1,59 @@
+\clearpage
+\thispagestyle{empty}
+
+\cleardoublepage
+\thispagestyle{empty}
+
+
+\makeatletter
+\renewcommand*\l@section{\@dottedtocline{1}{3.5em}{2.3em}}
+\renewcommand*\l@subsection{\@dottedtocline{2}{5.8em}{3.1em}}
+
+
+\renewcommand{\l@chapter}[2] {
+\setlength\@tempdima{2em}% HACK den ich nicht verstehe, sorgt dafür, dass bei weglassen eines part am Anfang die chapter eingezogen werde, benötigt wenn Preface nicht verwendet wird
+\addvspace{2ex}
+\pagebreak[3]
+\noindent
+\hspace*{1.5em}{\textbf{#1} \hfill \textbf{#2}}
+\par
+\nopagebreak
+\addvspace{0.2ex}
+}
+
+\renewcommand{\l@paragraph}[2] {
+\addvspace{4ex}
+\pagebreak[3]
+\noindent
+\makebox[0pt][l]{\rule[-3pt]{\textwidth}{0.5pt}}
+{\large{\color{blueP}\textbf{#1}}\hfill\textbf{#2}}
+\par
+\nopagebreak
+\addvspace{1ex}
+}
+
+\makeatother
+
+\pdfbookmark[0]{Contents}{contents}
+\tableofcontents
+
+\makeatletter
+\renewcommand*\l@section{\@dottedtocline{1}{-0.1em}{2.3em}}
+\renewcommand*\l@subsection{\@dottedtocline{2}{2.5em}{3.3em}}
+
+\renewcommand{\l@chapter}[2] {
+\addvspace{2ex}
+\pagebreak[3]
+\noindent
+{\textbf{#1} \hfill \textbf{#2}}
+\par
+\nopagebreak
+\addvspace{0.2ex}
+}
+\makeatother
+
+\clearpage
+\thispagestyle{empty}
+
+\cleardoublepage
+\thispagestyle{empty}

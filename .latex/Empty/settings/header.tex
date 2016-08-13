@@ -1,0 +1,197 @@
+\documentclass[11pt]{scrreprt}
+
+\usepackage{fontenc}
+
+\renewcommand\familydefault{\sfdefault}
+\usepackage[slantedGreek]{sfmath}
+
+\usepackage{graphicx}
+\usepackage{epstopdf} %use for .eps in pdf
+\usepackage{color,amsmath,amssymb,amsfonts,mathrsfs,bbm}
+\usepackage{afterpage,fancyhdr,tabularx}
+\usepackage{geometry}
+\usepackage{cite}
+
+\geometry{paper=a4paper,left=3.25cm,right=3.25cm,top=3.3cm,bottom=3.7cm,dvips}
+% \geometry{paper=a4paper,left=3.6cm,right=2.9cm,top=3.3cm,bottom=3.7cm,twoside,dvips}
+\setlength{\parindent}{2ex}
+
+\unitlength 1cm
+
+\setcounter{secnumdepth}{2}
+\setcounter{totalnumber}{6}
+\setcounter{topnumber}{6}
+\setcounter{bottomnumber}{6}
+
+%\setcounter{tocdepth}{0}
+
+\interfootnotelinepenalty=10000
+
+\usepackage{dpfloat}
+
+\usepackage{color}
+\definecolor{darkred}{rgb}{0.90,0,0}
+\definecolor{darkgreen}{rgb}{0,0.60,.2}
+\definecolor{darkblue}{rgb}{0,0,1}
+\definecolor{grey}{cmyk}{0,0,0,0.25}
+\definecolor{orange}{cmyk}{0,0.6,0.8,0}
+\newcommand{\red}{\color{darkred}}
+\newcommand{\blue}{\color{darkblue}}
+\newcommand{\black}{\color{black}}
+\newcommand{\green}{\color{darkgreen}}
+\newcommand{\grey}{\color{grey}}
+\newcommand{\orange}{\color{orange}}
+\newcommand{\white}{\color{white}}
+\definecolor{blueP}{rgb}{0.0,0.08,0.45}
+
+\usepackage[hang]{caption}
+
+\renewcommand*\figurename{Figure}
+\renewcommand*\tablename{Table} %%%%%%% CHANGED BY NILS
+\renewcommand{\bottomfraction}{.8}
+\renewcommand{\topfraction}{.8}
+
+\DeclareCaptionFont{blueP}{\color{blueP}}
+\captionsetup{font=small,labelfont={bf,blueP}}
+
+\pagestyle{fancy}
+\fancyhead[LE]{\color{blueP}\sffamily\thepage\hspace{1cm}\leftmark}
+\fancyhead[RO]{\color{blueP}\sffamily\rightmark\hspace{1cm}\thepage}
+\fancyhead[LO,RE]{}
+\fancyfoot{}
+
+\renewcommand{\sectionmark}[1]{\markright{\textsl{\thesection.\ {#1}}}}
+
+\usepackage{titlesec}
+% \titleformat{⟨Überschriftenklasse⟩}[Absatzformatierung⟩]{⟨Textformatierung⟩} {⟨Nummerierung⟩}{⟨Abstand zwischen Nummerierung und Überschriftentext⟩}{⟨Code vor der Überschrift⟩}[⟨Code nach der Überschrift⟩]
+% \titlespacing{⟨Überschriftenklasse⟩}{⟨Linker Einzug⟩}{⟨Platz oberhalb⟩}{⟨Platz unterhalb⟩}[⟨rechter Einzug⟩]
+\titleformat{\chapter}[display]{\normalfont\huge\bfseries\color{blueP}}{\chaptertitlename\ \thechapter}{20pt}{\huge}
+\titleformat{\section}{\normalfont\Large\bfseries\color{blueP}}{\thesection}{0.8em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries\color{blueP}}{\thesubsection}{0.8em}{}
+\titleformat{\subsubsection}{\normalfont\normalsize\bfseries\color{blueP}}{\thesubsubsection}{1em}{}
+\titlespacing*{\chapter}{0pt}{50pt}{20pt}
+\titlespacing*{\section}{0pt}{2.75ex plus 0.7ex minus .2ex}{1.75ex plus .2ex}
+\titlespacing*{\subsection}{0pt}{2.5ex plus 0.7ex minus .2ex}{1.2ex plus .2ex}
+\titlespacing*{\subsubsection}{0pt}{2ex plus 0.7ex minus .2ex}{1ex plus .2ex}
+
+\numberwithin{equation}{section}
+
+\usepackage[undotted]{minitoc}
+\mtcsetfont{minitoc}{subsection}{\normalsize\sffamily}
+\mtcsetfont{minitoc}{section}{\normalsize\bfseries\sffamily}
+\renewcommand{\mtifont}{\large\sffamily\bfseries\color{blueP}}
+
+\newcommand{\ctstyle}[1]{{\small #1}}
+\newcommand{\ctstyleFN}[1]{{\footnotesize #1}}
+\renewcommand\citeleft{{\color{blueP}[}}
+\renewcommand\citeright{{\color{blueP}]}}
+\renewcommand\citemid{{\color{blueP},}}
+\renewcommand\citeform[1]{\color{blueP} #1}
+
+\newcommand{\mc}{\mathcal}
+\newcommand{\la}{\Lambda}
+\newcommand{\tn}{\textnormal}
+
+\newcommand{\cprb}[4]{\textsl{`#1'}, Phys.~Rev.~B {\bf #2}, #3 (#4)}
+\newcommand{\cprl}[4]{\textsl{`#1'}, Phys.~Rev.~Lett.~{\bf #2}, #3 (#4)}
+\newcommand{\cnjp}[4]{\textsl{`#1'}, New J.~Phys.~{\bf #2}, #3 (#4)}
+\newcommand{\crevmod}[4]{\textsl{`#1'}, Rev.~Mod.~Phys.~{\bf #2}, #3 (#4)}
+\newcommand{\cjp}[4]{\textsl{`#1'}, J.~Phys.: Condensed Matter {\bf #2}, #3 (#4)}
+\newcommand{\cjpa}[4]{\textsl{`#1'}, J.~Phys.~A {\bf #2}, #3 (#4)}
+\newcommand{\cnature}[4]{\textsl{`#1'}, Nature {\bf #2}, #3 (#4)}
+\newcommand{\cbook}[2]{\textsl{`#1'} (#2)}
+
+\newcommand{\refeq}[1]{Eq.~(\ref{#1})}
+\newcommand{\refsec}[1]{Section~\ref{#1}}
+\newcommand{\reffig}[1]{Figure~\ref{#1}}
+\newcommand{\refcha}[1]{Chapter~\ref{#1}}
+\newcommand{\refapp}[1]{Appendix~\ref{#1}}
+\newcommand{\reftab}[1]{Table~\ref{#1}}
+\newcommand{\fa}{{\small(}a{\small)}}
+\newcommand{\faa}{{\footnotesize(}a{\footnotesize)}}
+\newcommand{\fb}{{\small(}b{\small)}}
+\newcommand{\fbb}{{\footnotesize(}b{\footnotesize)}}
+\newcommand{\fc}{{\small(}c{\small)}}
+
+\newcommand{\monthword}[1]{\ifcase#1\or Januar\or Februar\or M\"arz\or April\or
+                                        Mai\or Juni\or Juli\or August\or
+                                        September\or Oktober\or November\or Dezember\fi}
+
+\newcommand{\PDFpagebreak}{\pagebreak}
+
+\makeatletter
+\newcommand{\fmslash}[2][0mu]{%
+ \mathchoice
+   {\fmsl@sh\displaystyle{#1}{#2}}%
+   {\fmsl@sh\textstyle{#1}{#2}}%
+   {\fmsl@sh\scriptstyle{#1}{#2}}%
+   {\fmsl@sh\scriptscriptstyle{#1}{#2}}}
+\newcommand{\fmsl@sh}[3]{%
+ \m@th\ooalign{$\hfil#1\mkern#2/\hfil$\crcr$#1#3$}}
+\makeatother
+
+\usepackage[  pdfdisplaydoctitle=true, pdfborder={0 0 0},
+              pdfpagelayout=SinglePage, pdfpagemode=UseOutlines, pdfstartview=Fit, %implicit=false,
+pdftitle={Magnetic field effects on the Andreev bound states in Josephson quantum dots},
+pdfauthor={Nils Wentzell},
+pdfcreator={pdfTeX using libpoppler 3.1415926-1.40.9-2.2 (Web2C 7.5.7)}   ]{hyperref}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%		CHRISTOPH ADDED HERE	%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\diagramheight}{65pt}
+
+
+\newcommand{\ket}[1]{\left|#1\right\rangle}
+\newcommand{\bra}[1]{\left\langle#1\right|}
+\newcommand{\braket}[2]{\left\langle#1\right.\left|#2\right\rangle}
+\renewcommand{\vec}[1]{\underline{#1}}
+\newcommand{\commutator}[2]{\left[#1,#2\right]}
+\newcommand{\average}[1]{\langle#1\rangle}
+\newcommand{\tr}{\text{Tr}}
+\newcommand{\im}[1]{\text{Im }#1}
+\newcommand{\re}[1]{\text{Re }#1}
+\newcommand{\logTerm}[2]{\mathcal L_{#1}(#2)}
+\newcommand{\abs}[1]{{\left\lvert{#1}\right\rvert}}
+\newcommand{\ii}{\mathrm{i}}
+\newcommand{\jsquare}[1]{\left(J^{#1}_{\alpha\beta}\right)^2}
+\newcommand{\diag}[1]{diag\left\lbrace #1 \right\rbrace}
+\renewcommand{\hat}[1]{\widehat{#1\,\,}}
+\newcommand{\refschoeller}[1]{Eq.~(#1) from~\refcite{Schoeller2009}}
+\newcommand{\deltaV}{\alpha\delta_{\alpha\bar\beta}V}
+\newcommand{\refcite}[1]{Ref.~\cite{#1}}
+
+%\newcommand{\makephantomsection}[1]{ % Wahl ob Phantomsections im Dokument oder nur im toc auftauchen
+%	\phantomsection
+%	\part*{\color{blueP}#1\addcontentsline{toc}{paragraph}{#1}}
+%}
+ \newcommand{\makephantomsection}[1]{
+ 	\newpage
+ 	\addcontentsline{toc}{paragraph}{#1}
+ }
+
+%\renewcommand{\arraystretch}{1.1}
+\usepackage[nottoc]{tocbibind}
+\settocbibname{Bibliography}
+
+\usepackage[numbers]{natbib} 	
+\bibliographystyle{apsrev4-1}
+
+\usepackage{booktabs}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{dsfont}
+\usepackage{simplewick} % http://www.fzu.cz/~kolorenc/tex/simplewick/simplewick.pdf
+\usepackage{appendix}  % http://www.ctan.org/tex-archive/help/Catalogue/entries/appendix.html
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Nils added here
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+\newcommand{\Tr}{\operatorname{Tr}}
+
+\usepackage{grffile}
