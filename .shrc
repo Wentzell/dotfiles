@@ -20,21 +20,6 @@
 #Brown       0;33     Yellow        1;33
 #Light Gray  0;37     White         1;37
 
-##################### EVNIRONMENT ####################
-
-export VISUAL=vim
-
-export CPLUS_INCLUDE_PATH=/usr/local/include:/usr/include/mpi:/usr/include:$CPLUS_INCLUDE_PATH
-export LIBRARY_PATH=/usr/local/lib:/usr/lib:$LIBRARY_PATH
-export LD_LIBRARY_PATH=/usr/local/lib:/usr/lib:$LD_LIBRARY_PATH
-export PYTHONPATH=/home/nils/.usr/include:$PYTHONPATH
-
-export PATH=/usr/local/bin:$HOME/bin:$PATH
-
-#source /opt/intel/parallel_studio_xe_2015/psxevars.sh 
-source /opt/intel/bin/iccvars.sh intel64 2> /dev/null
-#source /opt/intel/vtune_amplifier_xe_2015/amplxe-vars.sh
-
 ##################### My aliases  ######################
 
 	# General

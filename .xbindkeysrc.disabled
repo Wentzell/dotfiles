@@ -1,0 +1,21 @@
+# Figure out key names with xev
+#
+# Increase volume
+"pamixer --increase 5"
+   XF86AudioRaiseVolume
+
+# Increase volume
+"pamixer --decrease 5"
+   XF86AudioLowerVolume
+
+# Increase brightness
+"bl_val=$(cat /sys/class/backlight/nv_backlight/brightness); echo $(($bl_val>90?100:$(($bl_val+10)))) > /sys/class/backlight/nv_backlight/brightness"
+   XF86MonBrightnessUp
+
+# Decrease brightness
+"bl_val=$(cat /sys/class/backlight/nv_backlight/brightness); echo $(($bl_val<20?10:$(($bl_val-10)))) > /sys/class/backlight/nv_backlight/brightness"
+   XF86MonBrightnessDown
+
+# Hibernate [ change also grub.cfg (resume Kernel option) and mkinitcpio.conf mit resume hook nach udev ]
+"systemctl hibernate"
+   XF86Launch1

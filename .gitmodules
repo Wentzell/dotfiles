@@ -1,0 +1,9 @@
+[submodule ".oh-my-zsh"]
+	path = .oh-my-zsh
+	url = https://www.github.com/Wentzell/oh-my-zsh
+[submodule ".vim/bundle/Vundle.vim"]
+	path = .vim/bundle/Vundle.vim
+	url = https://www.github.com/VundleVim/Vundle.vim
+[submodule ".solarized/dircolors-solarized"]
+	path = .solarized/dircolors-solarized
+	url = https://www.github.com/seebi/dircolors-solarized

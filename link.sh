@@ -21,7 +21,7 @@ function linkFile() {
 }
 
 
-for F in $(ls -a1 | grep -v .gitignore | grep -v .bashrc | grep -v setup.sh | grep -v link.sh | grep -v .dropbox | grep -v Desktop | egrep -v "^..?$" | egrep -v "^.*un~$" | grep -v .DS_Store); do
+for F in $(ls -a1 | grep -v '.git$' | grep -v disabled | grep -v .gitmodules | grep -v .gitignore | grep -v .bashrc | grep -v setup.sh | grep -v link.sh | grep -v .dropbox | grep -v Desktop | egrep -v "^..?$" | egrep -v "^.*un~$" | grep -v .DS_Store); do
     linkFile $F
 done
 
