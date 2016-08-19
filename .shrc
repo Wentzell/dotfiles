@@ -59,3 +59,7 @@ alias tkill='tmux kill-session -t'
 2png () {
    convert -density 300 $1 -resize 1024x1024 $1.png
 }
+
+aur () {
+   git clone https://aur.archlinux.org/$1
+}

@@ -113,6 +113,7 @@ sudo
 sysfsutils
 systemd-sysvcompat
 tar
+tcpdump
 texinfo
 texlive-bibtexextra
 texlive-fontsextra
@@ -129,6 +130,7 @@ texlive-publishers
 texlive-science
 tmux
 tor
+torsocks
 ttf-droid
 ttf-monofur
 usbutils
