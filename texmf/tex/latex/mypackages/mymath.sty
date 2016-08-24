@@ -1,7 +1,16 @@
 \ProvidesPackage{mymath}
+\usepackage{graphicx}
 \newcommand{\R}{\ensuremath{\mathbb{R}}}
 \newcommand{\C}{\ensuremath{\mathbb{C}}}
 \newcommand{\Z}{\ensuremath{\mathbb{Z}}}
 \newcommand{\Q}{\mathbb{Q}}
 \newcommand{\N}{\mathbb{N}}
-\newcommand{\Tr}{\DeclareMathOperator{\Tr}{Tr}}
+\newcommand*{\Chi}{\mbox{\Large$\chi$}}
+\DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator*{\sumint}{
+ \mathchoice
+{\ooalign{$\displaystyle\sum$\cr\hidewidth$\displaystyle\int$\hidewidth\cr}}
+{\ooalign{\raisebox{.14\height}{\scalebox{.7}{$\textstyle\sum$}}\cr\hidewidth$\textstyle\int$\hidewidth\cr}}
+{\ooalign{\raisebox{.2\height}{\scalebox{.6}{$\scriptstyle\sum$}}\cr$\scriptstyle\int$\cr}}
+{\ooalign{\raisebox{.2\height}{\scalebox{.6}{$\scriptstyle\sum$}}\cr$\scriptstyle\int$\cr}}
+}
