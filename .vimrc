@@ -196,3 +196,28 @@ function! SyncTexForward()
 endfunction
 
 nmap <Leader>f :call SyncTexForward()<CR>
+
+:command! Myspell :setlocal spell spelllang=en_us <bar> :syntax spell toplevel
+
+" Set wrapping and fix movement keys!
+noremap <silent> <Leader>w :call ToggleWrap()<CR>
+function ToggleWrap()
+  if &wrap
+    echo "Wrap OFF"
+    setlocal nowrap
+    set virtualedit=all
+    silent! nunmap <buffer> k
+    silent! nunmap <buffer> j
+    silent! nunmap <buffer> 0
+    silent! nunmap <buffer> $
+  else
+    echo "Wrap ON"
+    setlocal wrap linebreak nolist
+    set virtualedit=
+    setlocal display+=lastline
+    noremap  <buffer> <silent> k   gk
+    noremap  <buffer> <silent> j   gj
+    noremap  <buffer> <silent> 0   g0
+    noremap  <buffer> <silent> $   g$
+  endif
+endfunction
