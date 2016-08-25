@@ -1,11 +1,30 @@
 \ProvidesPackage{mymath}
 \usepackage{graphicx}
+
+% --- Citation
+\newcommand{\ceq}[1]{Eq.~(\ref{eq:#1})}
+\newcommand{\cfg}[1]{Fig.~\ref{fig:#1}}
+
+% --- Mengen
 \newcommand{\R}{\ensuremath{\mathbb{R}}}
 \newcommand{\C}{\ensuremath{\mathbb{C}}}
 \newcommand{\Z}{\ensuremath{\mathbb{Z}}}
 \newcommand{\Q}{\mathbb{Q}}
 \newcommand{\N}{\mathbb{N}}
+
+% --- Symbols
 \newcommand*{\Chi}{\mbox{\Large$\chi$}}
+\newcommand{\nub}{\bar{\nu}}
+\newcommand{\vp}{\varphi}
+\newcommand{\vpb}{\bar{\varphi}}
+\newcommand{\ud}{{ \uparrow\downarrow }}		% Up-Down
+\newcommand{\udc}{{ \overline{\uparrow\downarrow} }}	% Up-Down-Cross
+\newcommand{\uu}{{ \uparrow\uparrow }}			% Up-Up
+\newcommand{\xph}{{ \overline{ph} }}			% Exchange Particle-hole
+
+% --- Math operators
+\newcommand{\RE}{\operatorname{Re}}
+\newcommand{\IM}{\operatorname{Im}}
 \DeclareMathOperator{\Tr}{Tr}
 \DeclareMathOperator*{\sumint}{
  \mathchoice
