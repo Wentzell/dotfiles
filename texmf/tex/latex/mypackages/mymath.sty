@@ -1,16 +1,19 @@
 \ProvidesPackage{mymath}
 \usepackage{graphicx}
 
+% --- General
+\newcommand{\mc}[1]{\mathcal{#1}}
+
 % --- Citation
 \newcommand{\ceq}[1]{Eq.~(\ref{eq:#1})}
 \newcommand{\cfg}[1]{Fig.~\ref{fig:#1}}
 
 % --- Mengen
-\newcommand{\R}{\ensuremath{\mathbb{R}}}
+%\newcommand{\R}{\ensuremath{\mathbb{R}}}
 \newcommand{\C}{\ensuremath{\mathbb{C}}}
 \newcommand{\Z}{\ensuremath{\mathbb{Z}}}
-\newcommand{\Q}{\mathbb{Q}}
-\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\ensuremath{\mathbb{Q}}}
+\newcommand{\N}{\ensuremath{\mathbb{N}}}
 
 % --- Symbols
 \newcommand*{\Chi}{\mbox{\Large$\chi$}}
@@ -21,6 +24,32 @@
 \newcommand{\udc}{{ \overline{\uparrow\downarrow} }}	% Up-Down-Cross
 \newcommand{\uu}{{ \uparrow\uparrow }}			% Up-Up
 \newcommand{\xph}{{ \overline{ph} }}			% Exchange Particle-hole
+
+\newcommand{\K}{\mc{K}_1}				% K 1
+\newcommand{\KUD}{\mc{K}_{1,\ud}}			% K 1 ud
+\newcommand{\KPP}{\mc{K}_{1, pp}}			% K 1 pp
+\newcommand{\KPH}{\mc{K}_{1, ph}}			% K 1 ph
+\newcommand{\KXPH}{\mc{K}_{1, \xph}}			% K 1 xph
+\newcommand{\KPPUD}{\mc{K}_{1, pp, \ud}}		% K 1 pp ud
+\newcommand{\KPHUD}{\mc{K}_{1, ph, \ud}}		% K 1 ph ud
+\newcommand{\KXPHUD}{\mc{K}_{1, \xph, \ud}}		% K 1 xph ud
+\newcommand{\KK}{\mc{K}_2}				% K 2
+\newcommand{\KKUD}{\mc{K}_{2,\ud}}			% K 2 ud
+\newcommand{\KKB}{\overline{\mc{K}}_2}			% K 2 bar
+\newcommand{\KKPP}{\mc{K}_{2, pp}}			% K 2 pp
+\newcommand{\KKBPP}{\overline{\mc{K}}_{2, pp}}		% K 2 bar pp
+\newcommand{\KKPH}{\mc{K}_{2, ph}}			% K 2 ph
+\newcommand{\KKBPH}{\overline{\mc{K}}_{2, ph}}		% K 2 bar ph
+\newcommand{\KKXPH}{\mc{K}_{2, \xph}}			% K 2 xph
+\newcommand{\KKBXPH}{\overline{\mc{K}}_{2, \xph}}	% K 2 bar xph
+\newcommand{\KKPPUD}{\mc{K}_{2, pp, \ud}}		% K 2 pp ud
+\newcommand{\KKPHUD}{\mc{K}_{2, ph, \ud}}		% K 2 ph ud
+\newcommand{\KKXPHUD}{\mc{K}_{2, \xph, \ud}}		% K 2 xph ud
+\newcommand{\R}{\mc{R}} 				% Rest-function
+\newcommand{\RUD}{\mc{R}_{\ud}}				% Rest-function ud
+\newcommand{\RPP}{\mc{R}_{pp}} 				% Rest-function pp
+\newcommand{\RPH}{\mc{R}_{ph}} 				% Rest-function ph
+\newcommand{\RXPH}{\mc{R}_{\xph}} 			% Rest-function ph
 
 % --- Math operators
 \newcommand{\RE}{\operatorname{Re}}
