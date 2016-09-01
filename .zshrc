@@ -1,9 +1,9 @@
 # Path to your oh-my-zsh installation.
-  export ZSH=/home/nils/.oh-my-zsh
-  export TERM=xterm-256color
-  [ -n "$TMUX" ] && export TERM=tmux
+export ZSH=/home/nils/.oh-my-zsh
+export TERM=xterm-256color
+[ -n "$TMUX" ] && export TERM=tmux
 
-  setopt extendedglob
+setopt extendedglob
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
