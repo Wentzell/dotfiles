@@ -1,0 +1,29 @@
+\ProvidesPackage{mydiag}
+
+\usepackage{feynmp} 
+\DeclareGraphicsRule{*}{mps}{*}{}  %% assumes mps file format for graphic files
+\pagenumbering{gobble} %% Turns of page numbers
+\unitlength = 1mm
+
+%\newenvironment{diag}[1]{
+%\begin{fmffile}{diag/fey_#1}
+%\begin{fmfgraph}(150,80)\fmfkeep{#1}
+%%\fmfpen{thick}
+%}{
+%\end{fmfgraph}
+%\end{fmffile}
+%}
+
+\newcommand{\dss}{ %  Definition of Single Scale Prop Line
+	\fmfcmd{%
+		vardef cross_bar (expr p, len, ang) =
+			((-len/2,0)--(len/2,0))
+			rotated (ang + angle direction length(p)/2 of p)
+			shifted point length(p)/2 of p
+		enddef;
+		style_def sscale expr p =	
+			cdraw p;
+			ccutdraw cross_bar (p, 3mm, 70)
+		enddef;
+	}
+}

@@ -3,6 +3,8 @@
   export TERM=xterm-256color
   [ -n "$TMUX" ] && export TERM=tmux
 
+  setopt extendedglob
+
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
