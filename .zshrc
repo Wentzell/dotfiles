@@ -19,7 +19,7 @@ ZSH_THEME="robbyrussell"
 # HYPHEN_INSENSITIVE="true"
 
 # Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
+DISABLE_AUTO_UPDATE="true"
 
 # Uncomment the following line to change how often to auto-update (in days).
 # export UPDATE_ZSH_DAYS=13
@@ -31,7 +31,7 @@ ZSH_THEME="robbyrussell"
 # DISABLE_AUTO_TITLE="true"
 
 # Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
+ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
 # COMPLETION_WAITING_DOTS="true"
@@ -90,13 +90,6 @@ source $ZSH/oh-my-zsh.sh
 # ------------------ OWN CONFIG
 #
 
-
-#autoload -U compinit && compinit 			
-
-#autoload -U promptinit && promptinit 			# enable extended prompt
-
-#autoload -U colors && colors				# enable coloring
-
 # black -> 	palette 0
 # red -> 	plaette 1
 # green -> 	plaette 2
@@ -109,7 +102,7 @@ source $ZSH/oh-my-zsh.sh
 #prompt bart 						# see more prompts with 'prompt -p'
 #PROMPT="%{$fg[green]%}%n%{$reset_color%}@%{$fg[blue]%}%m %{$fg[yellow]%}%~ %{$reset_color%}%% "
 
-#setopt HIST_IGNORE_DUPS					# ignore duplicate lines in history
+setopt HIST_IGNORE_DUPS					# ignore duplicate lines in history
 
 # --- use ~/.dircolor file
 if which dircolors > /dev/null; then			# only std stream send to null
@@ -122,6 +115,8 @@ fi
 
 zstyle ':completion:*' list-colors "${(@s.:.)LS_COLORS}" # use dircolors for autocomplete
 autoload -Uz compinit && compinit			# enable autocomplete
+#autoload -U colors && colors				# enable coloring
+#autoload -U promptinit && promptinit 			# enable extended prompt
 
 if [ -f ~/.shrc ]; then
     . ~/.shrc
