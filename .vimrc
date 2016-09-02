@@ -79,6 +79,10 @@ let mapleader = ","
 inoremap ;; <Esc>
 vnoremap ;; <Esc>
 
+" easy copy/pase to clipboard
+vnoremap <leader><leader>y 	"+y
+nnoremap <leader><leader>p 	"+p
+
 " simple scrolling through file
 nnoremap ;j 	<C-D>
 nnoremap ;k 	<C-U>

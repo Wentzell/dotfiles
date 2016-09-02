@@ -60,6 +60,10 @@ alias tkill='tmux kill-session -t'
    convert -density 300 $1 -resize 1024x1024 $1.png
 }
 
+svg2png () {
+   inkscape -z -d 300 -e $(basename $1 .svg).png $1
+}
+
 aur () {
    git clone https://aur.archlinux.org/$1
 }

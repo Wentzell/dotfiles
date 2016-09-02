@@ -25,10 +25,10 @@ for F in $(ls -a1 | grep -v '.git$' | grep -v disabled | grep -v .gitmodules | g
     linkFile $F
 done
 
-export HOSTNAME=$(hostname)
+#export HOSTNAME=$(hostname)
 
-if [ -d "Desktop-$HOSTNAME" ]; then
-    linkFile "Desktop-$HOSTNAME" "Desktop"
-else 
-    echo "Unable to find Desktop-$HOSTNAME to link to Desktop"
-fi
+#if [ -d "Desktop-$HOSTNAME" ]; then
+    #linkFile "Desktop-$HOSTNAME" "Desktop"
+#else 
+    #echo "Unable to find Desktop-$HOSTNAME to link to Desktop"
+#fi
