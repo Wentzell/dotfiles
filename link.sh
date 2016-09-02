@@ -1,4 +1,4 @@
-#! /usr/bin/env bash
+#!/usr/bin/env sh
 cd $(dirname $0)
 
 function linkFile() {
@@ -20,9 +20,21 @@ function linkFile() {
     fi
 }
 
-
-for F in $(ls -a1 | grep -v '.git$' | grep -v disabled | grep -v .gitmodules | grep -v .gitignore | grep -v .bashrc | grep -v setup.sh | grep -v link.sh | grep -v .dropbox | grep -v Desktop | egrep -v "^..?$" | egrep -v "^.*un~$" | grep -v .DS_Store); do
-    linkFile $F
+for F in $(ls -a1 | \
+    grep -v '.git$' | \
+    grep -v disabled | \
+    grep -v .ssh_config | \
+    grep -v .gitmodules | \
+    grep -v .gitignore | \
+    grep -v .dropbox | \
+    grep -v .bashrc | \
+    grep -v setup.sh | \
+    grep -v link.sh | \
+    grep -v Desktop | \
+    egrep -v "^..?$" | \
+    egrep -v "^.*un~$" | \
+    grep -v .DS_Store \
+    ); do linkFile $F
 done
 
 #export HOSTNAME=$(hostname)
