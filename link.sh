@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/bash
 cd $(dirname $0)
 
 function linkFile() {
