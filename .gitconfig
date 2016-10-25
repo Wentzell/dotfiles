@@ -12,7 +12,7 @@
 	tool = vimdiff
 [core]
 	editor = vim
-	excludesfile = ~/.gitignore_glob
+	excludesfile = ~/.glob_git_ignore
 [push]
 	default = current
 [pull]
