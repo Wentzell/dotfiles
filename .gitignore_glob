@@ -4,6 +4,7 @@
 *.swp
 *.swo
 .dropbox.attr
+.netrwhist
 
 ## Coding
 ######################
