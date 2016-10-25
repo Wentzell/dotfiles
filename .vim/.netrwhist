@@ -1,5 +1,0 @@
-let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =3
-let g:netrw_dirhist_1='/home/nils/Dropbox/MyShare/paper/images/ATLI_FRG_COMPARE'
-let g:netrw_dirhist_2='/home/nils/ownCloud/Coding/gitolite-admin'
-let g:netrw_dirhist_3='/home/nils/ownCloud/Coding/gitolite-admin/conf'
