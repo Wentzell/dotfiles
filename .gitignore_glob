@@ -3,6 +3,7 @@
 *.log
 *.swp
 *.swo
+.dropbox.attr
 
 ## Coding
 ######################
