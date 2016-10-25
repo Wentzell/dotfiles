@@ -1,0 +1,34 @@
+## General
+######################
+*.log
+*.swp
+*.swo
+
+## Coding
+######################
+*.h5
+*.dat
+*.o
+#.eps
+#.png
+
+## Latex
+######################
+*.aux
+*.bbl
+*.blg
+*.dvi
+*.fls
+*.fdb_latexmk
+*.latexmain
+*.log
+*.lof
+*.lot
+*.out
+*.pdf
+*.pdfsync
+*.synctex
+*.synctex.gz
+*.synctex.gz(busy)
+*.toc
+*-converted-to.*
