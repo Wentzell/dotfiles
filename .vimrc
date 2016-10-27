@@ -23,6 +23,7 @@ Plugin 'chrisbra/Recover.vim'
 Plugin 'octol/vim-cpp-enhanced-highlight'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'derekwyatt/vim-fswitch'
+Plugin 'rhysd/vim-clang-format'
 
 call vundle#end()
 

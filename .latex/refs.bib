@@ -346,6 +346,7 @@
   Number                   = {7},
   Pages                    = {075159},
   Volume                   = {94},
+
   Abstract                 = {We discuss a generalization of the dynamical mean field theory (DMFT) for strongly correlated systems close to a Mott transition based on a systematic approximation of the fully irreducible four-point vertex. It is an atomic-limit approximation of a functional of the one- and two-particle Green functions, built with the second Legendre transform of the free energy with respect to the two-particle Green function. This functional is represented diagrammatically by four-particle irreducible (4PI) diagrams. Like the dynamical vertex approximation (D Γ A ), the fully irreducible vertex is computed from a quantum impurity model whose bath is self-consistently determined by solving the parquet equations. However, in contrast with D Γ A and DMFT, the interaction term of the impurity model is also self-consistently determined. The method interpolates between the parquet approximation at weak coupling and the atomic limit, where it is exact. It is applicable to systems with short-range and long-range interactions.},
   Adsnote                  = {Provided by the SAO/NASA Astrophysics Data System},
   Adsurl                   = {http://adsabs.harvard.edu/abs/2016PhRvB..94g5159A},
@@ -368,8 +369,6 @@
   Number                   = {23},
   Pages                    = {235124},
   Volume                   = {93},
-
-  __markedentry            = {[nwentzel:]},
   Abstract                 = {We present a formalism for strongly correlated systems with fermions coupled to bosonic modes. We construct the three-particle irreducible functional K by successive Legendre transformations of the free energy of the system. We derive a closed set of equations for the fermionic and bosonic self-energies for a given K . We then introduce a local approximation for K , which extends the idea of dynamical mean-field theory (DMFT) approaches from two- to three-particle irreducibility. This approximation entails the locality of the three-leg electron-boson vertex Λ (i ω ,i Ω ) , which is self-consistently computed using a quantum impurity model with dynamical charge and spin interactions. This local vertex is used to construct frequency- and momentum-dependent electronic self-energies and polarizations. By construction, the method interpolates between the spin-fluctuation or G W approximations at weak coupling and the atomic limit at strong coupling. We apply it to the Hubbard model on two-dimensional square and triangular lattices. We complement the results of [T. Ayral and O. Parcollet, Phys. Rev. B 92, 115109 (2015), 10.1103/PhysRevB.92.115109] by (i) showing that, at half-filling, as DMFT, the method describes the Fermi-liquid metallic state and the Mott insulator, separated by a first-order interaction-driven Mott transition at low temperatures, (ii) investigating the influence of frustration, and (iii) discussing the influence of the bosonic decoupling channel.},
   Adsnote                  = {Provided by the SAO/NASA Astrophysics Data System},
   Adsurl                   = {http://adsabs.harvard.edu/abs/2016PhRvB..93w5124A},
@@ -6272,11 +6271,19 @@
 
 @Article{Wentzell2016a,
   Title                    = {High-frequency asymptotics of the vertex function: diagrammatic parametrization and algorithmic implementation},
-  Author                   = {{Wentzell}, N. and {Li}, G. and {Tagliavini}, A. and {Taranto}, C. and {Rohringer}, G. and {Held}, K. and {Toschi}, A. and {Andergassen}, S.},
-  Journal                  = {in preparation},
+  Author                   = {N. Wentzell and G. Li and A. Tagliavini and C. Taranto and G. Rohringer and K. Held and A. Toschi and S. Andergassen},
+  Journal                  = {arXiv:1610.06520},
+  Year                     = {2016},
 
-  Owner                    = {nils},
-  Timestamp                = {2016.07.09}
+  Month                    = oct,
+
+  __markedentry            = {[nwentzel:]},
+  Abstract                 = {Vertex functions are a crucial ingredient of several forefront many-body algorithms in condensed matter physics. However, the full treatment of their frequency and momentum dependence severely restricts numerical calculations. A significant advancement requires an efficient treatment of the high-frequency asymptotic behavior of the vertex functions. In this work, we first provide a detailed diagrammatic analysis of the high-frequency structures and their physical interpretation. Based on these insights, we propose a parametrization scheme, which captures the whole high-frequency domain for arbitrary values of the local Coulomb interaction and electronic density, and we discuss the details of its algorithmic implementation in many-body solvers based on parquet-equations as well as functional renormalization group schemes. Finally, we assess its validity by comparing our results for a single impurity Anderson model with exact diagonalization calculations. The proposed parametrization is pivotal for the algorithmic development of all quantum many-body methods based on vertex functions arising from local microscopic interactions, such as the diagrammatic approaches including spatial correlations beyond dynamical mean-field theory.},
+  Comments                 = {24 pages, 24 figures},
+  Eprint                   = {1610.06520},
+  Oai2identifier           = {1610.06520},
+  Owner                    = {nwentzel},
+  Timestamp                = {2016.10.26}
 }
 
 @Article{Wentzell2015,
