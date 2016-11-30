@@ -198,6 +198,8 @@ let g:LatexBox_ignore_warnings = ['Underfull',
 				\ 'Overfull',
 				\ 'deprecated',
 				\ 'fancyhdr',
+				\ 'titlesec',
+				\ 'minitoc',
 				\ 'specifier changed to',
 				\ 'Package amsmath Warning']
 

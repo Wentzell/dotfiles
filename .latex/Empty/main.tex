@@ -1,17 +1,54 @@
 \input{settings/header.tex}
 
+\usepackage{mymath}
+
 \begin{document}
 
-%\title{}
+%\input{settings/titlepage.tex}
 
-%\maketitle 
+\dominitoc
+
+%\pdfbookmark[0]{Abstract}{abstract}
+%\chapter*{Abstract}
+%\hypersetup{bookmarksdepth=-2}
+%\addcontentsline{toc}{part}{ \texorpdfstring{\hspace*{0.25em}{\color{blueP}Abstract}}{Abstract} }
+%\hypersetup{bookmarksdepth}
+  %\input{content/abstract.tex}
+
+%\cleardoublepage
 
 \input{settings/tableofcontents.tex}
 
-%\makephantomsection{...}
-%\chapter*{...}
-  %\input{content/Input.tex}
+\makephantomsection{Introduction} % ---------
+%\addtocontents{toc}{\vspace{-0.1cm}}
 
-%\bibliography{myBib}
+%\chapter{...}
+%\label{cha:...}
+  \input{content/Input.tex}
+
+%\makephantomsection{Appendix}
+%\appendix
+%\addtocontents{toc}{\vspace{-0.1cm}}
+
+%\chapter{...}					
+%\label{app:...}
+  %\input{content/...}
+
+%\makephantomsection{Supplements}
+%\supplements
+
+%\chapter{...}
+%\label{sup:...}
+  %\input{...}
+
+\pdfbookmark[0]{Bibliography}{Bibliography}
+\hypersetup{bookmarksdepth=-2}
+\addcontentsline{toc}{part}{ \texorpdfstring{ \hspace*{0.25em}{\color{blueP}Bibliography} }{Bibliography} }
+\hypersetup{bookmarksdepth}
+\renewcommand{\leftmark}{Bibliography}
+\bibliography{refs}
+\bibliographystyle{mybibstyle}
+
+\cleardoublepage
 
 \end{document}
