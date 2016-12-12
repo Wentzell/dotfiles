@@ -1,6 +1,8 @@
 #!/bin/bash
 cd $(dirname $0)
 
+# Function that links a file to $HOME, DELETING it there if it exists already
+
 function linkFile() {
     LINK_TO_NAME=$2
     if [ -z $LINK_TO_NAME ]; then
@@ -20,10 +22,11 @@ function linkFile() {
     fi
 }
 
+# Link files to home and exclude the ones containing certain strings
+
 for F in $(ls -a1 | \
     grep -v '.git$' | \
     grep -v disabled | \
-    grep -v .ssh_config | \
     grep -v .gitmodules | \
     grep -v .gitignore | \
     grep -v .dropbox | \
@@ -31,16 +34,11 @@ for F in $(ls -a1 | \
     grep -v setup.sh | \
     grep -v link.sh | \
     grep -v Desktop | \
+    grep -v pkglst | \
+    grep -v aurlst | \
+    grep -v piplst | \
     egrep -v "^..?$" | \
     egrep -v "^.*un~$" | \
     grep -v .DS_Store \
     ); do linkFile $F
 done
-
-#export HOSTNAME=$(hostname)
-
-#if [ -d "Desktop-$HOSTNAME" ]; then
-    #linkFile "Desktop-$HOSTNAME" "Desktop"
-#else 
-    #echo "Unable to find Desktop-$HOSTNAME to link to Desktop"
-#fi

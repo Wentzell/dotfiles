@@ -1,0 +1,15 @@
+{
+  "load_extensions": {
+    "collapsible_headings/main": true, 
+    "latex_envs/latex_envs": true, 
+    "nbextensions_configurator/config_menu/main": true, 
+    "python-markdown/main": true, 
+    "scroll_down/main": true, 
+    "vim_binding/vim_binding": true, 
+    "freeze/main": true, 
+    "runtools/main": true, 
+    "move_selected_cells/main": true, 
+    "code_prettify/code_prettify": true, 
+    "contrib_nbextensions_help_item/main": true
+  }
+}
