@@ -41,7 +41,8 @@ alias sshx="TERM=xterm ssh -Y"
 alias sshnokey="ssh -X -o PubkeyAuthentication=no"
 
 	# vim
-alias vimsrc="vim src/*cpp include/*.h"
+alias vimsrc="vim **/*.c **/*.h **/*.cpp **/*.hpp"
+alias tagsrc="ctags **/*.c **/*.h **/*.cpp **/*.hpp"
 alias vimtex='vim --servername $(basename *.tex.latexmain .tex.latexmain) *.tex content/*.tex settings/*.tex'
 
 	# apt
