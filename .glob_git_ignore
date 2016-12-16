@@ -12,6 +12,7 @@
 *.dat
 *.o
 tags
+build
 #.eps
 #.png
 

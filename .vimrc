@@ -113,6 +113,8 @@ inoremap {}     {}
 
 "Just press F5 to make your program:
 map <F5> :Make run<cr><cr><cr>
+map 'll :Make -C build<cr><cr><cr>
+
 "leader n for next error
 nnoremap ;n	:cn<cr> 
 
