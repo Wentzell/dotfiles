@@ -37,6 +37,7 @@ for F in $(ls -a1 | \
     grep -v pkglst | \
     grep -v aurlst | \
     grep -v piplst | \
+    grep -v brewlst | \
     egrep -v "^..?$" | \
     egrep -v "^.*un~$" | \
     grep -v .DS_Store \
