@@ -41,9 +41,19 @@ alias sshx="TERM=xterm ssh -Y"
 alias sshnokey="ssh -X -o PubkeyAuthentication=no"
 
 	# vim
-alias vimsrc="vim **/*.c **/*.h **/*.cpp **/*.hpp"
-alias tagsrc="ctags **/*.c **/*.h **/*.cpp **/*.hpp"
+alias vimsrc="vim **/*.c(N) **/*.h(N) **/*.cpp(N) **/*.hpp(N)"
 alias vimtex='vim --servername $(basename *.tex.latexmain .tex.latexmain) *.tex content/*.tex settings/*.tex'
+tagsrc () {
+   list=()
+   file_endings=(c cpp h hpp)
+   for j in ${file_endings[@]}; do
+      #list+=(**/*.$j)
+      for i in $@; do
+         list+=($i/**/*.$j(N))
+      done
+   done
+   ctags ${list[@]}
+}
 
 	# apt
 alias apts="apt-cache search"
@@ -51,7 +61,7 @@ alias apti="sudo apt-get install"
 alias aptr="sudo apt-get remove"
 
 	# TMux
-alias tmux="history -w;tmux"  # write history file when opening tmux, fix vim colors in tmux, 
+#alias tmux="history -w;tmux"  # write history file when opening tmux, fix vim colors in tmux, 
 alias tmux-share="tmux -S /var/tmux/pair_sock new -s shared"
 alias tls='tmux list-sessions'
 alias tat='tmux attach-session -t'
