@@ -144,8 +144,8 @@ autocmd Syntax c,cpp,vim,xml,html,xhtml,perl normal zR			" Start unfolded
 "-------------------------------------- CPP SPECIFIC STUFF ------------------------------------------
 
 " --- Config for clang-format plugin
-nnoremap == :ClangFormat<cr>
-vnoremap == :ClangFormat<cr>
+autocmd Syntax c,cpp nnoremap == :ClangFormat<cr>
+autocmd Syntax c,cpp vnoremap == :ClangFormat<cr>
 " Specify command in shell
 let g:clang_format#command = 'clang-format'
 " Detect and apply style-file .clang-format or _clang-format
