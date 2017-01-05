@@ -35,6 +35,8 @@ alias resetX="export DISPLAY=:0.0"
 alias rubber="rubber -m pdftex"
 alias vpn='sudo vpnc --local-port 0'
 
+alias activate='source ~/opt/python/bin/activate'
+
 	# ssh
 alias ssh="TERM=xterm ssh"
 alias sshx="TERM=xterm ssh -Y"

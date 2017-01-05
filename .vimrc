@@ -24,6 +24,7 @@ Plugin 'octol/vim-cpp-enhanced-highlight'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'derekwyatt/vim-fswitch'
 Plugin 'rhysd/vim-clang-format'
+Plugin 'vim-scripts/AnsiEsc.vim'
 
 call vundle#end()
 
@@ -71,6 +72,8 @@ colorscheme solarized
 :command! Ttex		:r ~/.vim/templates/templ.tex
 
 "Command Make will call make and then open quickfix window
+autocmd BufReadPost quickfix AnsiEsc
+set makeprg=$HOME/.vim/mymake.sh
 :command! -nargs=* Make :make -j 4 <args> | cwindow
 
 "-------------------------------------- KEY MAPPINGS ------------------------------------------
@@ -80,7 +83,7 @@ let mapleader = ","
 inoremap ;; <Esc>
 vnoremap ;; <Esc>
 
-" easy copy/pase to clipboard
+" easy copy/paste to clipboard
 vnoremap <leader><leader>y 	"*y
 nnoremap <leader><leader>p 	"*p
 vnoremap <leader><leader>p 	"*p
@@ -115,8 +118,9 @@ inoremap {}     {}
 map <F5> :Make run<cr><cr><cr>
 map 'll :Make -C build<cr><cr><cr>
 
-"leader n for next error
+";n for next error
 nnoremap ;n	:cn<cr> 
+nnoremap ;p	:cp<cr> 
 
 " create and goto file under cursor
 map <leader>gf :e <cfile><cr>
@@ -153,8 +157,10 @@ let g:clang_format#detect_style_file = 1
 
 
 " set up file switch for fswitch plugin
-au! BufEnter *.cpp let b:fswitchdst = 'h' | let b:fswitchlocs = '../include'
-au! BufEnter *.h let b:fswitchdst = 'cpp' | let b:fswitchlocs = '../src'
+"au! BufEnter *.cpp let b:fswitchdst = 'h' | let b:fswitchlocs = '../include'
+"au! BufEnter *.h let b:fswitchdst = 'cpp' | let b:fswitchlocs = '../src'
+au! BufEnter *.cpp let b:fswitchdst = 'hpp'
+au! BufEnter *.hpp let b:fswitchdst = 'cpp'
 
 " --- FSwitch bindings
 " Switch to the file and load it into the current window >
@@ -201,6 +207,7 @@ let g:LatexBox_ignore_warnings = ['Underfull',
 				\ 'deprecated',
 				\ 'fancyhdr',
 				\ 'titlesec',
+				\ 'hyperref',
 				\ 'minitoc',
 				\ 'specifier changed to',
 				\ 'Package amsmath Warning']
