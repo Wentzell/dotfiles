@@ -27,7 +27,7 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 
-alias make="make -j 4"
+alias make="make -j 8"
 alias xkb='setxkbmap -option "ctrl:nocaps"'
 alias fn='find -name'
 alias tarf='tar -xvf'
@@ -43,11 +43,11 @@ alias sshx="TERM=xterm ssh -Y"
 alias sshnokey="ssh -X -o PubkeyAuthentication=no"
 
 	# vim
-alias vimsrc="vim **/*.c(N) **/*.h(N) **/*.cpp(N) **/*.hpp(N)"
+alias vimsrc="vim **/*.c(N) **/*.h(N) **/*.cpp(N) **/*.hpp(N) **/*.hxx(N)"
 alias vimtex='vim --servername $(basename *.tex.latexmain .tex.latexmain) *.tex content/*.tex settings/*.tex'
 tagsrc () {
    list=()
-   file_endings=(c cpp h hpp)
+   file_endings=(c cpp h hpp hxx)
    for j in ${file_endings[@]}; do
       #list+=(**/*.$j)
       for i in $@; do

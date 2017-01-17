@@ -74,7 +74,7 @@ colorscheme solarized
 "Command Make will call make and then open quickfix window
 autocmd BufReadPost quickfix AnsiEsc
 set makeprg=$HOME/.vim/mymake.sh
-:command! -nargs=* Make :make -j 4 <args> | cwindow
+:command! -nargs=* Make :make -j 8 <args> | cwindow
 
 "-------------------------------------- KEY MAPPINGS ------------------------------------------
 
@@ -116,7 +116,7 @@ inoremap {}     {}
 
 "Just press F5 to make your program:
 map <F5> :Make run<cr><cr><cr>
-map 'll :Make -C build<cr><cr><cr>
+autocmd Syntax c,cpp map 'll :Make -C build<cr><cr><cr>
 
 ";n for next error
 nnoremap ;n	:cn<cr> 
