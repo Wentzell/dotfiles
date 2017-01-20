@@ -16,6 +16,9 @@ addenv () {
 }
 
 export VISUAL=vim
+export CC=/usr/bin/clang
+export CXX=/usr/bin/clang++
+export CXXFLAGS=-Wno-c++1z-extensions
 
 if ! echo $PATH | /bin/egrep -q "(^|:)$HOME/bin($|:)" ; then
     export PATH=$HOME/bin:$PATH
