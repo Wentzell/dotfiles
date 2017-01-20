@@ -33,6 +33,7 @@ call vundle#end()
 syntax on			" Syntax highlighting on
 filetype plugin indent on	" Indenting globally on
 set shiftwidth=2		" Set indent shift
+set backspace=2			" Make backspace work normally
 
 set wildmenu			" Always use auto-complete menu
 
