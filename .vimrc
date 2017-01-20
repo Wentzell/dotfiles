@@ -32,7 +32,7 @@ call vundle#end()
 
 syntax on			" Syntax highlighting on
 filetype plugin indent on	" Indenting globally on
-set shiftwidth=4		" Set indent shift
+set shiftwidth=2		" Set indent shift
 
 set wildmenu			" Always use auto-complete menu
 
@@ -63,7 +63,7 @@ colorscheme solarized
 " Start Doxygen multiline comment
 :command! DoxComm	:normal i/**<cr><cr>/<Esc>ka<TAB>	
 " Build file and open quickfix window 
-:command! Mdb		:make | copen
+:command! Mdb		:make | copen 20
 " Insert templates
 :command! Tcpp		:r ~/.vim/templates/templ.cpp
 :command! Tmain		:r ~/.vim/templates/main.cpp
