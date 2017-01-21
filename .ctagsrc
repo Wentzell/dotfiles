@@ -1,0 +1,3 @@
+--languages=C++,Python
+--C++-kinds=+cdefglmnpstuvx
+--Python-kinds=+cfmvi
