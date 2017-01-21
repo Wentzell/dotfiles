@@ -67,17 +67,18 @@ alias tkill='tmux kill-session -t'
 alias make="make -j 8"
 alias triqs++='clang++ -std=c++14 -lmpi -ltriqs -lstdc++ -lpython -lblas -llapack' 
 alias activate='source ~/opt/python/bin/activate'
-tagsrc () {
-  list=()
-  file_endings=(c cpp h hpp hxx py)
-  for i in $@; do
-    if [ -d "$i" ]; then
-      for j in ${file_endings[@]}; do
-        list+=($i/**/*.$j(N))
-      done
-    elif [ -f "$i" ]; then
-      list+=($i)
-    fi
-  done
-  ctags --options=$HOME/.ctagsrc ${list[@]}
-}
+alias ctags='ctags -R --options=$HOME/.ctagsrc'
+#tagsrc () {
+  #list=()
+  #file_endings=(c cpp h hpp hxx py)
+  #for i in $@; do
+    #if [ -d "$i" ]; then
+      #for j in ${file_endings[@]}; do
+        #list+=($i/**/*.$j(N))
+      #done
+    #elif [ -f "$i" ]; then
+      #list+=($i)
+    #fi
+  #done
+  #ctags --options=$HOME/.ctagsrc ${list[@]}
+#}
