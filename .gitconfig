@@ -24,4 +24,5 @@
 	prompt = false
 [alias]
 	d = difftool
+	l = log --graph --abbrev-commit --decorate --format=format:'%C(blue)%h%C(reset) - %C(cyan)%aD%C(reset) %C(green)(%ar)%C(reset)%C(yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all
 	permission-reset = !git diff -p -R | grep -E \"^(diff|(old|new) mode)\" | git apply

@@ -85,9 +85,9 @@ inoremap ;; <Esc>
 vnoremap ;; <Esc>
 
 " easy copy/paste to clipboard
-vnoremap <leader><leader>y 	"*y
-nnoremap <leader><leader>p 	"*p
-vnoremap <leader><leader>p 	"*p
+vnoremap <leader><leader>y 	"+y
+nnoremap <leader><leader>p 	"+p
+vnoremap <leader><leader>p 	"+p
 
 " simple scrolling through file
 nnoremap ;j 	<C-D>
