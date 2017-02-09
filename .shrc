@@ -65,7 +65,7 @@ alias tkill='tmux kill-session -t'
 
 	# Development
 alias make="make -j 8"
-alias triqs++='clang++ -std=c++14 -lmpi -ltriqs -lstdc++ -lpython -lblas -llapack' 
+alias triqs++='clang++ -std=c++14 -ltriqs -lmpi -lmpi_cxx -lstdc++ -lpython2.7 -lblas -llapack' 
 alias activate='source ~/opt/python/bin/activate'
 alias ctags='ctags -R --options=$HOME/.ctagsrc'
 #tagsrc () {

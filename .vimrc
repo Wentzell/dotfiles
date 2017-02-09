@@ -64,7 +64,7 @@ colorscheme solarized
 " Start Doxygen multiline comment
 :command! DoxComm	:normal i/**<cr><cr>/<Esc>ka<TAB>	
 " Build file and open quickfix window 
-:command! Mdb		:make | copen 20
+:command! Mdb		:make | cwindow 15
 " Insert templates
 :command! Tcpp		:r ~/.vim/templates/templ.cpp
 :command! Tmain		:r ~/.vim/templates/main.cpp
@@ -75,7 +75,7 @@ colorscheme solarized
 "Command Make will call make and then open quickfix window
 autocmd BufReadPost quickfix AnsiEsc
 set makeprg=$HOME/.vim/mymake.sh
-:command! -nargs=* Make :make -j 8 <args> | cwindow
+:command! -nargs=* Make :make -j 8 <args> | cwindow 15
 
 "-------------------------------------- KEY MAPPINGS ------------------------------------------
 
