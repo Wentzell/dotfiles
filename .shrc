@@ -33,13 +33,13 @@ alias resetX="export DISPLAY=:0.0"
 alias rubber="rubber -m pdftex"
 alias vpn='sudo vpnc --local-port 0'
 2png () {
-   convert -density 300 $1 -resize 1024x1024 $1.png
+  convert -density 300 $1 -resize 1024x1024 $1.png
 }
 svg2png () {
-   inkscape -z -d 300 -e $(basename $1 .svg).png $1
+  inkscape -z -d 300 -e $(basename $1 .svg).png $1
 }
 aur () {
-   git clone https://aur.archlinux.org/$1
+  git clone https://aur.archlinux.org/$1
 }
 
 	# ssh
@@ -49,7 +49,7 @@ alias sshnokey="ssh -X -o PubkeyAuthentication=no"
 
 	# vim
 alias vimsrc="vim **/*.c(N) **/*.h(N) **/*.cpp(N) **/*.hpp(N) **/*.hxx(N)"
-alias vimtex='vim --servername $(basename *.tex.latexmain .tex.latexmain) *.tex content/*.tex settings/*.tex'
+alias vimtex='vim --servername $(basename *.tex.latexmain .tex.latexmain) *.tex content/*.tex(N) settings/*.tex(N)'
 
 	# apt
 alias apts="apt-cache search"
@@ -62,12 +62,58 @@ alias tmux-share="tmux -S /var/tmux/pair_sock new -s shared"
 alias tls='tmux list-sessions'
 alias tat='tmux attach-session -t'
 alias tkill='tmux kill-session -t'
+tmuxdev () {
+  tmux new-session -d -n Coding -c ~/Dropbox/Coding
+  tmux neww -n Coding -c ~/Dropbox/Coding
+  tmux neww -n Coding -c ~/Dropbox/Coding
+  tmux neww -n Coding -c ~/Dropbox/Coding
+  tmux neww -n Coding -c ~/Dropbox/Coding
+  tmux neww -n Coding -c ~/Dropbox/Coding
+  tmux neww -n System -c ~/Dropbox
+  tmux neww -n System -c ~/Dropbox
+  tmux neww -n Jupyter -c ~/Dropbox/Coding/Notebooks /home/nwentzel/opt/triqs/bin/ipytriqs_notebook
+  tmux neww -n Latex -c ~/Dropbox/Latex
+  tmux neww -n Latex -c ~/Dropbox/Latex
+  tmux selectw -t 1
+  tmux attach
+}
 
-	# Development
+
+        # Develop
 alias make="make -j 8"
 alias triqs++='clang++ -std=c++14 -ltriqs -lmpi -lmpi_cxx -lstdc++ -lpython2.7 -lblas -llapack' 
 alias activate='source ~/opt/python/bin/activate'
 alias ctags='ctags -R --options=$HOME/.ctagsrc'
+alias valmem='valgrind --leak-check=full --max-stackframe=4000000'
+alias cmdbg='cmake -DCMAKE_BUILD_TYPE=Debug'
+prof() {
+  rm -f $1.prof*
+  LD_PRELOAD=/usr/lib/libprofiler.so CPUPROFILE=$1.prof $1
+}
+pprint() {
+  google-pprof --text $1 $1.prof > $1.prof.txt
+  head -n 20 $1.prof.txt
+  google-pprof --gif $1 $1.prof > $1.prof.gif
+}
+hprof() {
+  rm -f $1.hprof*
+  LD_PRELOAD=/usr/lib/libtcmalloc.so HEAPPROFILE=$1.hprof $1
+}
+hpprint() {
+  if [ "$#" -eq 1 ]; then
+    for f in $(ls $1.hprof.*.heap); do 
+      google-pprof --text $1 $f > ${f%.*}.txt
+      head -n 4 ${f%.*}.txt
+      google-pprof --gif $1 $f > ${f%.*}.gif
+    done
+  elif [ "$#" -eq 2 ]; then
+    f=$(ls -1 $1.hprof.*$2.heap | head -n 1)
+    google-pprof --text $1 $f > ${f%.*}.txt
+    head -n 5 ${f%.*}.txt
+    google-pprof --gif $1 $f > ${f%.*}.gif
+  fi
+}
+
 #tagsrc () {
   #list=()
   #file_endings=(c cpp h hpp hxx py)

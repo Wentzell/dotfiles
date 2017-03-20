@@ -22,7 +22,7 @@
 #(make $@ 2>&1) | sed "s,t,t,g"
 #(make $@ 2>&1) | awk '{gsub("*p*","")}1'
 
-# ( make $@ 3>&2 2>&1 1>&3- ) | ( sed "s,\x1B\[[0-9;]*[a-zA-Z],,g" 3>&2 2>&1 1>&3- ) | sed "s,\x1B\[[0-9;]*[a-zA-Z],,g"  # WORKING WITH GCC, no colors..
+( make $@ 3>&2 2>&1 1>&3- ) | ( sed "s,\x1B\[[0-9;]*[a-zA-Z],,g" 3>&2 2>&1 1>&3- ) | sed "s,\x1B\[[0-9;]*[a-zA-Z],,g"  # WORKING WITH GCC, no colors..
 
-make $@ 3>&2 2>&1 1>&3 | sed 's,\(.\[0m\)*.\[1m/\(.*\.[h|c]pp\),/\2,g' 3>&2 2>&1 1>&3 # Clang
+#make $@ 3>&2 2>&1 1>&3 | sed 's,\(.\[0m\)*.\[1m/\(.*\.[h|c]pp\),/\2,g' 3>&2 2>&1 1>&3 # Clang
 #make $@ 2>&1 | sed 's,\(.\[0m\)*.\[1m/\(.*\.[h|c]pp\),/\2,g; /^.*recipe for target.*$/d' # .. delay

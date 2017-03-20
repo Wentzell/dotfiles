@@ -1,3 +1,2 @@
---languages=C++,Python
+--languages=C++
 --C++-kinds=+cdefglmnstuvx
---Python-kinds=+cfmvi
