@@ -5,6 +5,7 @@
 *.swo
 .dropbox.attr
 .netrwhist
+.DS_Store
 
 ## Coding
 ######################
