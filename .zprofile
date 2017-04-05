@@ -4,11 +4,8 @@ addlib () {
   if ! echo $CPATH | egrep -q "(^|:)$1/include($|:)" ; then
     export CPATH=$1/include:$CPATH
   fi
-  if ! echo $LIBRARY_PATH | egrep -q "(^|:)$1/lib($|:)" ; then
-    export LIBRARY_PATH=$1/lib:$LIBRARY_PATH
-  fi
   if ! echo $LD_LIBRARY_PATH | egrep -q "(^|:)$1/lib($|:)" ; then
-    export LD_LIBRARY_PATH=$1/lib:$LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH=$1/lib:$1/lib64:$LD_LIBRARY_PATH
   fi
   if ! echo $PKG_CONFIG_PATH | egrep -q "(^|:)$1/lib($|:)" ; then
     export PKG_CONFIG_PATH=$1/lib/pkgconfig:$PKG_CONFIG_PATH

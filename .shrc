@@ -41,6 +41,8 @@ svg2png () {
 aur () {
   git clone https://aur.archlinux.org/$1
 }
+alias paclst='pacman -Qqettn'
+alias aurlst='pacman -Qqettm'
 
 	# ssh
 alias ssh="TERM=xterm ssh"
