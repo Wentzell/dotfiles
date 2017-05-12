@@ -7,6 +7,9 @@ addlib () {
   if ! echo $LD_LIBRARY_PATH | egrep -q "(^|:)$1/lib($|:)" ; then
     export LD_LIBRARY_PATH=$1/lib:$1/lib64:$LD_LIBRARY_PATH
   fi
+  if ! echo $LIBRARY_PATH | egrep -q "(^|:)$1/lib($|:)" ; then
+    export LIBRARY_PATH=$1/lib:$1/lib64:$LIBRARY_PATH
+  fi
   if ! echo $PKG_CONFIG_PATH | egrep -q "(^|:)$1/lib($|:)" ; then
     export PKG_CONFIG_PATH=$1/lib/pkgconfig:$PKG_CONFIG_PATH
   fi
