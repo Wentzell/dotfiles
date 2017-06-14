@@ -122,5 +122,5 @@ if [ -f ~/.shrc ]; then
     . ~/.shrc
 fi
 
-setxkbmap -option "ctrl:nocaps"
+setxkbmap -option "ctrl:nocaps" &> /dev/null
 #xbindkeys -p
