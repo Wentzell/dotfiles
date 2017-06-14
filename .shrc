@@ -83,36 +83,36 @@ tmuxdev () {
 
         # Develop
 alias make="make -j 8"
-alias triqs++='clang++ -std=c++14 -ltriqs -lmpi -lmpi_cxx -lstdc++ -lpython2.7 -lblas -llapack' 
+alias triqs++='g++-7 -std=c++17 -ltriqs -lmpi -lmpi_cxx -lpython2.7 -lblas -llapack -lgtest -lhdf5 -Wno-register' 
 alias activate='source ~/opt/python/bin/activate'
 alias ctags='ctags -R --options=$HOME/.ctagsrc'
 alias valmem='valgrind --leak-check=full --max-stackframe=4000000'
 alias cmdbg='cmake -DCMAKE_BUILD_TYPE=Debug'
 prof() {
   rm -f $1.prof*
-  LD_PRELOAD=/usr/lib/libprofiler.so CPUPROFILE=$1.prof $1
+  LD_PRELOAD=/home/nwentzel/opt/gperftools/lib/libprofiler.so CPUPROFILE=$1.prof $1
 }
 pprint() {
-  google-pprof --text $1 $1.prof > $1.prof.txt
+  pprof --text $1 $1.prof > $1.prof.txt
   head -n 20 $1.prof.txt
-  google-pprof --gif $1 $1.prof > $1.prof.gif
+  pprof --gif $1 $1.prof > $1.prof.gif
 }
 hprof() {
   rm -f $1.hprof*
-  LD_PRELOAD=/usr/lib/libtcmalloc.so HEAPPROFILE=$1.hprof $1
+  LD_PRELOAD=/home/nwentzel/opt/gperftools/lib/libtcmalloc.so HEAPPROFILE=$1.hprof $1
 }
 hpprint() {
   if [ "$#" -eq 1 ]; then
     for f in $(ls $1.hprof.*.heap); do 
-      google-pprof --text $1 $f > ${f%.*}.txt
+      pprof --text $1 $f > ${f%.*}.txt
       head -n 4 ${f%.*}.txt
-      google-pprof --gif $1 $f > ${f%.*}.gif
+      pprof --gif $1 $f > ${f%.*}.gif
     done
   elif [ "$#" -eq 2 ]; then
     f=$(ls -1 $1.hprof.*$2.heap | head -n 1)
-    google-pprof --text $1 $f > ${f%.*}.txt
+    pprof --text $1 $f > ${f%.*}.txt
     head -n 5 ${f%.*}.txt
-    google-pprof --gif $1 $f > ${f%.*}.gif
+    pprof --gif $1 $f > ${f%.*}.gif
   fi
 }
 
