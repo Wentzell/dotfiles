@@ -83,7 +83,7 @@ tmuxdev () {
 
         # Develop
 alias make="make -j 8"
-alias triqs++='g++-7 -std=c++17 -ltriqs -lmpi -lmpi_cxx -lpython2.7 -lblas -llapack -lgtest -lhdf5 -Wno-register -DHAS_OPTIONAL_HEADER' 
+alias triqs++='g++ -std=c++17 -ltriqs -lmpi -lmpi_cxx -lpython2.7 -lblas -llapack -lgtest -lhdf5 -Wno-register -DHAS_OPTIONAL_HEADER' 
 alias activate='source ~/opt/python/bin/activate'
 alias ctags='ctags -R --options=$HOME/.ctagsrc'
 alias valmem='valgrind --leak-check=full --max-stackframe=4000000'

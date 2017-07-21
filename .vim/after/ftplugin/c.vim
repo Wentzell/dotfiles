@@ -3,7 +3,7 @@ setlocal comments-=://
 setlocal comments+=f://
 
 " Set indention width
-set shiftwidth=3
+set shiftwidth=2
 
 "---- Doxygen Style Comment blocks
 "" Simple small comment line
