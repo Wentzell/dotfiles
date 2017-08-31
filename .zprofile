@@ -2,25 +2,25 @@
 
 addlib () {
   if ! echo $CPATH | egrep -q "(^|:)$1/include($|:)" ; then
-    export CPATH=$1/include:$CPATH
+    export CPATH=$1/include${CPATH:+:$CPATH}
   fi
   if ! echo $LD_LIBRARY_PATH | egrep -q "(^|:)$1/lib($|:)" ; then
-    export LD_LIBRARY_PATH=$1/lib:$1/lib64:$LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH=$1/lib:$1/lib64${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
   fi
   if ! echo $LIBRARY_PATH | egrep -q "(^|:)$1/lib($|:)" ; then
-    export LIBRARY_PATH=$1/lib:$1/lib64:$LIBRARY_PATH
+    export LIBRARY_PATH=$1/lib:$1/lib64${LIBRARY_PATH:+:$LIBRARY_PATH}
   fi
   if ! echo $PKG_CONFIG_PATH | egrep -q "(^|:)$1/lib($|:)" ; then
-    export PKG_CONFIG_PATH=$1/lib/pkgconfig:$PKG_CONFIG_PATH
+    export PKG_CONFIG_PATH=$1/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}
   fi
 }
 
 addpath () {
   if ! echo $PATH | egrep -q "(^|:)$1/bin($|:)" ; then
-    export PATH=$1/bin:$PATH
+    export PATH=$1/bin${PATH:+:$PATH}
   fi
   if ! echo $MANPATH | egrep -q "(^|:)$1/man($|:)" ; then
-    export MANPATH=$1/share/man:$MANPATH
+    export MANPATH=$1/share/man${MANPATH:+:$MANPATH}
   fi
 }
 
