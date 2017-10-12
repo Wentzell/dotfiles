@@ -1,7 +1,7 @@
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
 export TERM=xterm-256color
-[ -n "$TMUX" ] && export TERM=tmux
+[ -n "$TMUX" ] && export TERM=screen-256color
 
 setopt extendedglob
 
@@ -122,7 +122,7 @@ if [ -f ~/.shrc ]; then
     . ~/.shrc
 fi
 
-setxkbmap -option "ctrl:nocaps" &> /dev/null
+#setxkbmap -option "ctrl:nocaps" &> /dev/null
 #xbindkeys -p
 
 # 'Readline' Equivalent Settings

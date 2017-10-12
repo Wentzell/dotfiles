@@ -21,12 +21,18 @@
 #Light Gray  0;37     White         1;37
 
 ##################### My aliases  ######################
+
+# -- Mac specifics 
+alias ldd='otool -L'
+
 #
 connect_remote_notebook(){
   ssh -N -f -L localhost:8889:127.0.0.1:8889 $1
 }
 
 	# General
+alias chromium-browser='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome'
+alias clang++='clang++ -Wl,-w'
 alias lock='/usr/bin/i3lock -c 000000'
 alias ll='ls -alF'
 alias la='ls -A'
@@ -48,6 +54,7 @@ aur () {
 }
 alias paclst='pacman -Qqettn'
 alias aurlst='pacman -Qqettm'
+alias brewlst='brew leaves'
 alias piplst="pip list --not-required | tail -n +3 | awk '{print \$1;}'"
 
 	# ssh
@@ -57,8 +64,10 @@ alias sshnokey="ssh -X -o PubkeyAuthentication=no"
 
 	# vim
 	# https://github.com/Sarcasm/compdb <- Add header files to compile_commands.json
-alias vimsrc="compdb -p build/ list > compile_commands.json &> /dev/null; vim **/*.cpp(N) **/*.hpp(N) **/*.hxx(N)" # **/*.c(N) **/*.h(N)
-alias vimtex='vim --servername $(basename *.tex.latexmain .tex.latexmain) *.tex content/*.tex(N) settings/*.tex(N)'
+#alias vim="mvim -v"
+alias vim="/usr/local/bin/vim"
+alias vimsrc="compdb -p build/ list > compile_commands.json &> /dev/null; /usr/local/bin/vim **/*.c(N) **/*.cpp(N) **/*.hpp(N) **/*.hxx(N) **/*.cc(N)" #**/*.h(N)"
+alias vimtex='mvim --servername SYNCTEX *.tex(N) content/*.tex(N) settings/*.tex(N)'
 
 	# apt
 alias apts="apt-cache search"
@@ -106,7 +115,7 @@ print_code_PY='enscript -G -f Courier7  --color -Epython -L 90 -C '
 prof() {
   #CURRENT_DIR=$PWD; mkdir -p prof; cd prof;
   rm -f $1.prof* &> /dev/null
-  LD_PRELOAD=$HOME/opt/gperftools/lib/libprofiler.so CPUPROFILE=$1.prof $@
+  DYLD_INSERT_LIBRARIES=/usr/local/lib/libprofiler.dylib CPUPROFILE=$1.prof $@
   #cd $CURRENT_DIR
 }
 pprint() {
@@ -122,7 +131,7 @@ pprint() {
 hprof() {
   #CURRENT_DIR=$PWD; mkdir -p hprof; cd hprof;
   rm -f $1.hprof* &> /dev/null
-  LD_PRELOAD=$HOME/opt/gperftools/lib/libtcmalloc.so HEAPPROFILE=$1.hprof $@
+  DYLD_INSERT_PRELOAD=/usr/local/lib/libtcmalloc.dylib HEAPPROFILE=$1.hprof $@
   #cd $CURRENT_DIR
 }
 hpprint() {
