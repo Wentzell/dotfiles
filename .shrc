@@ -21,6 +21,10 @@
 #Light Gray  0;37     White         1;37
 
 ##################### My aliases  ######################
+#
+connect_remote_notebook(){
+  ssh -N -f -L localhost:8889:127.0.0.1:8889 $1
+}
 
 	# General
 alias ll='ls -alF'
