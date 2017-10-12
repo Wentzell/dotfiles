@@ -74,7 +74,7 @@ colorscheme solarized
 
 "Command Make will call make and then open quickfix window
 autocmd BufReadPost quickfix AnsiEsc
-set makeprg=$HOME/.vim/mymake.sh
+set makeprg=$HOME/bin/pymake
 :command! -nargs=* Make :make -j 8 <args> | cwindow 15
 
 "-------------------------------------- KEY MAPPINGS ------------------------------------------

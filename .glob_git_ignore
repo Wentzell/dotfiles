@@ -14,8 +14,9 @@
 *.o
 tags
 build
-#.eps
-#.png
+.idea
+cmake-build-*
+.ipynb_checkpoints
 
 ## Latex
 ######################
