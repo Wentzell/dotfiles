@@ -1,0 +1,26 @@
+#!/bin/env python
+
+from __future__ import print_function
+
+import os
+import re
+import sys
+import signal
+import subprocess
+
+p = subprocess.Popen(['make'] + sys.argv[1:], stderr=subprocess.PIPE)
+
+def eprint(*args, **kwargs):
+    print(*args, file=sys.stderr, **kwargs)
+
+FILTER_LIST = ["_POSIX_C_SOURCE", "_XOPEN_SOURCE", "Python.h", "os_defines.h", "features.h" ]
+
+for line in p.stderr:
+    if any( string in line for string in FILTER_LIST ): continue
+    line = re.sub( '\x1B\[[0-9;]*[a-zA-Z]', '', line ) # Remove all colors
+    # line = re.sub( '\x1b\[01m\x1b\[K/\(.*\)\x1b\[m\x1b\[K','/\1', line )
+    # line = re.sub( '\x1b\[K', '', line )
+    # line = re.sub( '\x1b\[01m', '\x1b\[36;1m', line )
+    eprint(line.rstrip())
+    
+os.killpg(os.getpgid(p.pid), signal.SIGTERM) 
