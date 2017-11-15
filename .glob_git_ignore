@@ -17,6 +17,7 @@ build
 .idea
 cmake-build-*
 .ipynb_checkpoints
+*.pyc
 
 ## Latex
 ######################
