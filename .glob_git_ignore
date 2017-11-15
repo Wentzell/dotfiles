@@ -13,7 +13,7 @@
 *.dat
 *.o
 tags
-build
+build*
 .idea
 cmake-build-*
 .ipynb_checkpoints
