@@ -25,6 +25,7 @@ Plugin 'altercation/vim-colors-solarized'
 Plugin 'derekwyatt/vim-fswitch'
 Plugin 'rhysd/vim-clang-format'
 Plugin 'vim-scripts/AnsiEsc.vim'
+"Plugin 'w0rp/ale'
 
 call vundle#end()
 

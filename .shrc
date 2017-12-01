@@ -75,6 +75,9 @@ tmuxdev () {
   tmux neww -n Coding -c ~/Dropbox/Coding
   tmux neww -n Coding -c ~/Dropbox/Coding
   tmux neww -n Coding -c ~/Dropbox/Coding
+  tmux neww -n Coding -c ~/Dropbox/Coding
+  tmux neww -n Coding -c ~/Dropbox/Coding
+  tmux neww -n Coding -c ~/Dropbox/Coding
   tmux neww -n System -c ~/Dropbox
   tmux neww -n System -c ~/Dropbox
   tmux neww -n Jupyter -c ~/Dropbox/Coding/Notebooks /home/nwentzel/opt/triqs/bin/ipytriqs_notebook

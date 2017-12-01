@@ -3,9 +3,11 @@
 *.log
 *.swp
 *.swo
+*.swn
 .dropbox.attr
 .netrwhist
 .DS_Store
+*.png
 
 ## Coding
 ######################
