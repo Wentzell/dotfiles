@@ -1,4 +1,9 @@
 {
+  "latex_envs": {
+    "autocomplete": false, 
+    "eqLabelWithNumbers": false, 
+    "LaTeX_envs_menu_present": false
+  }, 
   "load_extensions": {
     "collapsible_headings/main": true, 
     "latex_envs/latex_envs": true, 

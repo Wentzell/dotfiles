@@ -1,3 +1,4 @@
+alsa-utils
 autoconf
 automake
 bison
@@ -26,7 +27,6 @@ gnuplot
 graphviz
 grub
 gtk-xfce-engine
-gtk3-print-backends
 gvim
 htop
 i3-wm
@@ -54,12 +54,14 @@ ntfs-3g
 ntp
 orage
 patch
+pavucontrol
 pax-utils
 pcmciautils
+pepper-flash
 pkg-config
 pkgfile
-psmisc
 pstoedit
+pulseaudio
 python2-h5py
 python2-lxml
 python2-mako
@@ -77,6 +79,7 @@ rsync
 rubber
 rxvt-unicode
 s-nail
+sshfs
 sudo
 systemd-sysvcompat
 tclap
@@ -140,5 +143,6 @@ xfce4-xkb-plugin
 xfdesktop
 xfwm4-themes
 xorg-server
+xscreensaver
 zathura-pdf-mupdf
 zsh

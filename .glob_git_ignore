@@ -4,6 +4,7 @@
 *.swp
 *.swo
 *.swn
+*.prof*
 .dropbox.attr
 .netrwhist
 .DS_Store
