@@ -6,7 +6,7 @@
   }, 
   "load_extensions": {
     "collapsible_headings/main": true, 
-    "latex_envs/latex_envs": true, 
+    "latex_envs/latex_envs": false, 
     "nbextensions_configurator/config_menu/main": true, 
     "python-markdown/main": true, 
     "scroll_down/main": true, 
