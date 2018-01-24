@@ -152,6 +152,10 @@ autocmd Syntax c,cpp,vim,xml,html,xhtml,perl normal zR			" Start unfolded
 " --- Config for clang-format plugin
 autocmd Syntax c,cpp nnoremap == :ClangFormat<cr>
 autocmd Syntax c,cpp vnoremap == :ClangFormat<cr>
+
+" --- Enable highlighting of matching angle braces
+autocmd Syntax c,cpp set mps+=<:>
+
 " Specify command in shell
 let g:clang_format#command = 'clang-format'
 " Detect and apply style-file .clang-format or _clang-format
