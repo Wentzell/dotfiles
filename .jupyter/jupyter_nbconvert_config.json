@@ -2,7 +2,6 @@
   "Exporter": {
     "template_path": [
       ".", 
-      "/home/nwentzel/opt/python/local/lib/python2.7/site-packages/jupyter_contrib_nbextensions/templates", 
       "/usr/lib/python2.7/site-packages/jupyter_contrib_nbextensions/templates"
     ], 
     "preprocessors": [
