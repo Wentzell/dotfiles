@@ -1,5 +1,5 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"  My .VIMRC 	\O/						" 
+"  My .VIMRC 	\O/						"
 "								"
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -39,15 +39,18 @@ set backspace=2			" Make backspace work normally
 set wildmenu			" Always use auto-complete menu
 
 " My Status Line
-set statusline=%t[%{strlen(&fenc)?&fenc:'none'},%{&ff}]%h%m%r%y%=%c,%l/%L\ %P	
-set laststatus=2		" Always display status bar		
+set statusline=%t[%{strlen(&fenc)?&fenc:'none'},%{&ff}]%h%m%r%y%=%c,%l/%L\ %P
+set laststatus=2		" Always display status bar
 set hidden			" Can hide changed buffers!
-set number 			" Show line numbers 
+set number 			" Show line numbers
 
 " Settings for solarized color scheme
-set t_Co=256			
+set t_Co=256
 set background=dark
-colorscheme solarized 
+colorscheme solarized
+
+" Remove all trailing whitespaces on write
+autocmd BufWritePre * %s/\s\+$//e
 
 " fix replace color highlight
 :hi incsearch term=standout cterm=standout ctermfg=9 ctermbg=7 gui=reverse
@@ -57,14 +60,14 @@ colorscheme solarized
 " Simple small comment line
 :command! CommLineSmall 	:normal 80i-<Esc>,ciA<cr>
 "  Small comment line with text
-:command! CommTLineSmall	:normal 80i-<Esc>,ci40hi 
+:command! CommTLineSmall	:normal 80i-<Esc>,ci40hi
 " Simple comment line
 :command! CommLine 	:normal 70i=<Esc>,ciA<cr>
 " Comment line with text
-:command! CommTLine 	:normal 70i=<Esc>,ci35hi   
+:command! CommTLine 	:normal 70i=<Esc>,ci35hi
 " Start Doxygen multiline comment
-:command! DoxComm	:normal i/**<cr><cr>/<Esc>ka<TAB>	
-" Build file and open quickfix window 
+:command! DoxComm	:normal i/**<cr><cr>/<Esc>ka<TAB>
+" Build file and open quickfix window
 :command! Mdb		:make | cwindow 15
 " Insert templates
 :command! Tcpp		:r ~/.vim/templates/templ.cpp
@@ -80,7 +83,7 @@ set makeprg=$HOME/bin/pymake
 
 "-------------------------------------- KEY MAPPINGS ------------------------------------------
 
-" rebind leader key and escape 
+" rebind leader key and escape
 let mapleader = ","
 inoremap ;; <Esc>
 vnoremap ;; <Esc>
@@ -121,8 +124,8 @@ map <F5> :Make run<cr><cr><cr>
 autocmd Syntax c,cpp map 'll :Make -C build<cr><cr><cr>
 
 ";n for next error
-nnoremap ;n	:cn<cr> 
-nnoremap ;p	:cp<cr> 
+nnoremap ;n	:cn<cr>
+nnoremap ;p	:cp<cr>
 
 " create and goto file under cursor
 map <leader>gf :e <cfile><cr>

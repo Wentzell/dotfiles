@@ -8,6 +8,7 @@ clang-tools-extra
 cloc
 cmake
 cpio
+cppcheck
 ctags
 cups
 dhcpcd
