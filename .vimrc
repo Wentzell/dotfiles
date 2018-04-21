@@ -25,7 +25,7 @@ Plugin 'altercation/vim-colors-solarized'
 Plugin 'derekwyatt/vim-fswitch'
 Plugin 'rhysd/vim-clang-format'
 Plugin 'vim-scripts/AnsiEsc.vim'
-"Plugin 'w0rp/ale'
+Plugin 'w0rp/ale'
 
 call vundle#end()
 
@@ -71,10 +71,10 @@ colorscheme solarized
 " Build file and open quickfix window
 :command! Mdb		:make | cwindow 15
 " Insert templates
-:command! Tcpp		:r ~/.vim/templates/templ.cpp
-:command! Tmain		:r ~/.vim/templates/main.cpp
-:command! Tclass	:r ~/.vim/templates/class.cpp
-:command! Th		:r ~/.vim/templates/templ.h
+:command! Ttest		:r ~/.vim/templates/test.cpp
+:command! TtestF	:r ~/.vim/templates/test_F.cpp
+:command! Tpytest	:r ~/.vim/templates/test.py
+:command! TCMake	:r ~/.vim/templates/CMakeLists.txt
 :command! Ttex		:r ~/.vim/templates/templ.tex
 
 "Command Make will call make and then open quickfix window
@@ -152,6 +152,13 @@ autocmd Syntax c,cpp,vim,xml,html,xhtml setlocal foldmethod=syntax 	" Enable Syn
 autocmd Syntax c,cpp,vim,xml,html,xhtml,perl normal zR			" Start unfolded
 
 "-------------------------------------- CPP SPECIFIC STUFF ------------------------------------------
+
+" --- Configure Ale Linter
+call ale#Set('cpp_clangtidy_checks', ['-*,modernize-*,cppcoreguidelines-*,-cppcoreguidelines-pro-bounds-constant-array-index,-cppcoreguidelines-pro-type-member-init'])
+call ale#Set('cpp_clangtidy_options', '-extra-arg=-std=c++17')
+let g:ale_linters = {
+      \   'C++': ['clangtidy'],
+      \}
 
 " --- Config for clang-format plugin
 autocmd Syntax c,cpp nnoremap == :ClangFormat<cr>
