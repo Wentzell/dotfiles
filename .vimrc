@@ -50,7 +50,8 @@ set background=dark
 colorscheme solarized
 
 " Remove all trailing whitespaces on write
-autocmd BufWritePre * %s/\s\+$//e
+"autocmd BufWritePre * %s/\s\+$//e
+:command! Delwsp :%s/\s\+$//e
 
 " fix replace color highlight
 :hi incsearch term=standout cterm=standout ctermfg=9 ctermbg=7 gui=reverse

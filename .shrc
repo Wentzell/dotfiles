@@ -10,7 +10,7 @@
 ##
 ##################################################
 
-## COLOR by \[\033COL_ID[0m\]  TEXT \[\033[0m\]
+## COLOR by \033[COL_IDm  TEXT \033[0m
 #Black       0;30     Dark Gray     1;30
 #Blue        0;34     Light Blue    1;34
 #Green       0;32     Light Green   1;32
@@ -63,7 +63,7 @@ alias apti="sudo apt-get install"
 alias aptr="sudo apt-get remove"
 
 	# tmux
-#alias tmux="history -w;tmux"  # write history file when opening tmux, fix vim colors in tmux, 
+#alias tmux="history -w;tmux"  # write history file when opening tmux, fix vim colors in tmux,
 alias tmux-share="tmux -S /var/tmux/pair_sock new -s shared"
 alias tls='tmux list-sessions'
 alias tat='tmux attach-session -t'
@@ -110,7 +110,7 @@ hprof() {
 }
 hpprint() {
   if [ "$#" -eq 1 ]; then
-    for f in $(ls $1.hprof.*.heap); do 
+    for f in $(ls $1.hprof.*.heap); do
       pprof --text $1 $f > ${f%.*}.txt
       head -n 4 ${f%.*}.txt
       pprof --gif $1 $f > ${f%.*}.gif
