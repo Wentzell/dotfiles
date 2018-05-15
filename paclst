@@ -4,7 +4,7 @@ automake
 bison
 boost
 chromium
-clang-tools-extra
+clang
 cloc
 cmake
 cpio
@@ -97,7 +97,9 @@ thunar-archive-plugin
 thunar-media-tags-plugin
 thunar-volman
 tmux
+tree
 tumbler
+unrar
 unzip
 usbutils
 valgrind

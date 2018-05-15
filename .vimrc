@@ -25,7 +25,7 @@ Plugin 'altercation/vim-colors-solarized'
 Plugin 'derekwyatt/vim-fswitch'
 Plugin 'rhysd/vim-clang-format'
 Plugin 'vim-scripts/AnsiEsc.vim'
-Plugin 'w0rp/ale'
+" Plugin 'w0rp/ale'
 
 call vundle#end()
 
@@ -154,11 +154,11 @@ autocmd Syntax c,cpp,vim,xml,html,xhtml,perl normal zR			" Start unfolded
 "-------------------------------------- CPP SPECIFIC STUFF ------------------------------------------
 
 " --- Configure Ale Linter
-call ale#Set('cpp_clangtidy_checks', ['-*,modernize-*,cppcoreguidelines-*,-cppcoreguidelines-pro-bounds-constant-array-index,-cppcoreguidelines-pro-type-member-init'])
-call ale#Set('cpp_clangtidy_options', '-extra-arg=-std=c++17')
-let g:ale_linters = {
-      \   'C++': ['clangtidy'],
-      \}
+" let g:ale_linters = {
+"      \   'cpp': ['clangtidy'],
+"      \}
+" let g:ale_cpp_clangtidy_checks = ['-*,modernize-*,cppcoreguidelines-*,-cppcoreguidelines-pro-bounds-constant-array-index,-cppcoreguidelines-pro-type-member-init']
+" let g:ale_cpp_clangtidy_options = '-extra-arg=-std=c++17'
 
 " --- Config for clang-format plugin
 autocmd Syntax c,cpp nnoremap == :ClangFormat<cr>

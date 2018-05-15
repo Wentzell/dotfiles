@@ -1,6 +1,8 @@
 dropbox
+env-modules
 isl
 jabref
+libc++experimental
 mendeleydesktop
 nfft
 openoffice
