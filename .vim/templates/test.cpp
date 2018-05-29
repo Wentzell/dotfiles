@@ -20,6 +20,7 @@
  ******************************************************************************/
 
 #include <triqs/test_tools/arrays.hpp>
+#include <triqs/test_tools/gfs.hpp>
 
 TEST(Test_Group, Test1) {
   // XXX Do something
