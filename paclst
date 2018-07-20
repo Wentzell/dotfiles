@@ -37,6 +37,7 @@ intel-ucode
 iputils
 ipython2
 jfsutils
+jq
 kcachegrind
 keepass
 licenses
@@ -68,6 +69,7 @@ python2-mako
 python2-matplotlib
 python2-mpi4py
 python2-nose
+python2-oauth2client
 python2-pip
 python2-pypandoc
 python2-scipy
@@ -145,5 +147,6 @@ xfdesktop
 xfwm4-themes
 xorg-server
 xscreensaver
+z3
 zathura-pdf-mupdf
 zsh
