@@ -80,7 +80,6 @@ tmuxdev () {
   tmux neww -n Coding -c ~/Dropbox/Coding
   tmux neww -n System -c ~/Dropbox
   tmux neww -n System -c ~/Dropbox
-  tmux neww -n Jupyter -c ~/Dropbox/Coding/Notebooks /home/nwentzel/opt/triqs/bin/ipytriqs_notebook
   tmux neww -n Latex -c ~/Dropbox/Latex
   tmux neww -n Latex -c ~/Dropbox/Latex
   tmux selectw -t 1
@@ -90,7 +89,7 @@ tmuxdev () {
 
         # Develop
 alias make="make -j 8"
-alias triqs++='clang++ -stdlib=libc++ -std=c++17 -ltriqs -lmpi -lmpi_cxx -lpython2.7 -lblas -llapack -lgtest -lhdf5 -Wno-register'
+alias triqs++='clang++ -stdlib=libc++ -std=c++17 -ltriqs -lmpi -lmpi_cxx -lpython2.7 -lblas -llapack -lgtest -lhdf5 -Wno-register -lbenchmark'
 alias activate='source ~/opt/python/bin/activate'
 alias ctags='ctags -R --options=$HOME/.ctagsrc'
 alias valmem='valgrind --leak-check=full --max-stackframe=4000000'

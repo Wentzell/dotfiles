@@ -1,10 +1,22 @@
 \ProvidesPackage{mymath}
 \usepackage{graphicx}
+\usepackage{amsmath}
 
 % --- General
 \newcommand{\todo}[1]{\textcolor{red}{\textbf{[TODO: #1]}}}
 \newcommand{\comment}[1]{\textcolor{blue}{\textbf{[Comment: #1]}}}
 \newcommand{\mc}[1]{\mathcal{#1}}
+
+% --- Some font operators that are removed in new versions
+\makeatletter
+\DeclareOldFontCommand{\rm}{\normalfont\rmfamily}{\mathrm}
+\DeclareOldFontCommand{\sf}{\normalfont\sffamily}{\mathsf}
+\DeclareOldFontCommand{\tt}{\normalfont\ttfamily}{\mathtt}
+\DeclareOldFontCommand{\bf}{\normalfont\bfseries}{\mathbf}
+\DeclareOldFontCommand{\it}{\normalfont\itshape}{\mathit}
+\DeclareOldFontCommand{\sl}{\normalfont\slshape}{\@nomath\sl}
+\DeclareOldFontCommand{\sc}{\normalfont\scshape}{\@nomath\sc}
+\makeatother
 
 % --- Citation
 \newcommand{\ceq}[1]{Eq.~(\ref{eq:#1})}

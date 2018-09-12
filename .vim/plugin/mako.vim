@@ -47,4 +47,3 @@ EOF
 endfunction
 
 :au BufWritePost *.mako.?pp call RunMako()
-

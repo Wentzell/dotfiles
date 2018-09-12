@@ -47,7 +47,7 @@ export TRIQS_SHOW_EXCEPTION_TRACE=1
 export VISUAL=vim
 export CC=clang
 export CXX=clang++
-export CXXFLAGS='-stdlib=libc++'
+export CXXFLAGS='-stdlib=libc++ -Wno-register'
 export FC=gfortran
 
 if ! echo $PATH | egrep -q "(^|:)$HOME/bin($|:)" ; then

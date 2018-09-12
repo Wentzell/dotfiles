@@ -226,6 +226,9 @@ let g:LatexBox_ignore_warnings = ['Underfull',
 				\ 'titlesec',
 				\ 'hyperref',
 				\ 'minitoc',
+				\ 'Font shape',
+				\ 'Some font shapes',
+				\ 'Empty \`thebibliography',
 				\ 'specifier changed to',
 				\ 'Package amsmath Warning']
 

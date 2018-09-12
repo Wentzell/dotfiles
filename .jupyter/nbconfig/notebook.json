@@ -3,6 +3,11 @@
     "autocomplete": false, 
     "eqLabelWithNumbers": false, 
     "LaTeX_envs_menu_present": false
+  },
+  "Cell": {
+    "cm_config": {
+      "lineNumbers": true
+    }
   }, 
   "load_extensions": {
     "collapsible_headings/main": true, 
