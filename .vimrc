@@ -25,7 +25,14 @@ Plugin 'altercation/vim-colors-solarized'
 Plugin 'derekwyatt/vim-fswitch'
 Plugin 'rhysd/vim-clang-format'
 Plugin 'vim-scripts/AnsiEsc.vim'
-" Plugin 'w0rp/ale'
+Plugin 'prabirshrestha/asyncomplete.vim'
+Plugin 'prabirshrestha/async.vim'
+Plugin 'prabirshrestha/vim-lsp'
+Plugin 'prabirshrestha/asyncomplete-lsp.vim'
+Plugin 'tpope/vim-fugitive'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+"Plugin 'w0rp/ale'
 
 call vundle#end()
 
@@ -37,6 +44,17 @@ set shiftwidth=2		" Set indent shift
 set backspace=2			" Make backspace work normally
 
 set wildmenu			" Always use auto-complete menu
+
+" Airline theme
+let g:airline_theme='solarized'
+let g:airline_solarized_bg='dark'
+let g:airline_powerline_fonts = 1
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+let g:airline_symbols.space = "\ua0"
+let g:airline#extensions#tabline#show_buffers = 0
+"let g:airline#extensions#tabline#enabled = 1
 
 " My Status Line
 set statusline=%t[%{strlen(&fenc)?&fenc:'none'},%{&ff}]%h%m%r%y%=%c,%l/%L\ %P
@@ -153,12 +171,32 @@ autocmd Syntax c,cpp,vim,xml,html,xhtml,perl normal zR			" Start unfolded
 
 "-------------------------------------- CPP SPECIFIC STUFF ------------------------------------------
 
+" --- clangd language server
+"if executable('clangd')
+    "au User lsp_setup call lsp#register_server({
+        "\ 'name': 'clangd',
+        "\ 'cmd': {server_info->['clangd']},
+        "\ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
+        "\ })
+"endif
+
+" --- cquery language server
+if executable('cquery')
+   au User lsp_setup call lsp#register_server({
+      \ 'name': 'cquery',
+      \ 'cmd': {server_info->['cquery']},
+      \ 'root_uri': {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'compile_commands.json'))},
+      \ 'initialization_options': { 'cacheDirectory': '/tmp/cquery/cache' },
+      \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp', 'cc'],
+      \ })
+endif
+
 " --- Configure Ale Linter
-" let g:ale_linters = {
-"      \   'cpp': ['clangtidy'],
-"      \}
-" let g:ale_cpp_clangtidy_checks = ['-*,modernize-*,cppcoreguidelines-*,-cppcoreguidelines-pro-bounds-constant-array-index,-cppcoreguidelines-pro-type-member-init']
-" let g:ale_cpp_clangtidy_options = '-extra-arg=-std=c++17'
+"call ale#Set('cpp_clangtidy_checks', ['-*,modernize-*,cppcoreguidelines-*,-cppcoreguidelines-pro-bounds-constant-array-index,-cppcoreguidelines-pro-type-member-init'])
+"call ale#Set('cpp_clangtidy_options', '-extra-arg=-std=c++17')
+"let g:ale_linters = {
+      "\   'C++': ['clangtidy'],
+      "\}
 
 " --- Config for clang-format plugin
 autocmd Syntax c,cpp nnoremap == :ClangFormat<cr>
