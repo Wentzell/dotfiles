@@ -48,6 +48,7 @@ set wildmenu			" Always use auto-complete menu
 " Airline theme
 let g:airline_theme='solarized'
 let g:airline_solarized_bg='dark'
+"Install e.g. Powerline Source Code Pro Font
 let g:airline_powerline_fonts = 1
 if !exists('g:airline_symbols')
   let g:airline_symbols = {}
@@ -55,6 +56,17 @@ endif
 let g:airline_symbols.space = "\ua0"
 let g:airline#extensions#tabline#show_buffers = 0
 "let g:airline#extensions#tabline#enabled = 1
+
+"Language Server Settings
+let g:lsp_auto_enable = 1
+let g:lsp_signs_enabled = 1         " enable diagnostic signs / we use ALE for now
+let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal mode
+let g:lsp_signs_error = {'text': '✖'}
+let g:lsp_signs_warning = {'text': '~'}
+let g:lsp_signs_hint = {'text': '?'}
+let g:lsp_signs_information = {'text': '!!'}
+let g:lsp_log_verbose = 1
+let g:lsp_log_file = expand('~/.vim/vim-lsp.log')
 
 " My Status Line
 set statusline=%t[%{strlen(&fenc)?&fenc:'none'},%{&ff}]%h%m%r%y%=%c,%l/%L\ %P
@@ -169,27 +181,42 @@ au BufNewFile,BufRead	*MAKE*	set filetype=make		" set files with MAKE in name to
 autocmd Syntax c,cpp,vim,xml,html,xhtml setlocal foldmethod=syntax 	" Enable Syntax folding
 autocmd Syntax c,cpp,vim,xml,html,xhtml,perl normal zR			" Start unfolded
 
+"-------------------------------------- PYTHON SPECIFIC STUFF ------------------------------------------
+
+if executable('pyls')
+    "pip install python-language-server[all]
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'pyls',
+        \ 'cmd': {server_info->['pyls']},
+        \ 'whitelist': ['python'],
+        \ })
+endif
+
+" --- Config for yapf
+autocmd Syntax python nnoremap == :YAPF<cr>
+autocmd Syntax python vnoremap == :YAPF<cr>
+
 "-------------------------------------- CPP SPECIFIC STUFF ------------------------------------------
 
 " --- clangd language server
-"if executable('clangd')
-    "au User lsp_setup call lsp#register_server({
-        "\ 'name': 'clangd',
-        "\ 'cmd': {server_info->['clangd']},
-        "\ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
-        "\ })
-"endif
+if executable('clangd')
+    au User lsp_setup call lsp#register_server({
+	\ 'name': 'clangd',
+	\ 'cmd': {server_info->['clangd']},
+	\ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
+	\ })
+endif
 
 " --- cquery language server
-if executable('cquery')
-   au User lsp_setup call lsp#register_server({
-      \ 'name': 'cquery',
-      \ 'cmd': {server_info->['cquery']},
-      \ 'root_uri': {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'compile_commands.json'))},
-      \ 'initialization_options': { 'cacheDirectory': '/tmp/cquery/cache' },
-      \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp', 'cc'],
-      \ })
-endif
+"if executable('cquery')
+   "au User lsp_setup call lsp#register_server({
+      "\ 'name': 'cquery',
+      "\ 'cmd': {server_info->['cquery']},
+      "\ 'root_uri': {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'compile_commands.json'))},
+      "\ 'initialization_options': { 'cacheDirectory': '/tmp/cquery/cache' },
+      "\ 'whitelist': ['c', 'cpp', 'objc', 'objcpp', 'cc'],
+      "\ })
+"endif
 
 " --- Configure Ale Linter
 "call ale#Set('cpp_clangtidy_checks', ['-*,modernize-*,cppcoreguidelines-*,-cppcoreguidelines-pro-bounds-constant-array-index,-cppcoreguidelines-pro-type-member-init'])
