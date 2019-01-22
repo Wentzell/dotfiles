@@ -181,7 +181,21 @@ au BufNewFile,BufRead	*MAKE*	set filetype=make		" set files with MAKE in name to
 autocmd Syntax c,cpp,vim,xml,html,xhtml setlocal foldmethod=syntax 	" Enable Syntax folding
 autocmd Syntax c,cpp,vim,xml,html,xhtml,perl normal zR			" Start unfolded
 
+"-------------------------------------- General Coding Config ------------------------------------------
+"
+" --- Vim LSP Config
+let g:lsp_signs_enabled = 1
+let g:lsp_diagnostics_echo_cursor = 1
+
+" --- Vim LSP Bindings
+autocmd Syntax c,cpp,python nnoremap <C-]> :LspDefinition<cr>
+autocmd Syntax c,cpp,python vnoremap <C-]> :LspDefinition<cr>
+autocmd Syntax c,cpp,python nnoremap <C-h> :LspRename<cr>
+autocmd Syntax c,cpp,python vnoremap <C-h> :LspRename<cr>
+
 "-------------------------------------- PYTHON SPECIFIC STUFF ------------------------------------------
+"
+autocmd FileType python set shiftwidth=4
 
 if executable('pyls')
     "pip install python-language-server[all]

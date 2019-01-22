@@ -21,6 +21,7 @@ build*
 cmake-build-*
 .ipynb_checkpoints
 *.pyc
+compile_commands.json
 
 ## Latex
 ######################
