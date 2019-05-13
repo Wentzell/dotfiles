@@ -7,7 +7,7 @@
 
 [user]
 	name = Nils Wentzell
-	email = nils.wentzell@gmail.com
+	email = nwentzell@flatironinstitute.org
 [merge]
 	tool = vimdiff
 [core]
