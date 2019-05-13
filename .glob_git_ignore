@@ -9,12 +9,21 @@
 .netrwhist
 .DS_Store
 *.png
+stdout.*
+stderr.*
+
+## Singularity
+#####################
+*.sif
+*.simg
 
 ## Coding
 ######################
 *.h5
 *.dat
 *.o
+*.so
+*.dylib
 tags
 build*
 .idea
