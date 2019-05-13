@@ -107,7 +107,10 @@ prof() {
 pprint() {
   pprof --text $1 $1.prof > $1.prof.txt
   head -n 20 $1.prof.txt
-  pprof --svg $1 $1.prof > $1.prof.svg
+  pprof --svg --lines $1 $1.prof > $1.prof.svg
+  chromium-browser $1.prof.svg &
+  #pprof --pdf --lines $1 $1.prof > $1.prof.pdf
+  #pprof --web --lines $1 $1.prof
 }
 hprof() {
   #CURRENT_DIR=$PWD; mkdir -p hprof; cd hprof;
@@ -120,13 +123,19 @@ hpprint() {
     for f in $(ls $1.hprof.*.heap); do
       pprof --text $1 $f > ${f%.*}.txt
       head -n 4 ${f%.*}.txt
-      pprof --svg $1 $f > ${f%.*}.svg
+      pprof --svg --lines $1 $f > ${f%.*}.svg
+      chromium-browser ${f%.*}.svg &
+      #pprof --pdf --lines $1 $f > ${f%.*}.pdf
+      #pprof --web --lines $1 $f
     done
   elif [ "$#" -eq 2 ]; then
     f=$(ls -1 $1.hprof.*$2.heap | head -n 1)
     pprof --text $1 $f > ${f%.*}.txt
     head -n 5 ${f%.*}.txt
-    pprof --svg $1 $f > ${f%.*}.svg
+    pprof --svg --lines $1 $f > ${f%.*}.svg
+    chromium-browser ${f%.*}.svg &
+    #pprof --pdf --lines $1 $f > ${f%.*}.pdf
+    #pprof --web --lines $1 $f
   fi
 }
 
@@ -135,7 +144,10 @@ hpprint_full() {
     for f in $1; do
       pprof --text $1 $f > ${f%.*}.txt
       head -n 4 ${f%.*}.txt
-      pprof --svg $1 $f > ${f%.*}.svg
+      pprof --svg --lines $1 $f > ${f%.*}.svg
+      chromium-browser ${f%.*}.svg &
+      #pprof --pdf --lines $1 $f > ${f%.*}.pdf
+      #pprof --web --lines $1 $f
     done
   fi
 }
