@@ -29,8 +29,8 @@ addenv () {
   addpath $1
 }
 
-export PYTHONPATH=$PYTHONPATH:/home/nwentzel/opt
-export PATH=$PATH:$HOME/.local/bin
+export PYTHONPATH=$PYTHONPATH:$HOME/opt
+export PATH=$PATH:$HOME/.local/bin:$HOME/bin
 
 export ASAN_SYMBOLIZER_PATH=$(which llvm-symbolizer)
 export ASAN_OPTIONS=symbolize=1:detect_leaks=0 # fast_unwind_on_malloc=0
