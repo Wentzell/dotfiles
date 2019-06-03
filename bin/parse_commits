@@ -1,0 +1,24 @@
+#!/usr/bin/env python
+
+import sys, re
+
+mdict = { "General": [] }
+
+if __name__ == "__main__":
+    for line in sys.stdin:
+
+        m = re.match('\[(.*?)\] (.*)', line)
+        if(m):
+            if m.group(1) in mdict.keys():
+                mdict[m.group(1)].append(m.group(2))
+            else:
+                mdict[m.group(1)] = [m.group(2)]
+        else:
+            mdict["General"].append(line)
+
+for group, mlist in mdict.iteritems():
+    sys.stdout.write("\n" + group + "\n")
+    sys.stdout.write('-' * len(group) + "\n")
+
+    for m in mlist:
+        sys.stdout.write("* " + m.rstrip() + "\n")
