@@ -72,6 +72,7 @@ cmake -DCMAKE_BUILD_TYPE=Release \
       -DLLVM_USE_LINKER=gold \
       -DCMAKE_C_COMPILER="${CC}" \
       -DCMAKE_CXX_COMPILER="${CXX}" \
+      -DLIBOMP_TSAN_SUPPORT=1 \
       "${WORK_DIR}/llvm"
       #-DLINK_POLLY_INTO_TOOLS=ON \
       #-DLLVM_BINUTILS_INCDIR="${WORK_DIR}/llvm/tools/binutils/include" \

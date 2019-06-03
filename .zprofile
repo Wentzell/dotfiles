@@ -37,7 +37,8 @@ export ASAN_OPTIONS=symbolize=1:detect_leaks=0 # fast_unwind_on_malloc=0
 
 export UBSAN_SYMBOLIZER_PATH=$(which llvm-symbolizer)
 export UBSAN_OPTIONS=symbolize=1:print_stacktrace=1:halt_on_error=1
-
+export TSAN_SYMBOLIZER_PATH=$(which llvm-symbolizer)
+export TSAN_OPTIONS=symbolize=1:halt_on_error=1
 export MSAN_SYMBOLIZER_PATH=$(which llvm-symbolizer)
 export MSAN_OPTIONS=symbolize=1:halt_on_error=1
 
