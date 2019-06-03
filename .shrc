@@ -98,6 +98,8 @@ alias activate='source ~/opt/python/bin/activate'
 alias ctags='ctags -R --options=$HOME/.ctagsrc'
 alias valmem='valgrind --leak-check=full --max-stackframe=4000000'
 alias cmdbg='cmake -DCMAKE_BUILD_TYPE=Debug'
+print_code_CPP='enscript -G -f Courier7  --color -Ecpp -L 90 -C '
+print_code_PY='enscript -G -f Courier7  --color -Epython -L 90 -C '
 prof() {
   #CURRENT_DIR=$PWD; mkdir -p prof; cd prof;
   rm -f $1.prof* &> /dev/null
@@ -105,7 +107,7 @@ prof() {
   #cd $CURRENT_DIR
 }
 pprint() {
-  pprof --text $1 $1.prof > $1.prof.txt
+  pprof --text --lines $1 $1.prof > $1.prof.txt
   head -n 20 $1.prof.txt
   pprof --svg --lines $1 $1.prof > $1.prof.svg
   chromium-browser $1.prof.svg &
@@ -121,7 +123,7 @@ hprof() {
 hpprint() {
   if [ "$#" -eq 1 ]; then
     for f in $(ls $1.hprof.*.heap); do
-      pprof --text $1 $f > ${f%.*}.txt
+      pprof --text --lines $1 $f > ${f%.*}.txt
       head -n 4 ${f%.*}.txt
       pprof --svg --lines $1 $f > ${f%.*}.svg
       chromium-browser ${f%.*}.svg &
@@ -130,7 +132,7 @@ hpprint() {
     done
   elif [ "$#" -eq 2 ]; then
     f=$(ls -1 $1.hprof.*$2.heap | head -n 1)
-    pprof --text $1 $f > ${f%.*}.txt
+    pprof --text --lines $1 $f > ${f%.*}.txt
     head -n 5 ${f%.*}.txt
     pprof --svg --lines $1 $f > ${f%.*}.svg
     chromium-browser ${f%.*}.svg &
@@ -142,7 +144,7 @@ hpprint() {
 hpprint_full() {
   if [ "$#" -eq 1 ]; then
     for f in $1; do
-      pprof --text $1 $f > ${f%.*}.txt
+      pprof --text --lines $1 $f > ${f%.*}.txt
       head -n 4 ${f%.*}.txt
       pprof --svg --lines $1 $f > ${f%.*}.svg
       chromium-browser ${f%.*}.svg &
