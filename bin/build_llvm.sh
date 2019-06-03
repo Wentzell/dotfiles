@@ -1,5 +1,5 @@
 WORK_DIR=$PWD
-RELEASE=trunk #branches/release_80 #trunk
+RELEASE=branches/release_80 #trunk
 
 cd ${WORK_DIR}
 svn co http://llvm.org/svn/llvm-project/llvm/${RELEASE} llvm
