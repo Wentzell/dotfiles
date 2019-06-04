@@ -53,8 +53,8 @@ mkdir -p ${BUILD_DIR}
 cd ${BUILD_DIR}
 # Cf. https://llvm.org/docs/CMake.html
 cmake -DCMAKE_BUILD_TYPE=Release \
-      -DCMAKE_C_FLAGS="-O3 -march=native" \
-      -DCMAKE_CXX_FLAGS="-O3 -march=native" \
+      -DCMAKE_C_FLAGS="-O3" \
+      -DCMAKE_CXX_FLAGS="-O3" \
       -DLLVM_CCACHE_BUILD=ON \
       -DLLVM_ENABLE_PIC=ON \
       -DCMAKE_INSTALL_PREFIX="${INSTALL_DIR}" \
