@@ -60,7 +60,7 @@ let g:airline#extensions#tabline#show_buffers = 0
 
 "Language Server Settings
 let g:lsp_auto_enable = 1
-let g:lsp_signs_enabled = 1         " enable diagnostic signs / we use ALE for now
+let g:lsp_signs_enabled = 1           " enable diagnostic signs / we use ALE for now
 let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal mode
 let g:lsp_signs_error = {'text': '✖'}
 let g:lsp_signs_warning = {'text': '~'}
@@ -220,11 +220,11 @@ if executable('clangd')
     au User lsp_setup call lsp#register_server({
 	\ 'name': 'clangd',
 	\ 'cmd': {server_info->['clangd']},
-	\ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
+	\ 'whitelist': ['c', 'cpp', 'objc', 'objcpp', 'cc'],
 	\ })
 endif
 
-" --- cquery language server
+"" --- cquery language server
 "if executable('cquery')
    "au User lsp_setup call lsp#register_server({
       "\ 'name': 'cquery',
