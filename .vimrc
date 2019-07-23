@@ -44,6 +44,7 @@ set shiftwidth=2		" Set indent shift
 set backspace=2			" Make backspace work normally
 
 set wildmenu			" Always use auto-complete menu
+set nomore			" Do not prompt for 'more'
 
 " Airline theme
 let g:airline_theme='solarized'
