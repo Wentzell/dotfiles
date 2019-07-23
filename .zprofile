@@ -29,32 +29,27 @@ addenv () {
   addpath $1
 }
 
-export PYTHONPATH=$PYTHONPATH:$HOME/opt
-export PATH=$PATH:$HOME/.local/bin:$HOME/bin
 
+# General Env
+export VISUAL=vim
+export CTEST_OUTPUT_ON_FAILURE=1
+export TRIQS_SHOW_EXCEPTION_TRACE=1
+export OMP_NUM_THREADS=1
+
+# My Software
+export PYTHONPATH=$HOME/opt:$PYTHONPATH
+export PATH=$HOME/bin:$PATH
+addenv $HOME/.local
+#for f in $HOME/opt/*/; do
+  #addenv $f
+#done
+
+# Sanitizers
 export ASAN_SYMBOLIZER_PATH=$(which llvm-symbolizer)
 export ASAN_OPTIONS=symbolize=1:detect_leaks=0 # fast_unwind_on_malloc=0
-
 export UBSAN_SYMBOLIZER_PATH=$(which llvm-symbolizer)
 export UBSAN_OPTIONS=symbolize=1:print_stacktrace=1:halt_on_error=1
 export TSAN_SYMBOLIZER_PATH=$(which llvm-symbolizer)
 export TSAN_OPTIONS=symbolize=1:halt_on_error=1
 export MSAN_SYMBOLIZER_PATH=$(which llvm-symbolizer)
 export MSAN_OPTIONS=symbolize=1:halt_on_error=1
-
-export CTEST_OUTPUT_ON_FAILURE=1
-export TRIQS_SHOW_EXCEPTION_TRACE=1
-
-export OMP_NUM_THREADS=1
-
-export VISUAL=vim
-
-export FC=gfortran
-export CC=clang
-export CXX=clang++
-export CXXFLAGS='-stdlib=libc++ -Wno-register'
-export LDFLAGS="-L${LD_LIBRARY_PATH//:/ -L}"
-
-if ! echo $PATH | egrep -q "(^|:)$HOME/bin($|:)" ; then
-  export PATH=$HOME/bin:$PATH
-fi
