@@ -5,36 +5,29 @@
 
 "-------------------------------------- Load plugins ------------------------------------------
 
-set nocompatible
-filetype off
-set rtp+=~/.vim/bundle/Vundle.vim/
-call vundle#begin()"
+call plug#begin()
 
-" Let Vundle manage itself
-Plugin 'VundleVim/Vundle.vim'
+Plug 'vim-scripts/GrepCommands'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-repeat'
+Plug 'Latex-Box-Team/Latex-Box'
+Plug 'scrooloose/nerdcommenter'
+Plug 'chrisbra/Recover.vim'
+Plug 'octol/vim-cpp-enhanced-highlight'
+Plug 'altercation/vim-colors-solarized'
+Plug 'derekwyatt/vim-fswitch'
+Plug 'rhysd/vim-clang-format'
+Plug 'vim-scripts/AnsiEsc.vim'
+Plug 'prabirshrestha/asyncomplete.vim'
+Plug 'prabirshrestha/async.vim'
+Plug 'prabirshrestha/vim-lsp'
+Plug 'prabirshrestha/asyncomplete-lsp.vim'
+Plug 'tpope/vim-fugitive'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+"Plug 'w0rp/ale'
 
-" Load Plugins ( from github.com )
-Plugin 'vim-scripts/GrepCommands'
-Plugin 'tpope/vim-surround'
-Plugin 'tpope/vim-repeat'
-Plugin 'Latex-Box-Team/Latex-Box'
-Plugin 'scrooloose/nerdcommenter'
-Plugin 'chrisbra/Recover.vim'
-Plugin 'octol/vim-cpp-enhanced-highlight'
-Plugin 'altercation/vim-colors-solarized'
-Plugin 'derekwyatt/vim-fswitch'
-Plugin 'rhysd/vim-clang-format'
-Plugin 'vim-scripts/AnsiEsc.vim'
-Plugin 'prabirshrestha/asyncomplete.vim'
-Plugin 'prabirshrestha/async.vim'
-Plugin 'prabirshrestha/vim-lsp'
-Plugin 'prabirshrestha/asyncomplete-lsp.vim'
-Plugin 'tpope/vim-fugitive'
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-"Plugin 'w0rp/ale'
-
-call vundle#end()
+call plug#end()
 
 "-------------------------------------- GENERAL SETTINGS ------------------------------------------
 
