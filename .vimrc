@@ -16,16 +16,14 @@ Plug 'chrisbra/Recover.vim'
 Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'altercation/vim-colors-solarized'
 Plug 'derekwyatt/vim-fswitch'
-Plug 'rhysd/vim-clang-format'
 Plug 'vim-scripts/AnsiEsc.vim'
-Plug 'prabirshrestha/asyncomplete.vim'
-Plug 'prabirshrestha/async.vim'
-Plug 'prabirshrestha/vim-lsp'
-Plug 'prabirshrestha/asyncomplete-lsp.vim'
 Plug 'tpope/vim-fugitive'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-"Plug 'w0rp/ale'
+Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
 
 call plug#end()
 
@@ -35,8 +33,6 @@ syntax on			" Syntax highlighting on
 filetype plugin indent on	" Indenting globally on
 set shiftwidth=2		" Set indent shift
 set backspace=2			" Make backspace work normally
-
-set wildmenu			" Always use auto-complete menu
 set nomore			" Do not prompt for 'more'
 
 " Airline theme
@@ -50,19 +46,6 @@ endif
 let g:airline_symbols.space = "\ua0"
 let g:airline#extensions#tabline#show_buffers = 0
 "let g:airline#extensions#tabline#enabled = 1
-
-"Language Server Settings
-let g:lsp_auto_enable = 1
-let g:lsp_signs_enabled = 1           " enable diagnostic signs / we use ALE for now
-let g:lsp_diagnostics_echo_cursor = 1 " enable echo under cursor when in normal mode
-let g:lsp_signs_error = {'text': '✖'}
-let g:lsp_signs_warning = {'text': '~'}
-let g:lsp_signs_hint = {'text': '?'}
-let g:lsp_signs_information = {'text': '!!'}
-"let g:asyncomplete_auto_popup = 0
-"let g:lsp_log_verbose = 1
-"let g:lsp_log_file = expand('~/.vim/vim-lsp.log') " drastically slow down editing
-
 
 " My Status Line
 set statusline=%t[%{strlen(&fenc)?&fenc:'none'},%{&ff}]%h%m%r%y%=%c,%l/%L\ %P
@@ -179,28 +162,29 @@ autocmd Syntax c,cpp,vim,xml,html,xhtml,perl normal zR			" Start unfolded
 
 "-------------------------------------- General Coding Config ------------------------------------------
 "
-" --- Vim LSP Config
-let g:lsp_signs_enabled = 1
-let g:lsp_diagnostics_echo_cursor = 1
+let g:LanguageClient_serverCommands = {
+    \ 'python': ['pyls'],
+    \ 'cpp': ['clangd'],
+    \ }
 
-" --- Vim LSP Bindings
-autocmd Syntax c,cpp,python nnoremap <C-]> :LspDefinition<cr>
-autocmd Syntax c,cpp,python vnoremap <C-]> :LspDefinition<cr>
-autocmd Syntax c,cpp,python nnoremap <C-h> :LspRename<cr>
-autocmd Syntax c,cpp,python vnoremap <C-h> :LspRename<cr>
+" --- Language Server Bindings
+autocmd Syntax c,cpp,python nnoremap <buffer> <C-]> :call LanguageClient#textDocument_definition()<CR>
+autocmd Syntax c,cpp,python vnoremap <buffer> <C-]> :call LanguageClient#textDocument_definition()<CR>
+autocmd Syntax c,cpp,python nnoremap <buffer> <C-h> :call LanguageClient#textDocument_rename()<CR>
+autocmd Syntax c,cpp,python vnoremap <buffer> <C-h> :call LanguageClient#textDocument_rename()<CR>
+
+" --- Code Completion
+set omnifunc=syntaxcomplete#Complete
+set completefunc=LanguageClient#complete
+set wildmenu
+inoremap <C-n> <C-x><C-o>
+let g:LanguageClient_autoStart = 1
+let g:LanguageClient_hoverPreview = 'auto'
+let g:LanguageClient_diagnosticsEnable = 1
 
 "-------------------------------------- PYTHON SPECIFIC STUFF ------------------------------------------
 "
 autocmd FileType python set shiftwidth=4
-
-if executable('pyls')
-    "pip install python-language-server[all]
-    au User lsp_setup call lsp#register_server({
-        \ 'name': 'pyls',
-        \ 'cmd': {server_info->['pyls']},
-        \ 'whitelist': ['python'],
-        \ })
-endif
 
 " --- Config for yapf
 autocmd Syntax python nnoremap == :YAPF<cr>
@@ -208,45 +192,12 @@ autocmd Syntax python vnoremap == :YAPF<cr>
 
 "-------------------------------------- CPP SPECIFIC STUFF ------------------------------------------
 
-" --- clangd language server
-if executable('clangd')
-    au User lsp_setup call lsp#register_server({
-	\ 'name': 'clangd',
-	\ 'cmd': {server_info->['clangd']},
-	\ 'whitelist': ['c', 'cpp', 'objc', 'objcpp', 'cc'],
-	\ })
-endif
-
-"" --- cquery language server
-"if executable('cquery')
-   "au User lsp_setup call lsp#register_server({
-      "\ 'name': 'cquery',
-      "\ 'cmd': {server_info->['cquery']},
-      "\ 'root_uri': {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'build/compile_commands.json'))},
-      "\ 'initialization_options': { 'cacheDirectory': '/tmp/cquery/cache' },
-      "\ 'whitelist': ['c', 'cpp', 'objc', 'objcpp', 'cc'],
-      "\ })
-"endif
-
-" --- Configure Ale Linter
-"call ale#Set('cpp_clangtidy_checks', ['-*,modernize-*,cppcoreguidelines-*,-cppcoreguidelines-pro-bounds-constant-array-index,-cppcoreguidelines-pro-type-member-init'])
-"call ale#Set('cpp_clangtidy_options', '-extra-arg=-std=c++17')
-"let g:ale_linters = {
-      "\   'C++': ['clangtidy'],
-      "\}
-
 " --- Config for clang-format plugin
-autocmd Syntax c,cpp nnoremap == :ClangFormat<cr>
-autocmd Syntax c,cpp vnoremap == :ClangFormat<cr>
+autocmd Syntax c,cpp nnoremap <buffer> == :call LanguageClient_textDocument_formatting()<CR>
+autocmd Syntax c,cpp vnoremap <buffer> == :call LanguageClient_textDocument_formatting()<CR>
 
 " --- Enable highlighting of matching angle braces
 autocmd Syntax c,cpp set mps+=<:>
-
-" Specify command in shell
-let g:clang_format#command = 'clang-format'
-" Detect and apply style-file .clang-format or _clang-format
-let g:clang_format#detect_style_file = 1
-
 
 " set up file switch for fswitch plugin
 "au! BufEnter *.cpp let b:fswitchdst = 'h' | let b:fswitchlocs = '../include'
