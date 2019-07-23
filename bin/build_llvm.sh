@@ -1,49 +1,21 @@
 WORK_DIR=$PWD
-RELEASE=branches/release_80 #trunk
+RELEASE=master
 
+# Cf. https://llvm.org/docs/GettingStarted.html
 cd ${WORK_DIR}
-svn co http://llvm.org/svn/llvm-project/llvm/${RELEASE} llvm
-
-cd ${WORK_DIR}
-cd llvm/tools
-svn co http://llvm.org/svn/llvm-project/cfe/${RELEASE} clang
-
-cd ${WORK_DIR}
-cd llvm/tools/clang/tools
-svn co http://llvm.org/svn/llvm-project/clang-tools-extra/${RELEASE} extra
+git clone https://github.com/llvm/llvm-project --branch $RELEASE --depth 1
 
 #cd ${WORK_DIR}
-#cd llvm/tools/clang/tools
+#cd llvm-project/llvm/tools/clang/tools
 #mkdir templight
 #git clone https://github.com/mikael-s-persson/templight templight
 #echo "add_clang_subdirectory(templight)" >> CMakeLists.txt
 
 #cd ${WORK_DIR}
-#cd llvm/tools
+#cd llvm-project/llvm/tools
 #git clone https://github.com/facebookincubator/BOLT llvm-bolt
 #cd ..
 #patch -p 1 < tools/llvm-bolt/llvm.patch
-
-cd ${WORK_DIR}
-cd llvm/tools
-svn co http://llvm.org/svn/llvm-project/lld/${RELEASE} lld
-
-cd ${WORK_DIR}
-cd llvm/tools
-svn co http://llvm.org/svn/llvm-project/polly/${RELEASE} polly
-
-cd ${WORK_DIR}
-cd llvm/projects
-svn co http://llvm.org/svn/llvm-project/compiler-rt/${RELEASE} compiler-rt
-
-cd ${WORK_DIR}
-cd llvm/projects
-svn co http://llvm.org/svn/llvm-project/openmp/${RELEASE} openmp
-
-cd ${WORK_DIR}
-cd llvm/projects
-svn co http://llvm.org/svn/llvm-project/libcxx/${RELEASE} libcxx
-svn co http://llvm.org/svn/llvm-project/libcxxabi/${RELEASE} libcxxabi
 
 BUILD_DIR=${WORK_DIR}/llvm_build
 INSTALL_DIR=$HOME/opt/llvm_${RELEASE}
@@ -53,6 +25,7 @@ mkdir -p ${BUILD_DIR}
 cd ${BUILD_DIR}
 # Cf. https://llvm.org/docs/CMake.html
 cmake -DCMAKE_BUILD_TYPE=Release \
+      -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;polly;compiler-rt;openmp;libcxx;libcxxabi" \
       -DCMAKE_C_FLAGS="-O3" \
       -DCMAKE_CXX_FLAGS="-O3" \
       -DLLVM_CCACHE_BUILD=ON \
@@ -73,7 +46,7 @@ cmake -DCMAKE_BUILD_TYPE=Release \
       -DCMAKE_C_COMPILER="${CC}" \
       -DCMAKE_CXX_COMPILER="${CXX}" \
       -DLIBOMP_TSAN_SUPPORT=1 \
-      "${WORK_DIR}/llvm"
+      "${WORK_DIR}/llvm-project/llvm"
       #-DLINK_POLLY_INTO_TOOLS=ON \
       #-DLLVM_BINUTILS_INCDIR="${WORK_DIR}/llvm/tools/binutils/include" \
       #-DLLVM_TARGETS_TO_BUILD="ARM;AArch64;PowerPC;X86" \
