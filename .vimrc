@@ -3,7 +3,7 @@
 "								"
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-"-------------------------------------- Load plugins ------------------------------------------
+"-------------------------------------- Load plugins ------------------------------------------{{{
 
 call plug#begin()
 
@@ -26,8 +26,8 @@ Plug 'autozimu/LanguageClient-neovim', {
     \ }
 
 call plug#end()
-
-"-------------------------------------- GENERAL SETTINGS ------------------------------------------
+"}}}
+"-------------------------------------- General Settings ------------------------------------------{{{
 
 syntax on			" Syntax highlighting on
 filetype plugin indent on	" Indenting globally on
@@ -45,7 +45,6 @@ if !exists('g:airline_symbols')
 endif
 let g:airline_symbols.space = "\ua0"
 let g:airline#extensions#tabline#show_buffers = 0
-"let g:airline#extensions#tabline#enabled = 1
 
 " My Status Line
 set statusline=%t[%{strlen(&fenc)?&fenc:'none'},%{&ff}]%h%m%r%y%=%c,%l/%L\ %P
@@ -64,8 +63,8 @@ colorscheme solarized
 
 " fix replace color highlight
 :hi incsearch term=standout cterm=standout ctermfg=9 ctermbg=7 gui=reverse
-
-"-------------------------------------- CUSTOM COMMANDS ------------------------------------------
+"}}}
+"-------------------------------------- Custom Commands ------------------------------------------{{{
 
 " Simple small comment line
 :command! CommLineSmall 	:normal 80i-<Esc>,ciA<cr>
@@ -88,10 +87,11 @@ colorscheme solarized
 
 "Command Make will call make and then open quickfix window
 autocmd BufReadPost quickfix AnsiEsc
-set makeprg=$HOME/bin/pymake
-:command! -nargs=* Make :make -j 8 <args> | cwindow 15
-
-"-------------------------------------- KEY MAPPINGS ------------------------------------------
+"set makeprg=$HOME/bin/pymake
+set makeprg=make
+:command! -nargs=* Make :make -j 60 <args> | cwindow 15
+"}}}
+"-------------------------------------- Key Mappings ------------------------------------------{{{
 
 " rebind leader key and escape
 let mapleader = ","
@@ -131,7 +131,7 @@ inoremap {}     {}
 
 "Just press F5 to make your program:
 map <F5> :Make run<cr><cr><cr>
-autocmd Syntax c,cpp map 'll :Make -C build<cr><cr><cr>
+autocmd Syntax c,cpp map <buffer> 'll :Make -s -C build<cr><cr><cr>
 
 ";n for next error
 nnoremap ;n	:cn<cr>
@@ -150,17 +150,41 @@ nnoremap ;h	:set hlsearch!<cr>
 " replace selected text
 vnoremap <C-r> "hy:%s/<C-r>h//gc<left><left><left>
 
-"-------------------------------------- FILE TYPE AUTOCOMMANDS ------------------------------------------
+" Set wrapping and fix movement keys!
+noremap <silent> <Leader>w :call ToggleWrap()<CR>
+function ToggleWrap()
+  if &wrap
+    echo "Wrap OFF"
+    setlocal nowrap
+    set virtualedit=all
+    silent! nunmap <buffer> k
+    silent! nunmap <buffer> j
+    silent! nunmap <buffer> 0
+    silent! nunmap <buffer> $
+  else
+    echo "Wrap ON"
+    setlocal wrap linebreak nolist
+    set virtualedit=
+    setlocal display+=lastline
+    noremap  <buffer> <silent> k   gk
+    noremap  <buffer> <silent> j   gj
+    noremap  <buffer> <silent> 0   g0
+    noremap  <buffer> <silent> $   g$
+  endif
+endfunction
+"}}}
+"-------------------------------------- File Type Autocommands ------------------------------------------{{{
 
 au BufNewFile,BufRead	*.plt	set filetype=gnuplot		" set plt files to gnuplot type
 au BufNewFile,BufRead	*MAKE*	set filetype=make		" set files with MAKE in name to make type
+"}}}
+"-------------------------------------- Folding ------------------------------------------{{{
 
-"-------------------------------------- FOLDING  ------------------------------------------
-
-autocmd Syntax c,cpp,vim,xml,html,xhtml setlocal foldmethod=syntax 	" Enable Syntax folding
-autocmd Syntax c,cpp,vim,xml,html,xhtml,perl normal zR			" Start unfolded
-
-"-------------------------------------- General Coding Config ------------------------------------------
+set foldmethod=marker foldlevelstart=0 foldnestmax=1
+autocmd Syntax c,cpp setlocal foldmethod=syntax 	" Enable Syntax folding
+"autocmd Syntax c,cpp normal zR			        " Start unfolded
+"}}}
+"-------------------------------------- General Coding Config ------------------------------------------{{{
 "
 let g:LanguageClient_serverCommands = {
     \ 'python': ['pyls'],
@@ -181,16 +205,16 @@ inoremap <C-n> <C-x><C-o>
 let g:LanguageClient_autoStart = 1
 let g:LanguageClient_hoverPreview = 'auto'
 let g:LanguageClient_diagnosticsEnable = 1
-
-"-------------------------------------- PYTHON SPECIFIC STUFF ------------------------------------------
+"}}}
+"-------------------------------------- Python Specific Stuff ------------------------------------------{{{
 "
 autocmd FileType python set shiftwidth=4
 
 " --- Config for yapf
-autocmd Syntax python nnoremap == :YAPF<cr>
-autocmd Syntax python vnoremap == :YAPF<cr>
-
-"-------------------------------------- CPP SPECIFIC STUFF ------------------------------------------
+autocmd Syntax python nnoremap <buffer> == :YAPF<cr>
+autocmd Syntax python vnoremap <buffer> == :YAPF<cr>
+"}}}
+"-------------------------------------- Cpp Specific Stuff ------------------------------------------{{{
 
 " --- Config for clang-format plugin
 autocmd Syntax c,cpp nnoremap <buffer> == :call LanguageClient_textDocument_formatting()<CR>
@@ -208,22 +232,6 @@ au! BufEnter *.hpp let b:fswitchdst = 'cpp'
 " --- FSwitch bindings
 " Switch to the file and load it into the current window >
 nmap <silent> <Leader>of :FSHere<cr>
-"Switch to the file and load it into the window on the right >
-nmap <silent> <Leader>ol :FSRight<cr>
-"Switch to the file and load it into a new window split on the right >
-nmap <silent> <Leader>oL :FSSplitRight<cr>
-"Switch to the file and load it into the window on the left >
-nmap <silent> <Leader>oh :FSLeft<cr>
-"Switch to the file and load it into a new window split on the left >
-nmap <silent> <Leader>oH :FSSplitLeft<cr>
-"Switch to the file and load it into the window above >
-nmap <silent> <Leader>ok :FSAbove<cr>
-"Switch to the file and load it into a new window split above >
-nmap <silent> <Leader>oK :FSSplitAbove<cr>
-"Switch to the file and load it into the window below >
-nmap <silent> <Leader>oj :FSBelow<cr>
-"Switch to the file and load it into a new window split below >
-nmap <silent> <Leader>oJ :FSSplitBelow<cr>
 
 " Translate Mathematica cpp expressions to correct expression
 function! Math2Cpp()
@@ -240,8 +248,8 @@ function! Math2Cpp()
    :s/Log/log/ge
    :s/Abs/abs/ge
 endfunction
-
-"-------------------------------------- LATEX SPECIFIC STUFF ------------------------------------------
+"}}}
+"-------------------------------------- Latex Specific Stuff ------------------------------------------{{{
 "
 let g:LatexBox_viewer = 'zathura'
 let g:LatexBox_latexmk_options = "-pdflatex='pdflatex -synctex=1 \%O \%S'"
@@ -269,27 +277,4 @@ endfunction
 
 nmap <Leader>f :call SyncTexForward()<CR>
 
-:command! Myspell :setlocal spell spelllang=en_us <bar> :syntax spell toplevel
-
-" Set wrapping and fix movement keys!
-noremap <silent> <Leader>w :call ToggleWrap()<CR>
-function ToggleWrap()
-  if &wrap
-    echo "Wrap OFF"
-    setlocal nowrap
-    set virtualedit=all
-    silent! nunmap <buffer> k
-    silent! nunmap <buffer> j
-    silent! nunmap <buffer> 0
-    silent! nunmap <buffer> $
-  else
-    echo "Wrap ON"
-    setlocal wrap linebreak nolist
-    set virtualedit=
-    setlocal display+=lastline
-    noremap  <buffer> <silent> k   gk
-    noremap  <buffer> <silent> j   gj
-    noremap  <buffer> <silent> 0   g0
-    noremap  <buffer> <silent> $   g$
-  endif
-endfunction
+:command! Myspell :setlocal spell spelllang=en_us <bar> :syntax spell toplevel"}}}
