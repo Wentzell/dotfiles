@@ -1,0 +1,12 @@
+set editing-mode vi
+set keymap vi-insert
+";;": vi-movement-mode
+Control-p: previous-history
+Control-n: next-history
+Control-l: clear-screen
+#Control-n: history-search-backward
+set keymap vi
+u: undo
+Control-p: previous-history
+Control-n: next-history
+Control-l: clear-screen

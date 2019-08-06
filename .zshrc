@@ -124,3 +124,21 @@ fi
 
 setxkbmap -option "ctrl:nocaps" &> /dev/null
 #xbindkeys -p
+
+# 'Readline' Equivalent Settings
+bindkey -v
+bindkey -M viins ';;' vi-cmd-mode
+bindkey -M vicmd 'u' undo
+bindkey -M viins '^p' up-history
+bindkey -M vicmd '^p' up-history
+bindkey -M viins '^n' down-history
+bindkey -M vicmd '^n' down-history
+bindkey -M viins '^r' history-incremental-search-backward
+bindkey -M vicmd '^r' history-incremental-search-backward
+bindkey -M viins '^e' end-of-line
+bindkey -M vicmd '^e' end-of-line
+bindkey -M viins '^a' beginning-of-line
+bindkey -M vicmd '^a' beginning-of-line
+bindkey -M viins "^?" backward-delete-char
+#bindkey -M viins '^r' history-beginning-search-backward
+#bindkey -M vicmd '^r' history-beginning-search-backward
