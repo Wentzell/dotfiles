@@ -61,6 +61,8 @@ colorscheme solarized
 "autocmd BufWritePre * %s/\s\+$//e
 :command! Delwsp :%s/\s\+$//e
 
+let g:clang_format#command = 'clang-format'
+
 " fix replace color highlight
 :hi incsearch term=standout cterm=standout ctermfg=9 ctermbg=7 gui=reverse
 "}}}
@@ -182,12 +184,13 @@ au BufNewFile,BufRead	*MAKE*	set filetype=make		" set files with MAKE in name to
 
 set foldmethod=marker foldlevelstart=0 foldnestmax=1
 autocmd Syntax c,cpp setlocal foldmethod=syntax 	" Enable Syntax folding
-"autocmd Syntax c,cpp normal zR			        " Start unfolded
+autocmd Syntax c,cpp normal zR			        " Start unfolded
 "}}}
 "-------------------------------------- General Coding Config ------------------------------------------{{{
 "
 let g:LanguageClient_serverCommands = {
     \ 'python': ['pyls'],
+    \ 'c': ['clangd'],
     \ 'cpp': ['clangd'],
     \ }
 
