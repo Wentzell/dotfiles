@@ -104,7 +104,7 @@ print_code_PY='enscript -G -f Courier7  --color -Epython -L 90 -C '
 prof() {
   #CURRENT_DIR=$PWD; mkdir -p prof; cd prof;
   rm -f $1.prof* &> /dev/null
-  LD_PRELOAD=$HOME/opt/gperftools/lib/libprofiler.so CPUPROFILE=$1.prof $1
+  LD_PRELOAD=$HOME/opt/gperftools/lib/libprofiler.so CPUPROFILE=$1.prof $1 $@
   #cd $CURRENT_DIR
 }
 pprint() {
