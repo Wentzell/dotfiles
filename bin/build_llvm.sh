@@ -1,5 +1,5 @@
 WORK_DIR=$PWD
-RELEASE=master
+RELEASE=llvmorg-8.0.1
 
 # Cf. https://llvm.org/docs/GettingStarted.html
 cd ${WORK_DIR}
@@ -18,7 +18,7 @@ git clone https://github.com/llvm/llvm-project --branch $RELEASE --depth 1
 #patch -p 1 < tools/llvm-bolt/llvm.patch
 
 BUILD_DIR=${WORK_DIR}/llvm_build
-INSTALL_DIR=$HOME/opt/llvm_${RELEASE}
+INSTALL_DIR=$HOME/opt/llvm_8.0.1
 TRHEADS=40
 
 mkdir -p ${BUILD_DIR}
