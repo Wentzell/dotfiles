@@ -1,30 +1,38 @@
-WORK_DIR=$PWD
-RELEASE=llvmorg-8.0.1
+# Build configuration
+RELEASE=llvmorg-9.0.0
+INSTALL_DIR=$HOME/opt/llvm_9.0.0
+SRC_DIR=$PWD
+BUILD_DIR=${SRC_DIR}/llvm_build
+THREADS=10
 
-# Cf. https://llvm.org/docs/GettingStarted.html
-cd ${WORK_DIR}
+# Shallow clone of llvm
+cd ${SRC_DIR}
 git clone https://github.com/llvm/llvm-project --branch $RELEASE --depth 1
 
-#cd ${WORK_DIR}
+#cd ${SRC_DIR}
 #cd llvm-project/llvm/tools/clang/tools
 #mkdir templight
 #git clone https://github.com/mikael-s-persson/templight templight
 #echo "add_clang_subdirectory(templight)" >> CMakeLists.txt
 
-#cd ${WORK_DIR}
+#cd ${SRC_DIR}
 #cd llvm-project/llvm/tools
 #git clone https://github.com/facebookincubator/BOLT llvm-bolt
 #cd ..
 #patch -p 1 < tools/llvm-bolt/llvm.patch
 
-BUILD_DIR=${WORK_DIR}/llvm_build
-INSTALL_DIR=$HOME/opt/llvm_8.0.1
-TRHEADS=40
+# Build with gcc
+export CC=gcc
+export CXX=g++
+export CXXFLAGS=''
+GCC_INSTALL_PREFIX=$(dirname $(which gcc))/../
 
 mkdir -p ${BUILD_DIR}
 cd ${BUILD_DIR}
 # Cf. https://llvm.org/docs/CMake.html
+# and https://llvm.org/docs/GettingStarted.html
 cmake -DCMAKE_BUILD_TYPE=Release \
+      -DGCC_INSTALL_PREFIX=${GCC_INSTALL_PREFIX} \
       -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;polly;compiler-rt;openmp;libcxx;libcxxabi" \
       -DCMAKE_C_FLAGS="-O3" \
       -DCMAKE_CXX_FLAGS="-O3" \
@@ -46,9 +54,11 @@ cmake -DCMAKE_BUILD_TYPE=Release \
       -DCMAKE_C_COMPILER="${CC}" \
       -DCMAKE_CXX_COMPILER="${CXX}" \
       -DLIBOMP_TSAN_SUPPORT=1 \
-      "${WORK_DIR}/llvm-project/llvm"
+      "${SRC_DIR}/llvm-project/llvm"
+      #-DCLANG_OPENMP_NVPTX_DEFAULT_ARCH=sm_61 \
+      #-DLIBOMPTARGET_NVPTX_COMPUTE_CAPABILITIES=61 \
       #-DLINK_POLLY_INTO_TOOLS=ON \
-      #-DLLVM_BINUTILS_INCDIR="${WORK_DIR}/llvm/tools/binutils/include" \
+      #-DLLVM_BINUTILS_INCDIR="${SRC_DIR}/llvm/tools/binutils/include" \
       #-DLLVM_TARGETS_TO_BUILD="ARM;AArch64;PowerPC;X86" \
       #-DLLVM_VERSION_SUFFIX="-r${LLVM_SVN_REVISION:?}" \
       #-DCLANG_REPOSITORY_STRING="${URL_PREFIX}clang" \
