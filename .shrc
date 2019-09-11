@@ -118,7 +118,7 @@ pprint() {
 hprof() {
   #CURRENT_DIR=$PWD; mkdir -p hprof; cd hprof;
   rm -f $1.hprof* &> /dev/null
-  LD_PRELOAD=$HOME/opt/gperftools/lib/libtcmalloc.so HEAPPROFILE=$1.hprof $1
+  LD_PRELOAD=$HOME/opt/gperftools/lib/libtcmalloc.so HEAPPROFILE=$1.hprof $1 $@
   #cd $CURRENT_DIR
 }
 hpprint() {
@@ -154,18 +154,3 @@ hpprint_full() {
     done
   fi
 }
-
-#tagsrc () {
-  #list=()
-  #file_endings=(c cpp h hpp hxx py)
-  #for i in $@; do
-    #if [ -d "$i" ]; then
-      #for j in ${file_endings[@]}; do
-        #list+=($i/**/*.$j(N))
-      #done
-    #elif [ -f "$i" ]; then
-      #list+=($i)
-    #fi
-  #done
-  #ctags --options=$HOME/.ctagsrc ${list[@]}
-#}
