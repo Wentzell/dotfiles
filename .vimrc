@@ -188,11 +188,27 @@ autocmd Syntax c,cpp normal zR			        " Start unfolded
 "}}}
 "-------------------------------------- General Coding Config ------------------------------------------{{{
 "
+"let g:LanguageClient_loggingFile = expand('~/.vim/LanguageClient.log')
+let g:LanguageClient_diagnosticsList = "Disabled" " We do not want to populate the quickfix window
 let g:LanguageClient_serverCommands = {
-    \ 'python': ['pyls'],
-    \ 'c': ['clangd'],
-    \ 'cpp': ['clangd'],
-    \ }
+      \ 'python': ['pyls'],
+      \ 'c': ['clangd',
+      \       '--compile-commands-dir='.getcwd().'/build',
+      \	      '--all-scopes-completion',
+      \	      '--background-index',
+      \	      '--clang-tidy',
+      \	      '--completion-style=bundled',
+      \	      '--header-insertion=iwyu',
+      \	      '--suggest-missing-includes'],
+      \ 'cpp': ['clangd',
+      \       '--compile-commands-dir='.getcwd().'/build',
+      \	      '--all-scopes-completion',
+      \	      '--background-index',
+      \	      '--clang-tidy',
+      \	      '--completion-style=bundled',
+      \	      '--header-insertion=iwyu',
+      \	      '--suggest-missing-includes'],
+      \ }
 
 " --- Language Server Bindings
 autocmd Syntax c,cpp,python nnoremap <buffer> <C-]> :call LanguageClient#textDocument_definition()<CR>
