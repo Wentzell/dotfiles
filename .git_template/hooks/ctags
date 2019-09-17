@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+set -e
+dir="`git rev-parse --git-dir`"
+trap 'rm -f "$dir/$$.tags"' EXIT
+ctags --tag-relative -R --options=$HOME/.ctagsrc -f "$dir/$$.tags"
+mv "$dir/$$.tags" "$dir/tags"

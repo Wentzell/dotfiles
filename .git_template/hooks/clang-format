@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+#
+# Runs clang-format on changed regions before commit.
+#
+
+git stash save -k "clang_format_stash"
+git clang-format
+git add -p
+git stash pop
