@@ -55,7 +55,8 @@ alias sshx="TERM=xterm ssh -Y"
 alias sshnokey="ssh -X -o PubkeyAuthentication=no"
 
 	# vim
-alias vimsrc="vim **/*.c(N) **/*.h(N) **/*.cpp(N) **/*.hpp(N) **/*.hxx(N)"
+	# https://github.com/Sarcasm/compdb <- Add header files to compile_commands.json
+alias vimsrc="compdb -p build/ list > compile_commands.json &> /dev/null; vim **/*.cpp(N) **/*.hpp(N) **/*.hxx(N)" # **/*.c(N) **/*.h(N)
 alias vimtex='vim --servername $(basename *.tex.latexmain .tex.latexmain) *.tex content/*.tex(N) settings/*.tex(N)'
 
 	# apt
