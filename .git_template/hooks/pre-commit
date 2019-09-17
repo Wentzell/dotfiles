@@ -1,2 +1,2 @@
-#!/bin/sh
-.git/hooks/clang-format >/dev/null 2>&1 &
+#!/usr/bin/env sh
+.git/hooks/clang-format
