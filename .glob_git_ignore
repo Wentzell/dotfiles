@@ -27,6 +27,7 @@ stderr.*
 tags
 build*
 .idea
+.clangd
 cmake-build-*
 .ipynb_checkpoints
 *.pyc
