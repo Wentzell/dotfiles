@@ -53,7 +53,10 @@ cmake -DCMAKE_BUILD_TYPE=Release \
       -DCMAKE_C_COMPILER="${CC}" \
       -DCMAKE_CXX_COMPILER="${CXX}" \
       -DLIBOMP_TSAN_SUPPORT=1 \
+      -DCLANG_PYTHON_BINDINGS_VERSIONS="2.7" \
       "${SRC_DIR}/llvm-project/llvm"
+      #-DCLANG_OPENMP_NVPTX_DEFAULT_ARCH=sm_70 \
+      #-DLIBOMPTARGET_NVPTX_COMPUTE_CAPABILITIES=70 \
       #-DLINK_POLLY_INTO_TOOLS=ON \
       #-DLLVM_BINUTILS_INCDIR="${SRC_DIR}/llvm/tools/binutils/include" \
       #-DLLVM_TARGETS_TO_BUILD="ARM;AArch64;PowerPC;X86" \
@@ -62,4 +65,4 @@ cmake -DCMAKE_BUILD_TYPE=Release \
       #-DCLANG_VENDOR="${VENDOR:+"${VENDOR} "}" \
       #-DCLANG_VERSION_SUFFIX="-r${CLANG_SVN_REVISION:?}" \
 
-make install
+make -j ${THREADS} install
