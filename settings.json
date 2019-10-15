@@ -1,0 +1,98 @@
+{
+"vim.normalModeKeyBindings": [
+{
+"before": ["<Leader>", "c", "h", "l"],
+"commands": [":CommLineSmall"]
+},
+{
+"before": ["<Leader>", "c", "t", "l"],
+"commands": [":CommTLineSmall"]
+},
+{
+"before": ["<Leader>", "C", "h", "l"],
+"commands": [":CommLine"]
+},
+{
+"before": ["<Leader>", "C", "t", "l"],
+"commands": [":CommTLine"]
+},
+{
+"before": ["<Leader>", "d", "c"],
+"commands": [":DoxComm"]
+}
+],
+"vim.normalModeKeyBindingsNonRecursive": [
+{
+"before": ["<leader>", "<leader>", "p"],
+"after": ["\"", "+", "p"]
+},
+{
+"before": [";", "j"],
+"after": ["<C-D>"]
+},
+{
+"before": [";", "k"],
+"after": ["<C-U>"]
+},
+{
+"before": [";", "n"],
+"commands": [":cn"]
+},
+{
+"before": [";", "p"],
+"commands": [":cp"]
+}
+],
+"vim.visualModeKeyBindingsNonRecursive": [
+{
+"before": [";", ";"],
+"after": ["<Esc>"]
+},
+{
+"before": ["<leader>", "<leader>", "y"],
+"after": ["\"", "+", "y"]
+},
+{
+"before": ["<leader>", "<leader>", "p"],
+"after": ["\"", "+", "p"]
+},
+{
+"before": [";", "j"],
+"after": ["<C-D>"]
+},
+{
+"before": [";", "k"],
+"after": ["<C-U>"]
+},
+{
+"before": ["<C-r>"],
+"after": ["\"", "h", "y", ":", "%", "s", "/", "<C-r>", "h", "/", "/", "g", "c", "<left>", "<left>", "<left>"]
+}
+],
+"vim.insertModeKeyBindingsNonRecursive": [
+{
+"before": [";", ";"],
+"after": ["<Esc>"]
+},
+{
+"before": ["{"],
+"after": ["{", "}", "<Left>"]
+},
+{
+"before": ["{", "<cr>"],
+"after": ["{", "<cr>", "}", "<Esc>", "O"]
+},
+{
+"before": ["{", "{"],
+"after": ["{"]
+},
+{
+"before": ["{", "}"],
+"after": ["{", "}"]
+},
+{
+"before": ["<C-n>"],
+"after": ["<C-x>", "<C-o>"]
+}
+]
+}
