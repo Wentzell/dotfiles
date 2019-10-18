@@ -105,7 +105,7 @@ print_code_PY='enscript -G -f Courier7  --color -Epython -L 90 -C '
 prof() {
   #CURRENT_DIR=$PWD; mkdir -p prof; cd prof;
   rm -f $1.prof* &> /dev/null
-  LD_PRELOAD=$HOME/opt/gperftools/lib/libprofiler.so CPUPROFILE=$1.prof $1 $@
+  LD_PRELOAD=$HOME/opt/gperftools/lib/libprofiler.so CPUPROFILE=$1.prof $@
   #cd $CURRENT_DIR
 }
 pprint() {
@@ -119,7 +119,7 @@ pprint() {
 hprof() {
   #CURRENT_DIR=$PWD; mkdir -p hprof; cd hprof;
   rm -f $1.hprof* &> /dev/null
-  LD_PRELOAD=$HOME/opt/gperftools/lib/libtcmalloc.so HEAPPROFILE=$1.hprof $1 $@
+  LD_PRELOAD=$HOME/opt/gperftools/lib/libtcmalloc.so HEAPPROFILE=$1.hprof $@
   #cd $CURRENT_DIR
 }
 hpprint() {
