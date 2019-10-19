@@ -94,5 +94,13 @@
 "before": ["<C-n>"],
 "after": ["<C-x>", "<C-o>"]
 }
-]
+],
+"workbench.colorTheme": "Solarized Light",
+"revealjs.separator": "^\\n\\n\\n",
+"revealjs.verticalSeparator": "^\\n\\n",
+"revealjs.theme": "flatiron",
+"revealjs.highlightTheme": "solarized-light",
+"extensions.ignoreRecommendations": false,
+"revealjs.autoSlide": 2,
+"revealjs.viewDistance": 1
 }
