@@ -112,7 +112,9 @@ pprint() {
   pprof --text --lines $1 $1.prof > $1.prof.txt
   head -n 20 $1.prof.txt
   pprof --svg --lines $1 $1.prof > $1.prof.svg
+  pprof --collapsed $1 $1.prof | flamegraph.pl - > $1.prof.flamegraph.svg
   chromium-browser $1.prof.svg &
+  chromium-browser $1.prof.flamegraph.svg &
   #pprof --pdf --lines $1 $1.prof > $1.prof.pdf
   #pprof --web --lines $1 $1.prof
 }
