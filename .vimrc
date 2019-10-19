@@ -98,18 +98,18 @@ set makeprg=make
 " rebind leader key and escape
 let mapleader = ","
 inoremap ;; <Esc>
-vnoremap ;; <Esc>
+xnoremap ;; <Esc>
 
 " easy copy/paste to clipboard
-vnoremap <leader><leader>y 	"+y
+xnoremap <leader><leader>y 	"+y
 nnoremap <leader><leader>p 	"+p
-vnoremap <leader><leader>p 	"+p
+xnoremap <leader><leader>p 	"+p
 
 " simple scrolling through file
 nnoremap ;j 	<C-D>
 nnoremap ;k 	<C-U>
-vnoremap ;j 	<C-D>
-vnoremap ;k 	<C-U>
+xnoremap ;j 	<C-D>
+xnoremap ;k 	<C-U>
 
 " change window mode mappings
 noremap <leader><leader> 	<C-W>
@@ -150,7 +150,7 @@ autocmd! bufwritepost .vimrc source %
 nnoremap ;h	:set hlsearch!<cr>
 
 " replace selected text
-vnoremap <C-r> "hy:%s/<C-r>h//gc<left><left><left>
+xnoremap <C-r> "hy:%s/<C-r>h//gc<left><left><left>
 
 " Set wrapping and fix movement keys!
 noremap <silent> <Leader>w :call ToggleWrap()<CR>
@@ -212,9 +212,9 @@ let g:LanguageClient_serverCommands = {
 
 " --- Language Server Bindings
 autocmd Syntax c,cpp,python nnoremap <buffer> <C-]> :call LanguageClient#textDocument_definition()<CR>
-autocmd Syntax c,cpp,python vnoremap <buffer> <C-]> :call LanguageClient#textDocument_definition()<CR>
+autocmd Syntax c,cpp,python xnoremap <buffer> <C-]> :call LanguageClient#textDocument_definition()<CR>
 autocmd Syntax c,cpp,python nnoremap <buffer> <C-h> :call LanguageClient#textDocument_rename()<CR>
-autocmd Syntax c,cpp,python vnoremap <buffer> <C-h> :call LanguageClient#textDocument_rename()<CR>
+autocmd Syntax c,cpp,python xnoremap <buffer> <C-h> :call LanguageClient#textDocument_rename()<CR>
 
 " --- Code Completion
 set omnifunc=syntaxcomplete#Complete
@@ -231,13 +231,13 @@ autocmd FileType python set shiftwidth=4
 
 " --- Config for yapf
 autocmd Syntax python nnoremap <buffer> == :YAPF<cr>
-autocmd Syntax python vnoremap <buffer> == :YAPF<cr>
+autocmd Syntax python xnoremap <buffer> == :YAPF<cr>
 "}}}
 "-------------------------------------- Cpp Specific Stuff ------------------------------------------{{{
 
 " --- Config for clang-format plugin
 autocmd Syntax c,cpp nnoremap <buffer> == :call LanguageClient_textDocument_formatting()<CR>
-autocmd Syntax c,cpp vnoremap <buffer> == :call LanguageClient_textDocument_formatting()<CR>
+autocmd Syntax c,cpp xnoremap <buffer> == :call LanguageClient_textDocument_formatting()<CR>
 
 " --- Enable highlighting of matching angle braces
 autocmd Syntax c,cpp set mps+=<:>
