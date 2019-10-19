@@ -19,7 +19,10 @@ if __name__ == "__main__":
     commit_messages = list(Popen(["git", "log", "%s..HEAD"%start_commit, "--no-merges", "--pretty=format:%s", "-i", "-E"], stdout=PIPE).stdout)
 
     # App4Triqs Commit Messages (exclude these)
-    app4triqs_commit_messages = list(Popen(["git", "log", "app4triqs-remote/unstable", "--pretty=format:%s", "-i", "-E"], stdout=PIPE).stdout)
+    app4triqs_branches = [branch.strip() for branch in Popen(["git", "branch", "-a"], stdout=PIPE).stdout if "app4triqs" in branch]
+    app4triqs_commit_messages = []
+    for branch in app4triqs_branches:
+        app4triqs_commit_messages.extend(list(Popen(["git", "log", branch, "--pretty=format:%s", "-i", "-E"], stdout=PIPE).stdout))
 
     # Iterate through the git log items and group them
     for line in commit_messages:
