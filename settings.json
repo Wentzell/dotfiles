@@ -101,6 +101,11 @@
 "revealjs.theme": "flatiron",
 "revealjs.highlightTheme": "solarized-light",
 "extensions.ignoreRecommendations": false,
-"revealjs.autoSlide": 2,
-"revealjs.viewDistance": 1
+"clangd.arguments": [
+    "--all-scopes-completion",
+    "--background-index",
+    "--clang-tidy",
+    "--completion-style=bundled",
+    "--suggest-missing-includes"
+]
 }
