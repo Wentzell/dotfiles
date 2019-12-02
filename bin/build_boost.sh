@@ -10,9 +10,9 @@ cd boost
 # Build with clang
 export CC=clang
 export CXX=clang++
-export CFLAGS='-O3 -march=broadwell -stdlib=libc++'
 export CXXFLAGS='-O3 -march=broadwell -stdlib=libc++'
+export LDFLAGS='-stdlib=libc++'
 
 # Cf. https://github.com/boostorg/boost/wiki/Getting-Started%3A-Overview#installing-boost
 ./bootstrap.sh --with-toolset=clang
-./b2 toolset=clang install --prefix=${INSTALL_DIR} -j ${THREADS}
+./b2 toolset=clang cxxflags="$CXXFLAGS" linkflags="$LDFLAGS" install --prefix=${INSTALL_DIR} -j ${THREADS}
