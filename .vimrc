@@ -297,3 +297,7 @@ endfunction
 nmap <Leader>f :call SyncTexForward()<CR>
 
 :command! Myspell :setlocal spell spelllang=en_us <bar> :syntax spell toplevel"}}}
+
+" --- Presentation mode
+"let g:airline_solarized_bg='light'
+"set background=light
