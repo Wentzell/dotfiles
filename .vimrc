@@ -101,9 +101,9 @@ inoremap ;; <Esc>
 xnoremap ;; <Esc>
 
 " easy copy/paste to clipboard
-xnoremap <leader><leader>y 	"+y
-nnoremap <leader><leader>p 	"+p
-xnoremap <leader><leader>p 	"+p
+xnoremap <leader><leader>y 	"*y
+nnoremap <leader><leader>p 	"*p
+xnoremap <leader><leader>p 	"*p
 
 " simple scrolling through file
 nnoremap ;j 	<C-D>
