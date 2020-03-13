@@ -35,7 +35,7 @@ cd ${BUILD_DIR}
 cmake -DCMAKE_BUILD_TYPE=Release \
       -DCMAKE_INSTALL_PREFIX="${INSTALL_DIR}" \
       -DGCC_INSTALL_PREFIX=${GCC_INSTALL_PREFIX} \
-      -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;polly;compiler-rt;openmp;libcxx;libcxxabi" \
+      -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;polly;compiler-rt;openmp;libcxx;libcxxabi;lldb" \
       -DLLVM_PARALLEL_COMPILE_JOBS="${THREADS}" \
       -DLLVM_PARALLEL_LINK_JOBS="${THREADS}" \
       -DLLVM_CCACHE_BUILD=ON \
