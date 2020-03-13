@@ -66,3 +66,14 @@ cmake -DCMAKE_BUILD_TYPE=Release \
       #-DCLANG_VERSION_SUFFIX="-r${CLANG_SVN_REVISION:?}" \
 
 make -j ${THREADS} install
+
+# --- Build and Install Include-what-you-use
+
+#cd ${SRC_DIR}
+#git clone https://github.com/include-what-you-use/include-what-you-use --branch clang_9.0 --depth 1
+
+#mkdir -p ${SRC_DIR}/iwyu_build
+#cd ${SRC_DIR}/iwyu_build
+
+#cmake -DCMAKE_INSTALL_PREFIX="${INSTALL_DIR}" "${SRC_DIR}/include-what-you-use"
+#make -j ${THREADS} install
