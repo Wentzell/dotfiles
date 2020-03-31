@@ -1,6 +1,6 @@
 # Build configuration
-RELEASE=llvmorg-9.0.0
-INSTALL_DIR=$HOME/opt/llvm_9.0.0
+RELEASE=llvmorg-10.0.0
+INSTALL_DIR=$HOME/opt/llvm_10.0.0
 SRC_DIR=$PWD
 BUILD_DIR=${SRC_DIR}/llvm_build
 THREADS=10
