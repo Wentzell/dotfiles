@@ -2,7 +2,8 @@
  *
  * TRIQS: a Toolbox for Research in Interacting Quantum Systems
  *
- * Copyright (C) 2018 by N. Wentzell
+ * Copyright (C) 2020 Simons Foundation
+ *   author: N. Wentzell
  *
  * TRIQS is free software: you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software
@@ -19,7 +20,7 @@
  *
  ******************************************************************************/
 
-#include <triqs/test_tools/arrays.hpp>
+#include <nda/gtest_tools.hpp>
 
 // Test fixture, common to all tests
 class Test_Group : public ::testing::Test {
