@@ -161,7 +161,7 @@ for f in additional_args:
  *
  ******************************************************************************/
 """%(args.appname, args.appname, args.appname)
-    if f.endswith('.py'): header = re.sub(r"/? ?\*/*", "#", header)
+    if f.endswith('.py') or f.endswith('.txt'): header = re.sub(r"/? ?\*/*", "#", header)
     with open(f, "r") as fin: dat = fin.read()
     expr = r"^#{10}.*#{10}\n" if f.endswith('.py') else r"^/\*{10}.*\*{10}/\n"
     if re.search(expr, dat, re.S):
