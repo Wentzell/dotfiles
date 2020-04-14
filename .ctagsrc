@@ -1,2 +1,2 @@
---languages=C++
+--languages=C++,C
 --C++-kinds=+cdefglmnstuvx
