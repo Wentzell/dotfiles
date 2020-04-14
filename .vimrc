@@ -190,23 +190,38 @@ autocmd Syntax c,cpp normal zR			        " Start unfolded
 "
 "let g:LanguageClient_loggingFile = expand('~/.vim/LanguageClient.log')
 let g:LanguageClient_diagnosticsList = "Disabled" " We do not want to populate the quickfix window
+let g:LanguageClient_rootMarkers = ['.git']
+let g:LanguageClient_loadSettings = 1
+" pip install 'python-language-server[all]'
+" then create .vim/settings.json with e.g.
+" {
+" 	"pyls.plugins.pyflakes.enabled": true,
+" 	"pyls.plugins.pydocstyle.enabled": true,
+" 	"pyls.plugins.rope.enabled": true,
+" 	"pyls.plugins.pycodestyle.enabled": true,
+" 	"pyls.plugins.mccabe.enabled": true,
+" 	"pyls.plugins.autopep8.enabled": true,
+" 	"pyls.plugins.papf.enabled": true,
+" 	"pyls.plugins.pylint.enabled": true
+" }
+" check with  \ 'python': ['pyls', '-vv', '--log-file', '~/.vim/pyls.log'],
 let g:LanguageClient_serverCommands = {
       \ 'python': ['pyls'],
       \ 'c': ['clangd',
       \       '--compile-commands-dir='.getcwd().'/build',
       \	      '--all-scopes-completion',
       \	      '--background-index',
-      \	      '--clang-tidy',
       \	      '--completion-style=bundled',
       \	      '--header-insertion=iwyu',
+      \	      '--clang-tidy',
       \	      '--suggest-missing-includes'],
       \ 'cpp': ['clangd',
       \       '--compile-commands-dir='.getcwd().'/build',
       \	      '--all-scopes-completion',
       \	      '--background-index',
-      \	      '--clang-tidy',
       \	      '--completion-style=bundled',
       \	      '--header-insertion=iwyu',
+      \	      '--clang-tidy',
       \	      '--suggest-missing-includes'],
       \ }
 
