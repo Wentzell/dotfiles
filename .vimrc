@@ -232,7 +232,7 @@ autocmd Syntax c,cpp,python nnoremap <buffer> <C-h> :call LanguageClient#textDoc
 autocmd Syntax c,cpp,python xnoremap <buffer> <C-h> :call LanguageClient#textDocument_rename()<CR>
 
 " --- Code Completion
-set omnifunc=syntaxcomplete#Complete
+set omnifunc=LanguageClient#complete
 set completefunc=LanguageClient#complete
 set wildmenu
 inoremap <C-n> <C-x><C-o>
