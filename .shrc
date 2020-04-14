@@ -27,6 +27,7 @@ connect_remote_notebook(){
 }
 
 	# General
+alias lock='/usr/bin/i3lock -c 000000'
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
