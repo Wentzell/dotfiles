@@ -20,7 +20,7 @@ addpath () {
     export PATH=$1/bin${PATH:+:$PATH}
   fi
   if ! echo $MANPATH | egrep -q "(^|:)$1/man($|:)" ; then
-    export MANPATH=$1/share/man${MANPATH:+:$MANPATH}
+    export MANPATH=:$1/share/man${MANPATH:+:$MANPATH}
   fi
 }
 
