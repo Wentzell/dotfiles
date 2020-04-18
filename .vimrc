@@ -55,7 +55,7 @@ set number 			" Show line numbers
 " Settings for solarized color scheme
 set t_Co=256
 set background=dark
-colorscheme solarized
+silent! colorscheme solarized
 
 " Remove all trailing whitespaces on write
 "autocmd BufWritePre * %s/\s\+$//e
