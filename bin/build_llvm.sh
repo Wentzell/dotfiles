@@ -57,6 +57,7 @@ cmake -DCMAKE_BUILD_TYPE=Release \
       -DLIBOMPTARGET_NVPTX_COMPUTE_CAPABILITIES=70 \
       -DCLANG_PYTHON_BINDINGS_VERSIONS="2.7" \
       "${SRC_DIR}/llvm-project/llvm"
+      #-DLLVM_USE_SANITIZER=Memory \
       #-DLINK_POLLY_INTO_TOOLS=ON \
       #-DLLVM_BINUTILS_INCDIR="${SRC_DIR}/llvm/tools/binutils/include" \
       #-DLLVM_TARGETS_TO_BUILD="ARM;AArch64;PowerPC;X86" \
