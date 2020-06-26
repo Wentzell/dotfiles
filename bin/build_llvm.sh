@@ -3,11 +3,13 @@ RELEASE=llvmorg-10.0.0
 INSTALL_DIR=$HOME/opt/llvm_10.0.0
 SRC_DIR=$PWD
 BUILD_DIR=${SRC_DIR}/llvm_build
-THREADS=10
+THREADS=40
+
+## -- Get the Sources
 
 # Shallow clone of llvm
 cd ${SRC_DIR}
-git clone https://github.com/llvm/llvm-project --branch $RELEASE --depth 1
+git clone https://github.com/llvm/llvm-project --branch $RELEASE --depth 1 -c advice.detachedHead=false
 
 #cd ${SRC_DIR}
 #cd llvm-project/llvm/tools/clang/tools
@@ -21,18 +23,32 @@ git clone https://github.com/llvm/llvm-project --branch $RELEASE --depth 1
 #cd ..
 #patch -p 1 < tools/llvm-bolt/llvm.patch
 
-# Build with gcc
-export CC=gcc
-export CXX=g++
-export CFLAGS='-O3 -march=native'
-export CXXFLAGS='-O3 -march=native'
+
+## --  Build environment
+
+# - GCC
+#export CC=gcc
+#export CXX=g++
+#export CFLAGS='-O3 -march=broadwell'
+#export CXXFLAGS='-O3 -march=broadwell'
+
+# - Clang
+export CC=clang
+export CXX=clang++
+export CFLAGS='-stdlib=libc++ -O3 -march=broadwell'
+export CXXFLAGS='-stdlib=libc++ -O3 -march=broadwell'
+
 GCC_INSTALL_PREFIX=$(dirname $(which gcc))/../
+
+
+## --  Build LLVM
 
 mkdir -p ${BUILD_DIR}
 cd ${BUILD_DIR}
 # Cf. https://llvm.org/docs/CMake.html
 # and https://llvm.org/docs/GettingStarted.html
-cmake -DCMAKE_BUILD_TYPE=Release \
+cmake -GNinja \
+      -DCMAKE_BUILD_TYPE=Release \
       -DCMAKE_INSTALL_PREFIX="${INSTALL_DIR}" \
       -DGCC_INSTALL_PREFIX=${GCC_INSTALL_PREFIX} \
       -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;polly;compiler-rt;openmp;libcxx;libcxxabi;lldb" \
@@ -55,9 +71,8 @@ cmake -DCMAKE_BUILD_TYPE=Release \
       -DLIBOMP_TSAN_SUPPORT=1 \
       -DCLANG_OPENMP_NVPTX_DEFAULT_ARCH=sm_70 \
       -DLIBOMPTARGET_NVPTX_COMPUTE_CAPABILITIES=70 \
-      -DCLANG_PYTHON_BINDINGS_VERSIONS="2.7" \
+      -DCLANG_PYTHON_BINDINGS_VERSIONS="3.8" \
       "${SRC_DIR}/llvm-project/llvm"
-      #-DLLVM_USE_SANITIZER=Memory \
       #-DLINK_POLLY_INTO_TOOLS=ON \
       #-DLLVM_BINUTILS_INCDIR="${SRC_DIR}/llvm/tools/binutils/include" \
       #-DLLVM_TARGETS_TO_BUILD="ARM;AArch64;PowerPC;X86" \
@@ -66,15 +81,16 @@ cmake -DCMAKE_BUILD_TYPE=Release \
       #-DCLANG_VENDOR="${VENDOR:+"${VENDOR} "}" \
       #-DCLANG_VERSION_SUFFIX="-r${CLANG_SVN_REVISION:?}" \
 
-make -j ${THREADS} install
+cmake --build .
+ninja install
 
 # --- Build and Install Include-what-you-use
 
-#cd ${SRC_DIR}
-#git clone https://github.com/include-what-you-use/include-what-you-use --branch clang_9.0 --depth 1
+cd ${SRC_DIR}
+git clone https://github.com/include-what-you-use/include-what-you-use --branch clang_10 --depth 1
 
-#mkdir -p ${SRC_DIR}/iwyu_build
-#cd ${SRC_DIR}/iwyu_build
+mkdir -p ${SRC_DIR}/iwyu_build
+cd ${SRC_DIR}/iwyu_build
 
-#cmake -DCMAKE_INSTALL_PREFIX="${INSTALL_DIR}" "${SRC_DIR}/include-what-you-use"
-#make -j ${THREADS} install
+cmake -DCMAKE_INSTALL_PREFIX="${INSTALL_DIR}" "${SRC_DIR}/include-what-you-use"
+make -j ${THREADS} install
