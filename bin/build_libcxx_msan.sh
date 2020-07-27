@@ -40,6 +40,7 @@ cmake -GNinja \
       -DLLVM_ENABLE_PROJECTS="libcxx;libcxxabi" \
       -DLLVM_PARALLEL_COMPILE_JOBS="${THREADS}" \
       -DLLVM_PARALLEL_LINK_JOBS="${THREADS}" \
+      -DLLVM_ENABLE_PIC=ON \
       -DLLVM_USE_SANITIZER=MemoryWithOrigins \
       "${SRC_DIR}/llvm-project/llvm"
 
