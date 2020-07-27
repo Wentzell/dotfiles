@@ -10,19 +10,22 @@ from subprocess import Popen, PIPE
 
 mdict = { "General": [] }
 
+def run(cmd):
+    return [ln.decode("utf-8").strip() for ln in Popen(cmd.split(), stdout=PIPE).stdout]
+
 if __name__ == "__main__":
 
     # Parse all commits starting from the last tag
-    start_commit = Popen(["git", "describe", "--tags", "--abbrev=0"], stdout=PIPE).communicate()[0].rstrip()
+    start_commit = run("git describe --tags --abbrev=0")[0].rstrip()
 
     # Commit Messages
-    commit_messages = list(Popen(["git", "log", "%s..HEAD"%start_commit, "--no-merges", "--pretty=format:%s", "-i", "-E"], stdout=PIPE).stdout)
+    commit_messages = run("git log -i -E --no-merges --pretty=format:%s {}..HEAD".format(start_commit))
 
     # App4Triqs Commit Messages (exclude these)
-    app4triqs_branches = [branch.strip() for branch in Popen(["git", "branch", "-a"], stdout=PIPE).stdout if "app4triqs" in branch]
+    app4triqs_branches = [branch for branch in run("git branch -a") if "app4triqs" in branch]
     app4triqs_commit_messages = []
     for branch in app4triqs_branches:
-        app4triqs_commit_messages.extend(list(Popen(["git", "log", branch, "--pretty=format:%s", "-i", "-E"], stdout=PIPE).stdout))
+        app4triqs_commit_messages.extend(run("git log -i -E --pretty=format:%s {}".format(branch)))
 
     # Iterate through the git log items and group them
     for line in commit_messages:
@@ -30,14 +33,14 @@ if __name__ == "__main__":
 
         m = re.match('\[(.*?)\] (.*)', line)
         if(m):
-            if m.group(1) in mdict.keys():
+            if m.group(1) in list(mdict.keys()):
                 mdict[m.group(1)].append(m.group(2))
             else:
                 mdict[m.group(1)] = [m.group(2)]
         else:
             mdict["General"].append(line)
 
-for group, mlist in mdict.iteritems():
+for group, mlist in mdict.items():
     sys.stdout.write("\n" + group + "\n")
     sys.stdout.write('-' * len(group) + "\n")
 
