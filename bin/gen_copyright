@@ -16,71 +16,92 @@ import argparse
 parser = argparse.ArgumentParser(description="""
 A script to generate GPL Copyright headers for a list of files based on their git history
 """)
-parser.add_argument('-appname', nargs=None, default='TRIQS', help="The Name of the Project")
-parser.add_argument('-description', nargs=None, default="A Toolbox for Research in Interacting Quantum Systems", help="The Description of the Project")
+parser.add_argument('-license', nargs=None, default='Apache', help="The License to use (Apache [default] or GPLv3")
+parser.add_argument('-cea', action='store_true', help='Add cea copyright')
+parser.add_argument('-cnrs', action='store_true', help='Add cnrs copyright')
 args, additional_args = parser.parse_known_args()
 
-def pretty_years(s):
+license_header = {
 
-    l = list(s)
-    l.sort()
+    "Apache" : """// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0.txt
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.""",
 
-    start = None
-    prev = None
-    r = []
+    "GPL"    :  """// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You may obtain a copy of the License at
+//     https://www.gnu.org/licenses/gpl-3.0.txt"""
 
-    for x in l:
-        if prev is None:
-            start = x
-            prev = x
-            continue
+}
 
-        if x == prev + 1:
-            prev = x
-            continue
+def pretty_years(y):
 
-        if prev == start:
-            r.append("%i" % prev)
-        else:
-            r.append("%i-%i" % (start, prev))
+    s = set(y)
+    l = list(y)
 
-        start = x
-        prev = x
-
-    if not prev is None:
-        if prev == start:
-            r.append("%i" % prev)
-        else:
-            r.append("%i-%i" % (start, prev))
-
-    return ", ".join(r)
-
-
-def order_by_year(a, b):
-
-    la = list(a[2])
-    la.sort()
-
-    lb = list(b[2])
-    lb.sort()
-
-    if la[0] < lb[0]:
-        return -1
-    elif la[0] > lb[0]:
-        return 1
+    if len(s) == 1:
+        return str(l[0])
     else:
-        return 0
+        return str(min(l)) + "-" + str(max(l))
 
+    # l = list(s)
+    # l.sort()
+
+    # start = None
+    # prev = None
+    # r = []
+
+    # for x in l:
+        # if prev is None:
+            # start = x
+            # prev = x
+            # continue
+
+        # if x == prev + 1:
+            # prev = x
+            # continue
+
+        # if prev == start:
+            # r.append("%i" % prev)
+        # else:
+            # r.append("%i-%i" % (start, prev))
+
+        # start = x
+        # prev = x
+
+    # if not prev is None:
+        # if prev == start:
+            # r.append("%i" % prev)
+        # else:
+            # r.append("%i-%i" % (start, prev))
+
+    # return ", ".join(r)
 
 for f in additional_args:
 
-    print "Generating header for file: %s"%f
+    print("Generating header for file: %s"%f)
 
     commits = []
     data = {}
 
     for ln in Popen(["git", "blame", "-w", "-M", "--incremental", f],
-                    stdout=PIPE).stdout:
+                    stdout=PIPE, encoding="utf8").stdout:
 
         if ln.startswith("filename "):
             if len(data) > 0:
@@ -107,65 +128,60 @@ for f in additional_args:
             n = (c["author"], c["author-mail"], set())
             by_author[c["author"]] = n
 
-        # FIXME: Handle time zones properly
         year = datetime.fromtimestamp(int(c["author-time"])).year
 
         n[2].add(year)
     by_author.pop("Not Committed Yet", None)
 
-    for an, a in list(by_author.iteritems()):
-        for bn, b in list(by_author.iteritems()):
+    for an, a in list(by_author.items()):
+        for bn, b in list(by_author.items()):
             if a is b:
                 continue
 
             if a[1] == b[1]:
                 a[2].update(b[2])
 
-                if by_author.has_key(an) and by_author.has_key(bn):
+                if an in by_author and bn in by_author:
                     del by_author[bn]
 
-    copyright = list(by_author.itervalues())
-    copyright.sort(order_by_year)
+    copyright = list(by_author.values())
 
-    # For 2018 we add a copyright note for The Simons foundation with an author list
-    simons_authors = set()
-    header = """/*******************************************************************************
- *
- * %s: %s
- *
-"""%(args.appname, args.description)
-    for name, mail, years in copyright:
+    header = ""
+
+    years = set()
+    for author_name, author_mail, author_years in copyright:
+        years.update(author_years)
+    
+    if args.cea or args.cnrs:
         years_gt_2017 = [y for y in years if int(y) > 2017]
-        years_lt_2018 = [y for y in years if int(y) < 2018]
-        if len(years_gt_2017) > 0: simons_authors.add(name)
-        if len(years_lt_2018) > 0:
-            header = header + " * Copyright (c) %s %s\n" % (
-                pretty_years(years_lt_2018), name)
-    if len(simons_authors) > 0:
-        header = header + " * Copyright (c) %s The Simons foundation\n *   authors: %s" % (
-            pretty_years(years), ", ".join(list(simons_authors)))
-    header = header + """
- *
- * %s is free software: you can redistribute it and/or modify it under the
- * terms of the GNU General Public License as published by the Free Software
- * Foundation, either version 3 of the License, or (at your option) any later
- * version.
- *
- * %s is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- *
- * You should have received a copy of the GNU General Public License along with
- * %s. If not, see <http://www.gnu.org/licenses/>.
- *
- ******************************************************************************/
-"""%(args.appname, args.appname, args.appname)
-    if f.endswith('.py') or f.endswith('.txt'): header = re.sub(r"/? ?\*/*", "#", header)
-    with open(f, "r") as fin: dat = fin.read()
-    expr = r"^#{10}.*#{10}\n" if f.endswith('.py') else r"^/\*{10}.*\*{10}/\n"
-    if re.search(expr, dat, re.S):
-        dat = re.sub(expr, header, dat, 1, re.S)
+        years_lt_2019 = [y for y in years if int(y) < 2019]
+
+        # For <2019 we add a copyright note for CEA / CNRS
+        if len(years_lt_2019) > 0:
+            if args.cea: header = header + "// Copyright (c) %s Commissariat à l'énergie atomique et aux énergies alternatives (CEA)\n" % (pretty_years(years_lt_2019))
+            if args.cnrs: header = header + "// Copyright (c) %s Centre national de la recherche scientifique (CNRS)\n" % (pretty_years(years_lt_2019))
+
+        # For >2017 we add a copyright note for The Simons foundation
+        if len(years_gt_2017) > 0:
+            header = header + "// Copyright (c) %s Simons Foundation\n" % (pretty_years(years_gt_2017))
     else:
-        dat = header + dat
+        header = header + "// Copyright (c) %s Simons Foundation\n" % (pretty_years(years))
+
+    header = header + "//\n" + license_header[args.license] + "\n\n"
+
+    if f.endswith('.py') or f.endswith('.txt'): header = re.sub(r"//", "#", header)
+
+    with open(f, "r") as fin: dat = fin.read()
+    head_res = {
+            'py': [r"^\n?#{10}.*?\n.*?#{10}\n", "^# Copyright.*License.\n\n", "^# Copyright.*gpl-3.0.txt\n\n"],
+            'txt': [r"^\n?#{10}.*?\n.*?#{10}\n", "^# Copyright.*License.\n\n", "^# Copyright.*gpl-3.0.txt\n\n"],
+            'cpp': [r"^\n?/\*{10}.*?\n.*?\*{10}/\n", "^// Copyright.*License.\n\n", "^// Copyright.*gpl-3.0.txt\n\n"],
+            'hpp': [r"^\n?/\*{10}.*?\n.*?\*{10}/\n", "^// Copyright.*License.\n\n", "^// Copyright.*gpl-3.0.txt\n\n"]
+            }
+    file_ending = f.split(".")[-1]
+    for head_re in head_res[file_ending]:
+        if re.search(head_re, dat, re.S):
+            dat = re.sub(head_re, '', dat, 1, re.S)
+    dat = header + dat
+
     with open(f, "w") as fout: fout.write(dat)
