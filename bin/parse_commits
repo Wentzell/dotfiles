@@ -10,13 +10,19 @@ from subprocess import Popen, PIPE
 
 mdict = { "General": [] }
 
+import argparse
+parser = argparse.ArgumentParser(description="""
+A script to parse the commit messages up to a given commit / tag and group them by [topic]""")
+parser.add_argument('-tag', nargs=None, default=None, help="The commit / tag up to which to parse. Defaults to latest tag")
+args, additional_args = parser.parse_known_args()
+
 def run(cmd):
     return [ln.decode("utf-8").strip() for ln in Popen(cmd.split(), stdout=PIPE).stdout]
 
 if __name__ == "__main__":
 
     # Parse all commits starting from the last tag
-    start_commit = run("git describe --tags --abbrev=0")[0].rstrip()
+    start_commit = run("git describe --tags --abbrev=0")[0].rstrip() if args.tag is None else args.tag
 
     # Commit Messages
     commit_messages = run("git log -i -E --no-merges --pretty=format:%s {}..HEAD".format(start_commit))
