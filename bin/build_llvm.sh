@@ -35,11 +35,10 @@ git clone https://github.com/llvm/llvm-project --branch $RELEASE --depth 1 -c ad
 # - Clang
 export CC=clang
 export CXX=clang++
-export CFLAGS='-stdlib=libc++ -O3 -march=broadwell'
+export CFLAGS='-O3 -march=broadwell'
 export CXXFLAGS='-stdlib=libc++ -O3 -march=broadwell'
 
 GCC_INSTALL_PREFIX=$(dirname $(which gcc))/../
-
 
 ## --  Build LLVM
 
