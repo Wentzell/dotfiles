@@ -27,6 +27,9 @@ if __name__ == "__main__":
     # Commit Messages
     commit_messages = run("git log -i -E --no-merges --pretty=format:%s {}..HEAD".format(start_commit))
 
+    # Author List sorted by last name
+    authors = sorted(set(tuple(author.split()) for author in run("git log -i -E --no-merges --pretty=format:%aN {}..HEAD".format(start_commit))), key=lambda x: x[-1])
+
     # App4Triqs Commit Messages (exclude these)
     app4triqs_branches = [branch for branch in run("git branch -a") if "app4triqs" in branch]
     app4triqs_commit_messages = []
@@ -52,3 +55,5 @@ for group, mlist in mdict.items():
 
     for m in mlist:
         sys.stdout.write("* " + m.rstrip() + "\n")
+
+sys.stdout.write("\n\nContributors: " + ", ".join([" ".join(author) for author in authors]) + "\n")
