@@ -10,7 +10,7 @@
 
 function! RunMako()
 
- python << EOF
+ python3 << EOF
 from mako.template import Template
 import vim, re, os
 
