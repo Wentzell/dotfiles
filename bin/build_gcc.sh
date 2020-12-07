@@ -1,11 +1,11 @@
 # Build configuration
-RELEASE=trunk
-INSTALL_DIR=$HOME/opt/gcc_${RELEASE}
-SRC_DIR=$PWD/gcc_${RELEASE}
+RELEASE=gcc-10.2.0
+INSTALL_DIR=$HOME/opt/${RELEASE}
+SRC_DIR=$PWD/${RELEASE}
 THREADS=60
 
 # Shallow clone of gcc
-git clone https://github.com/gcc-mirror/gcc --branch $RELEASE --depth 1 ${SRC_DIR}
+git clone https://github.com/gcc-mirror/gcc --branch releases/$RELEASE --depth 1 ${SRC_DIR}
 
 # Build with gcc
 export CC=gcc
