@@ -9,9 +9,12 @@ call plug#begin()
 
 Plug 'vim-scripts/GrepCommands'
 Plug 'tpope/vim-surround'
+"Plug 'machakann/vim-sandwich'
+"Plug 'dhruvasagar/vim-marp'
 Plug 'tpope/vim-repeat'
 Plug 'Latex-Box-Team/Latex-Box'
 Plug 'scrooloose/nerdcommenter'
+Plug 'scrooloose/nerdtree'
 Plug 'chrisbra/Recover.vim'
 Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'altercation/vim-colors-solarized'
@@ -117,6 +120,9 @@ noremap <leader><leader>s	<C-W>s
 noremap <leader><leader>v	<C-W><C-V>
 noremap <leader><leader>x	<C-W>c
 noremap <leader><leader>c	<C-W>x
+
+" nerdtree
+noremap <leader><leader>n 	:NERDTreeToggle<cr>
 
 " comment insertions
 nmap <Leader>chl 	:CommLineSmall<cr>
