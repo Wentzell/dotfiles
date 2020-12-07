@@ -88,7 +88,7 @@ ninja install
 ## --- Build and Install Include-what-you-use
 
 #cd ${SRC_DIR}
-#git clone https://github.com/include-what-you-use/include-what-you-use --branch clang_10 --depth 1
+#git clone https://github.com/include-what-you-use/include-what-you-use --branch clang_11 --depth 1
 
 #mkdir -p ${SRC_DIR}/iwyu_build
 #cd ${SRC_DIR}/iwyu_build
