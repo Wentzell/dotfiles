@@ -32,6 +32,7 @@ cmake-build-*
 .ipynb_checkpoints
 *.pyc
 compile_commands.json
+.pre-commit-config.yaml
 
 ## Latex
 ######################

@@ -72,17 +72,17 @@ alias tls='tmux list-sessions'
 alias tat='tmux attach-session -t'
 alias tkill='tmux kill-session -t'
 tmuxdev () {
-  tmux new-session -d -n Coding -c ~/Dropbox/Coding
-  tmux neww -n Coding -c ~/Dropbox/Coding
-  tmux neww -n Coding -c ~/Dropbox/Coding
-  tmux neww -n Coding -c ~/Dropbox/Coding
-  tmux neww -n Coding -c ~/Dropbox/Coding
-  tmux neww -n Coding -c ~/Dropbox/Coding
-  tmux neww -n Coding -c ~/Dropbox/Coding
-  tmux neww -n Coding -c ~/Dropbox/Coding
-  tmux neww -n Coding -c ~/Dropbox/Coding
-  tmux neww -n System -c ~/Dropbox
-  tmux neww -n System -c ~/Dropbox
+  tmux new-session -d -n Coding -c $HOME
+  tmux neww -n Coding -c $HOME
+  tmux neww -n Coding -c $HOME
+  tmux neww -n Coding -c $HOME
+  tmux neww -n Coding -c $HOME
+  tmux neww -n Coding -c $HOME
+  tmux neww -n Coding -c $HOME
+  tmux neww -n Coding -c $HOME
+  tmux neww -n Coding -c $HOME
+  tmux neww -n System -c $HOME
+  tmux neww -n System -c $HOME
   tmux neww -n Latex -c ~/Dropbox/Latex
   tmux neww -n Latex -c ~/Dropbox/Latex
   tmux selectw -t 1
@@ -96,7 +96,6 @@ alias make="make -j 8"
 alias ctest="ctest -j 8"
 alias pip_upgrade="pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U"
 # Clang ignores LIBRARY_PATH
-alias triqs++="clang++ -std=c++17 -stdlib=libc++ -L${LIBRARY_PATH//:/ -L} -ltriqs -lcpp2py -lpthread -lmpi -lmpi_cxx -lpython2.7 -lblas -llapack -lgtest -lhdf5 -lnfft3"
 alias activate='source ~/opt/python/bin/activate'
 alias ctags='ctags -R --options=$HOME/.ctagsrc'
 alias valmem='valgrind --leak-check=full --max-stackframe=4000000'
@@ -110,13 +109,13 @@ prof() {
   #cd $CURRENT_DIR
 }
 pprint() {
-  pprof --text --lines $1 $1.prof > $1.prof.txt
-  head -n 20 $1.prof.txt
-  pprof --svg --lines $1 $1.prof > $1.prof.svg
-  pprof --collapsed $1 $1.prof | flamegraph.pl - > $1.prof.flamegraph.svg
-  chromium-browser $1.prof.svg &
-  chromium-browser $1.prof.flamegraph.svg &
-  #pprof --pdf --lines $1 $1.prof > $1.prof.pdf
+  # First argument should be the binary, e.g. executable or python module!
+  # Second argument is name of profile file
+  pprof --text --lines $1 $2.prof > $2.prof.txt
+  head -n 20 $2.prof.txt
+  pprof --svg --lines $1 $2.prof > $2.prof.lines.svg
+  pprof --svg $1 $2.prof > $2.prof.svg
+  pprof --collapsed $1 $2.prof | flamegraph.pl - > $2.prof.flamegraph.svg
   #pprof --web --lines $1 $1.prof
 }
 hprof() {
@@ -126,21 +125,19 @@ hprof() {
   #cd $CURRENT_DIR
 }
 hpprint() {
-  if [ "$#" -eq 1 ]; then
-    for f in $(ls $1.hprof.*.heap); do
+  if [ "$#" -eq 2 ]; then
+    for f in $(ls $2.hprof.*.heap); do
       pprof --text --lines $1 $f > ${f%.*}.txt
       head -n 4 ${f%.*}.txt
       pprof --svg --lines $1 $f > ${f%.*}.svg
-      chromium-browser ${f%.*}.svg &
       #pprof --pdf --lines $1 $f > ${f%.*}.pdf
       #pprof --web --lines $1 $f
     done
-  elif [ "$#" -eq 2 ]; then
-    f=$(ls -1 $1.hprof.*$2.heap | head -n 1)
+  elif [ "$#" -eq 3 ]; then
+    f=$(ls -1 $2.hprof.*$3.heap | head -n 1)
     pprof --text --lines $1 $f > ${f%.*}.txt
     head -n 5 ${f%.*}.txt
     pprof --svg --lines $1 $f > ${f%.*}.svg
-    chromium-browser ${f%.*}.svg &
     #pprof --pdf --lines $1 $f > ${f%.*}.pdf
     #pprof --web --lines $1 $f
   fi

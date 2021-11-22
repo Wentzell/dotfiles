@@ -1,9 +1,9 @@
 # Build configuration
-RELEASE=llvmorg-11.0.0
-INSTALL_DIR=$HOME/opt/llvm_11.0.0
+RELEASE=llvmorg-13.0.0
+INSTALL_DIR=$HOME/opt/llvm_13.0.0
 SRC_DIR=$PWD
 BUILD_DIR=${SRC_DIR}/llvm_build
-THREADS=10
+THREADS=50
 
 ## -- Get the Sources
 
@@ -63,17 +63,17 @@ cmake -GNinja \
       -DLLVM_INCLUDE_DOCS=OFF \
       -DLLVM_ENABLE_OCAMLDOC=OFF \
       -DLLVM_ENABLE_BINDINGS=OFF \
-      -DLLVM_ENABLE_LIBCXX=ON \
+      -DLLVM_ENABLE_LIBCXX=OFF \
       -DLLVM_OPTIMIZED_TABLEGEN=ON \
       -DCMAKE_C_COMPILER="${CC}" \
       -DCMAKE_CXX_COMPILER="${CXX}" \
       -DLIBOMP_TSAN_SUPPORT=1 \
-      -DCLANG_PYTHON_BINDINGS_VERSIONS="3.7" \
+      -DCLANG_OPENMP_NVPTX_DEFAULT_ARCH=sm_70 \
+      -DLIBOMPTARGET_NVPTX_COMPUTE_CAPABILITIES=70 \
+      -DCLANG_PYTHON_BINDINGS_VERSIONS="3.8;3.9" \
       -DLLVM_BINUTILS_INCDIR=/usr/include \
       -DLLDB_ENABLE_PYTHON=ON \
       "${SRC_DIR}/llvm-project/llvm"
-      #-DCLANG_OPENMP_NVPTX_DEFAULT_ARCH=sm_70 \
-      #-DLIBOMPTARGET_NVPTX_COMPUTE_CAPABILITIES=70 \
       #-DLLVM_ENABLE_RTTI=ON \
       #-DLLVM_USE_LINKER=gold \
       #-DLINK_POLLY_INTO_TOOLS=ON \
@@ -90,7 +90,7 @@ ninja install
 ## --- Build and Install Include-what-you-use
 
 #cd ${SRC_DIR}
-#git clone https://github.com/include-what-you-use/include-what-you-use --branch clang_11 --depth 1
+#git clone https://github.com/include-what-you-use/include-what-you-use --branch clang_12 --depth 1
 
 #mkdir -p ${SRC_DIR}/iwyu_build
 #cd ${SRC_DIR}/iwyu_build

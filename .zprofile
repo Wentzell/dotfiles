@@ -36,7 +36,7 @@ export CTEST_OUTPUT_ON_FAILURE=1
 export TRIQS_SHOW_EXCEPTION_TRACE=1
 export OMP_NUM_THREADS=1
 
-# My Software
+# === My Software
 export PYTHONPATH=$HOME/opt:$PYTHONPATH
 export PATH=$HOME/bin:$PATH
 addenv $HOME/.local

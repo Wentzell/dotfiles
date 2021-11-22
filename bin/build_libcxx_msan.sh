@@ -1,6 +1,6 @@
 # Build configuration
-RELEASE=llvmorg-10.0.0
-INSTALL_DIR=$HOME/opt/libcxx_10.0.0_msan
+RELEASE=llvmorg-11.0.0
+INSTALL_DIR=$HOME/opt/libcxx_11.0.0_msan
 SRC_DIR=$PWD
 BUILD_DIR=${SRC_DIR}/libcxx_build
 THREADS=40

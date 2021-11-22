@@ -23,8 +23,9 @@ Plug 'vim-scripts/AnsiEsc.vim'
 Plug 'tpope/vim-fugitive'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
+Plug 'JuliaEditorSupport/julia-vim'
 Plug 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
+    \ 'branch': 'dev',
     \ 'do': 'bash install.sh',
     \ }
 
@@ -132,10 +133,10 @@ nmap <Leader>Ctl 	:CommTLine<cr>
 nmap <Leader>dc 	:DoxComm<cr>
 
 " automatically add closing brackets
-inoremap {      {}<Left>
-inoremap {<cr>  {<cr>}<Esc>O
-inoremap {{     {
-inoremap {}     {}
+"inoremap {      {}<Left>
+"inoremap {<cr>  {<cr>}<Esc>O
+"inoremap {{     {
+"inoremap {}     {}
 
 "Just press F5 to make your program:
 map <F5> :Make run<cr><cr><cr>
