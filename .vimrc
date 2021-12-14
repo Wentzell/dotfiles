@@ -8,26 +8,46 @@
 call plug#begin()
 
 Plug 'vim-scripts/GrepCommands'
-Plug 'tpope/vim-surround'
-"Plug 'machakann/vim-sandwich'
-"Plug 'dhruvasagar/vim-marp'
 Plug 'tpope/vim-repeat'
-Plug 'Latex-Box-Team/Latex-Box'
 Plug 'scrooloose/nerdcommenter'
+Plug 'preservim/tagbar'
 Plug 'scrooloose/nerdtree'
 Plug 'chrisbra/Recover.vim'
 Plug 'octol/vim-cpp-enhanced-highlight'
-Plug 'altercation/vim-colors-solarized'
-Plug 'derekwyatt/vim-fswitch'
 Plug 'vim-scripts/AnsiEsc.vim'
 Plug 'tpope/vim-fugitive'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'JuliaEditorSupport/julia-vim'
-Plug 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'dev',
-    \ 'do': 'bash install.sh',
-    \ }
+
+if has('nvim')
+  " neovim only plugins
+  Plug 'neovim/nvim-lspconfig'
+  "Plug 'ishan9299/nvim-solarized-lua'
+  Plug 'altercation/vim-colors-solarized'
+  "Plug 'folke/lsp-colors.nvim', { 'branch': 'main' }
+
+  " -- Auto Completion --
+  Plug 'hrsh7th/nvim-cmp'
+  Plug 'hrsh7th/cmp-nvim-lsp'
+  Plug 'saadparwaiz1/cmp_luasnip'
+  Plug 'L3MON4D3/LuaSnip'
+
+else
+  " vim only plugins
+  Plug 'derekwyatt/vim-fswitch'
+  Plug 'altercation/vim-colors-solarized'
+
+  Plug 'autozimu/LanguageClient-neovim', {
+      \ 'branch': 'dev',
+      \ 'do': 'bash install.sh',
+      \ }
+endif
+
+"Plug 'Latex-Box-Team/Latex-Box'
+"Plug 'tpope/vim-surround'
+"Plug 'machakann/vim-sandwich'
+"Plug 'dhruvasagar/vim-marp'
+"Plug 'JuliaEditorSupport/julia-vim'
 
 call plug#end()
 "}}}
@@ -50,16 +70,19 @@ endif
 let g:airline_symbols.space = "\ua0"
 let g:airline#extensions#tabline#show_buffers = 0
 
-" My Status Line
-set statusline=%t[%{strlen(&fenc)?&fenc:'none'},%{&ff}]%h%m%r%y%=%c,%l/%L\ %P
-set laststatus=2		" Always display status bar
-set hidden			" Can hide changed buffers!
-set number 			" Show line numbers
+"Tagbar
+let g:tagbar_width = 25
 
 " Settings for solarized color scheme
 set t_Co=256
 set background=dark
 silent! colorscheme solarized
+
+" My Status Line
+set statusline=%t[%{strlen(&fenc)?&fenc:'none'},%{&ff}]%h%m%r%y%=%c,%l/%L\ %P
+set laststatus=2		" Always display status bar
+set hidden			" Can hide changed buffers!
+set number 			" Show line numbers
 
 " Remove all trailing whitespaces on write
 "autocmd BufWritePre * %s/\s\+$//e
@@ -124,6 +147,7 @@ noremap <leader><leader>c	<C-W>x
 
 " nerdtree
 noremap <leader><leader>n 	:NERDTreeToggle<cr>
+noremap <leader><leader>t       :TagbarToggle<cr>
 
 " comment insertions
 nmap <Leader>chl 	:CommLineSmall<cr>
@@ -194,58 +218,76 @@ autocmd Syntax c,cpp setlocal foldmethod=syntax 	" Enable Syntax folding
 autocmd Syntax c,cpp normal zR			        " Start unfolded
 "}}}
 "-------------------------------------- General Coding Config ------------------------------------------{{{
-"
-"let g:LanguageClient_loggingFile = expand('~/.vim/LanguageClient.log')
-let g:LanguageClient_diagnosticsList = "Disabled" " We do not want to populate the quickfix window
-let g:LanguageClient_rootMarkers = ['.git']
-let g:LanguageClient_loadSettings = 1
-" pip install 'python-language-server[all]'
-" then create .vim/settings.json with e.g.
-" {
-" 	"pyls.plugins.pyflakes.enabled": true,
-" 	"pyls.plugins.pydocstyle.enabled": true,
-" 	"pyls.plugins.rope.enabled": true,
-" 	"pyls.plugins.pycodestyle.enabled": true,
-" 	"pyls.plugins.mccabe.enabled": true,
-" 	"pyls.plugins.autopep8.enabled": true,
-" 	"pyls.plugins.papf.enabled": true,
-" 	"pyls.plugins.pylint.enabled": true
-" }
-" check with  \ 'python': ['pyls', '-vv', '--log-file', '~/.vim/pyls.log'],
-let g:LanguageClient_serverCommands = {
-      \ 'python': ['pyls'],
-      \ 'c': ['clangd',
-      \       '--compile-commands-dir='.getcwd().'/build',
-      \	      '--all-scopes-completion',
-      \	      '--background-index',
-      \	      '--completion-style=bundled',
-      \	      '--header-insertion=iwyu',
-      \	      '--clang-tidy',
-      \	      '--suggest-missing-includes'],
-      \ 'cpp': ['clangd',
-      \       '--compile-commands-dir='.getcwd().'/build',
-      \	      '--all-scopes-completion',
-      \	      '--background-index',
-      \	      '--completion-style=bundled',
-      \	      '--header-insertion=iwyu',
-      \	      '--clang-tidy',
-      \	      '--suggest-missing-includes'],
-      \ }
 
-" --- Language Server Bindings
-autocmd Syntax c,cpp,python nnoremap <buffer> <C-]> :call LanguageClient#textDocument_definition()<CR>
-autocmd Syntax c,cpp,python xnoremap <buffer> <C-]> :call LanguageClient#textDocument_definition()<CR>
-autocmd Syntax c,cpp,python nnoremap <buffer> <C-h> :call LanguageClient#textDocument_rename()<CR>
-autocmd Syntax c,cpp,python xnoremap <buffer> <C-h> :call LanguageClient#textDocument_rename()<CR>
-
-" --- Code Completion
-set omnifunc=LanguageClient#complete
-set completefunc=LanguageClient#complete
 set wildmenu
 inoremap <C-n> <C-x><C-o>
-let g:LanguageClient_autoStart = 1
-let g:LanguageClient_hoverPreview = 'auto'
-let g:LanguageClient_diagnosticsEnable = 1
+
+if !has('nvim')
+  "let g:LanguageClient_loggingFile = expand('~/.vim/LanguageClient.log')
+  "let g:LanguageClient_loggingLevel = 'DEBUG'
+  let g:LanguageClient_diagnosticsList = "Disabled" " We do not want to populate the quickfix window
+  let g:LanguageClient_rootMarkers = ['.git']
+  let g:LanguageClient_loadSettings = 1
+  " pip install 'python-language-server[all]'
+  " then create .vim/settings.json with e.g.
+  " {
+  " 	"pyls.plugins.pyflakes.enabled": true,
+  " 	"pyls.plugins.pydocstyle.enabled": true,
+  " 	"pyls.plugins.rope.enabled": true,
+  " 	"pyls.plugins.pycodestyle.enabled": true,
+  " 	"pyls.plugins.mccabe.enabled": true,
+  " 	"pyls.plugins.autopep8.enabled": true,
+  " 	"pyls.plugins.papf.enabled": true,
+  " 	"pyls.plugins.pylint.enabled": true
+  " }
+  " check with  \ 'python': ['pyls', '-vv', '--log-file', '~/.vim/pyls.log'],
+  let g:LanguageClient_serverCommands = {
+        \ 'python': ['pyright'],
+        \ 'c': ['clangd',
+        \	      '--all-scopes-completion',
+        \	      '--background-index',
+        \	      '--completion-style=bundled',
+        \	      '--header-insertion=iwyu',
+        \	      '--clang-tidy',
+        \	      '--suggest-missing-includes'],
+        \ 'cpp': ['clangd',
+        \	      '--all-scopes-completion',
+        \	      '--background-index',
+        \	      '--completion-style=bundled',
+        \	      '--header-insertion=iwyu',
+        \	      '--clang-tidy',
+        \	      '--suggest-missing-includes'],
+        \ }
+
+        """\ 'julia': ['julia', '--startup-file=no', '--history-file=no', '-e', '
+        """\       using LanguageServer;
+        """\       using Pkg;
+        """\       import StaticLint;
+        """\       import SymbolServer;
+        """\       env_path = dirname(Pkg.Types.Context().env.project_file);
+        """\
+        """\       server = LanguageServer.LanguageServerInstance(stdin, stdout, env_path, "");
+        """\       server.runlinter = true;
+        """\       run(server);']
+        """
+        """\       '--compile-commands-dir='.getcwd().'/build',
+  "
+
+  " --- Language Server Bindings
+  autocmd Syntax c,cpp,python nnoremap <buffer> <C-]> :call LanguageClient#textDocument_definition()<CR>
+  autocmd Syntax c,cpp,python xnoremap <buffer> <C-]> :call LanguageClient#textDocument_definition()<CR>
+  autocmd Syntax c,cpp,python nnoremap <buffer> <C-h> :call LanguageClient#textDocument_rename()<CR>
+  autocmd Syntax c,cpp,python xnoremap <buffer> <C-h> :call LanguageClient#textDocument_rename()<CR>
+
+  " --- Code Completion
+  set omnifunc=LanguageClient#complete
+  set completefunc=LanguageClient#complete
+  let g:LanguageClient_autoStart = 1
+  let g:LanguageClient_hoverPreview = 'auto'
+  let g:LanguageClient_diagnosticsEnable = 1
+
+endif
+
 "}}}
 "-------------------------------------- Python Specific Stuff ------------------------------------------{{{
 "

@@ -31,6 +31,7 @@ for F in $(ls -a1 | \
     grep -v .gitignore | \
     grep -v .dropbox | \
     grep -v .bashrc | \
+    grep -v .config | \
     grep -v setup.sh | \
     grep -v link.sh | \
     grep -v Desktop | \
@@ -43,3 +44,5 @@ for F in $(ls -a1 | \
     grep -v .DS_Store \
     ); do linkFile $F
 done
+
+ln -s $PWD/.config/nvim $HOME/.config/nvim
