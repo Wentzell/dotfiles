@@ -118,13 +118,6 @@ autoload -Uz compinit && compinit			# enable autocomplete
 #autoload -U colors && colors				# enable coloring
 #autoload -U promptinit && promptinit 			# enable extended prompt
 
-if [ -f ~/.shrc ]; then
-    . ~/.shrc
-fi
-
-setxkbmap -option "ctrl:nocaps" &> /dev/null
-#xbindkeys -p
-
 # 'Readline' Equivalent Settings
 bindkey -v
 bindkey -M viins ';;' vi-cmd-mode
@@ -142,3 +135,10 @@ bindkey -M vicmd '^a' beginning-of-line
 bindkey -M viins "^?" backward-delete-char
 #bindkey -M viins '^r' history-beginning-search-backward
 #bindkey -M vicmd '^r' history-beginning-search-backward
+
+if [ -f ~/.shrc ]; then
+    . ~/.shrc
+fi
+
+setxkbmap -option "ctrl:nocaps" &> /dev/null
+#xbindkeys -p
