@@ -1,12 +1,15 @@
 # Install dir
-PREFIX=~/opt/python3_mkl
+PREFIX=$HOME/opt/python3_spack_mkl
 
 # Set Up Proper Build Environment
 export PYTHONPATH=$PREFIX:$PYTHONPATH
-export CC=clang
-export CXX=clang++
+export CC=gcc
+export CXX=g++
+export CXXFLAGS="-fopenmp -O3 -march=broadwell -fPIC"
+#export CC=clang
+#export CXX=clang++
+#export CXXFLAGS="-fopenmp -stdlib=libc++ -O3 -march=broadwell -fPIC"
 export FC=gfortran
-export CXXFLAGS="-fopenmp -stdlib=libc++ -O3 -march=broadwell -fPIC"
 export CFLAGS="-fopenmp -O3 -march=broadwell -fPIC"
 export FFLAGS="-fopenmp -O3 -march=broadwell -fPIC"
 export LDFLAGS="-fPIC -shared"
