@@ -10,8 +10,10 @@
 	email = nwentzell@flatironinstitute.org
 [merge]
 	tool = vimdiff
+[merge "vimdiff"]
+	path = nvim
 [core]
-	editor = vim
+	editor = nvim
 	excludesfile = ~/.glob_git_ignore
 [push]
 	default = current
@@ -21,6 +23,8 @@
 [diff]
 	submodule = log
 	tool = vimdiff
+[difftool "vimdiff"]
+        path = nvim
 [difftool]
 	prompt = false
 [alias]
