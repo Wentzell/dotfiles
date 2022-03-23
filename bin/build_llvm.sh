@@ -1,6 +1,6 @@
 # Build configuration
-RELEASE=llvmorg-13.0.0
-INSTALL_DIR=$HOME/opt/llvm_13.0.0
+RELEASE=llvmorg-14.0.0
+INSTALL_DIR=$HOME/opt/llvm_14.0.0
 SRC_DIR=$PWD
 BUILD_DIR=${SRC_DIR}/llvm_build
 THREADS=50
@@ -50,7 +50,8 @@ cmake -GNinja \
       -DCMAKE_BUILD_TYPE=Release \
       -DCMAKE_INSTALL_PREFIX="${INSTALL_DIR}" \
       -DGCC_INSTALL_PREFIX=${GCC_INSTALL_PREFIX} \
-      -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;polly;compiler-rt;openmp;libcxx;libcxxabi;lldb" \
+      -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;lldb;polly;compiler-rt" \
+      -DLLVM_ENABLE_RUNTIMES="libcxx;libcxxabi;libunwind;openmp" \
       -DLLVM_PARALLEL_COMPILE_JOBS="${THREADS}" \
       -DLLVM_PARALLEL_LINK_JOBS="${THREADS}" \
       -DLLVM_CCACHE_BUILD=ON \
@@ -69,8 +70,8 @@ cmake -GNinja \
       -DCMAKE_CXX_COMPILER="${CXX}" \
       -DLIBOMP_TSAN_SUPPORT=1 \
       -DCLANG_OPENMP_NVPTX_DEFAULT_ARCH=sm_70 \
-      -DLIBOMPTARGET_NVPTX_COMPUTE_CAPABILITIES=70 \
-      -DCLANG_PYTHON_BINDINGS_VERSIONS="3.8;3.9" \
+      -DLIBOMPTARGET_NVPTX_COMPUTE_CAPABILITIES="50;52;53;60;61;62;70;72;75;80;86" \
+      -DCLANG_PYTHON_BINDINGS_VERSIONS="3.8;3.9;3.10" \
       -DLLVM_BINUTILS_INCDIR=/usr/include \
       -DLLDB_ENABLE_PYTHON=ON \
       "${SRC_DIR}/llvm-project/llvm"
