@@ -1,6 +1,8 @@
 # Build configuration
-RELEASE=llvmorg-14.0.0
-INSTALL_DIR=$HOME/opt/llvm_14.0.0
+RELEASE=llvmorg-14.0.1
+INSTALL_DIR=$HOME/opt/llvm_14.0.1
+#RELEASE=main
+#INSTALL_DIR=$HOME/opt/llvm_main
 SRC_DIR=$PWD
 BUILD_DIR=${SRC_DIR}/llvm_build
 THREADS=50
@@ -50,8 +52,9 @@ cmake -GNinja \
       -DCMAKE_BUILD_TYPE=Release \
       -DCMAKE_INSTALL_PREFIX="${INSTALL_DIR}" \
       -DGCC_INSTALL_PREFIX=${GCC_INSTALL_PREFIX} \
-      -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;lldb;polly;compiler-rt" \
-      -DLLVM_ENABLE_RUNTIMES="libcxx;libcxxabi;libunwind;openmp" \
+      -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;lldb;pstl" \
+      -DLLVM_ENABLE_RUNTIMES="compiler-rt;libcxx;libcxxabi;libunwind;openmp" \
+      -DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON \
       -DLLVM_PARALLEL_COMPILE_JOBS="${THREADS}" \
       -DLLVM_PARALLEL_LINK_JOBS="${THREADS}" \
       -DLLVM_CCACHE_BUILD=ON \
