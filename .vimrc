@@ -27,8 +27,8 @@ if has('nvim')
   "Plug 'folke/lsp-colors.nvim', { 'branch': 'main' }
 
   " -- Auto Completion --
-  Plug 'hrsh7th/nvim-cmp'
-  Plug 'hrsh7th/cmp-nvim-lsp'
+  Plug 'hrsh7th/nvim-cmp', { 'branch': 'main' }
+  Plug 'hrsh7th/cmp-nvim-lsp', { 'branch': 'main' }
   Plug 'saadparwaiz1/cmp_luasnip'
   Plug 'L3MON4D3/LuaSnip'
 
