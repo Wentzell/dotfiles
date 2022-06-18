@@ -45,4 +45,5 @@ for F in $(ls -a1 | \
     ); do linkFile $F
 done
 
+mkdir -p $HOME/.config
 ln -s $PWD/.config/nvim $HOME/.config/nvim
