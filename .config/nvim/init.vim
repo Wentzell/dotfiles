@@ -5,6 +5,7 @@ source ~/.vimrc
 " ---- Language Server Setup -----
 
 lua << EOF
+  vim.lsp.set_log_level("debug")
   require'lspconfig'.clangd.setup({
     cmd       = { 'clangd', '--all-scopes-completion', '--background-index', '--completion-style=bundled', '--header-insertion=iwyu', '--clang-tidy' };
     filetypes = { 'c', 'h', 'cpp', 'cxx', 'hxx', 'objc', 'objcpp' }
@@ -12,19 +13,46 @@ lua << EOF
   
   require'lspconfig'.pyright.setup{} -- npm i -g pyright
   require'lspconfig'.pylsp.setup{} -- pip install 'python-lsp-server[all]' 
-  
   require'lspconfig'.julials.setup{} -- julia --project=~/.julia/environments/nvim-lspconfig -e 'using Pkg; Pkg.add("LanguageServer")'
   require'lspconfig'.bashls.setup{} -- npm i -g bash-language-server
   require'lspconfig'.jsonls.setup{} -- npm i -g vscode-langservers-extracted
+  require'lspconfig'.esbonio.setup({ -- Sphinx: pip install esbonio
+    init_options = {
+      server = { logLevel = "debug" };
+      sphinx = { confDir = "build/doc", srcDir = "doc" }
+    }
+  })
+
 EOF
 
-autocmd Syntax c,cpp,python,julia,sh,json nnoremap <buffer> <C-]> <cmd>lua vim.lsp.buf.definition()<CR>
-autocmd Syntax c,cpp,python,julia,sh,json xnoremap <buffer> <C-]> <cmd>lua vim.lsp.buf.definition()<CR>
-autocmd Syntax c,cpp,python,julia,sh,json nnoremap <buffer> <C-h> <cmd>lua vim.lsp.buf.rename()<CR>
-autocmd Syntax c,cpp,python,julia,sh,json xnoremap <buffer> <C-h> <cmd>lua vim.lsp.buf.rename()<CR>
-autocmd Syntax c,cpp,python,julia,sh,json nnoremap <buffer> == <cmd>lua vim.lsp.buf.formatting()<CR>
-autocmd Syntax c,cpp,python,julia,sh,json xnoremap <buffer> == <cmd>lua vim.lsp.buf.range_formatting()<CR>
-autocmd Syntax c,cpp,python,julia,sh,json nnoremap <buffer> <leader><leader>f <cmd>lua vim.lsp.buf.code_action()<CR>
+let g:diagnostics_is_on=1
+function! ToggleDiagnostics()
+  if g:diagnostics_is_on
+    echo "Diagnostics Off"
+    let g:diagnostics_is_on=0
+    lua vim.diagnostic.disable()
+  else
+    echo "Diagnostics On"
+    let g:diagnostics_is_on=1
+    lua vim.diagnostic.enable()
+  endif
+endfunction
+autocmd Syntax c,cpp,python,julia,sh,json nnoremap <buffer> <leader><leader>d :call ToggleDiagnostics()<CR>
+
+function! DiagnosticsSetup()
+  if &diff
+    lua vim.diagnostic.disable()
+  endif
+endfunction
+autocmd Syntax c,cpp,python,julia,sh,json call DiagnosticsSetup()
+
+autocmd Syntax c,cpp,python,julia,sh,json nnoremap <buffer> <C-]> :lua vim.lsp.buf.definition()<CR>
+autocmd Syntax c,cpp,python,julia,sh,json xnoremap <buffer> <C-]> :lua vim.lsp.buf.definition()<CR>
+autocmd Syntax c,cpp,python,julia,sh,json nnoremap <buffer> <C-h> :lua vim.lsp.buf.rename()<CR>
+autocmd Syntax c,cpp,python,julia,sh,json xnoremap <buffer> <C-h> :lua vim.lsp.buf.rename()<CR>
+autocmd Syntax c,cpp,python,julia,sh,json nnoremap <buffer> == :lua vim.lsp.buf.formatting()<CR>
+autocmd Syntax c,cpp,python,julia,sh,json xnoremap <buffer> == :lua vim.lsp.buf.range_formatting()<CR>
+autocmd Syntax c,cpp,python,julia,sh,json nnoremap <buffer> <leader><leader>f :lua vim.lsp.buf.code_action()<CR>
 
 autocmd Syntax c,cpp nnoremap <Leader>of :ClangdSwitchSourceHeader<cr>
 
@@ -49,7 +77,7 @@ lua << EOF
 
   -- Show line diagnostics automatically in hover window
   vim.o.updatetime = 500
-  vim.cmd [[autocmd CursorHold * lua vim.lsp.diagnostic.show_line_diagnostics({focusable=false})]]
+  vim.cmd [[autocmd CursorHold * lua vim.diagnostic.open_float({focusable=false})]]
 
   -- Customizing how diagnostic symbols
   local signs = { Error = "⛔", Warn = "⚡", Hint = "💡", Info = "ℹ" }
@@ -79,7 +107,6 @@ lua << EOF
   
   -- Enable some language servers with the additional completion capabilities offered by nvim-cmp
   local servers = { 'clangd', 'pyright', 'pylsp', 'julials', 'bashls', 'jsonls' }
-  -- local servers = { 'clangd', 'pylsp', 'julials', 'bashls', 'jsonls' }
   for _, lsp in ipairs(servers) do
     lspconfig[lsp].setup {
       -- on_attach = my_custom_on_attach,
