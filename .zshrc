@@ -142,3 +142,7 @@ fi
 
 setxkbmap -option "ctrl:nocaps" &> /dev/null
 #xbindkeys -p
+
+# -- History Size
+export HISTSIZE=100000
+export SAVEHIST=$HISTSIZE
