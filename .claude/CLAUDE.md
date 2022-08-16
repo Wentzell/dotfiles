@@ -1,29 +1,22 @@
 # Environment & Workflow
 
 ## Environment
-- `$HOME` (and `~`) is `/mnt/home/wentzell`, the NFS home shared with cluster nodes
-- `/home/wentzell` is local disk; `~/Dropbox` is a symlink into it, so `~/Dropbox/Coding` lives on local disk despite the `~` prefix
 - Most sources are located in repository directories under `~/Dropbox/Coding`
 - Build directories (`build*`) are commonly soft links onto the local disk to keep build files out of Dropbox sync. Never remove a build dir itself (`rm -rf build`) — clear its contents instead (`rm -rf build/*`)
 - For searches, prefer the local-disk Dropbox copy and indexed tools (`git grep` in-repo) over filesystem walks
 - `curl` command is currently blocked in our company permissions, use alternatives
 
 ## Toolchain
-- LMod modules; default env: `module show devenv9/clang-py3-mkl`
-- Extra libraries in `/mnt/home/wentzell/opt`
+- Homebrew installed in `/opt/homebrew` manages all software
 - Compiler: Clang (preferred) or GCC. Build: Ninja (preferred) or Make
 - Don't invoke the compiler directly — always go through cmake
-
-## Hardware
-- Workstation: 16 physical cores, 500 GB RAM — don't oversubscribe with too many parallel builds
-- Genoa compute nodes (AMD EPYC Zen 4): 96 cores, ~1.5 TB RAM, Slurm constraint `-C genoa`; cross-compile with `-march=znver4`
 
 ## Building & Testing
 - Layout: `c++/`, `test/c++/`, `python/`, `test/python/`, `docs/` (Sphinx + Doxygen)
 - Configure: `cmake -S . -B build -GNinja -DCMAKE_EXPORT_COMPILE_COMMANDS=ON`
 - Toggles: `-DASAN=ON -DUBSAN=ON` (sanitizers), `-DBuild_Documentation=ON` (docs), `-DCMAKE_INSTALL_PREFIX=~/opt/REPONAME` (install)
 - Test: `ctest --test-dir build -j 16` — always use ctest. `python test.py` silently loads the installed module instead of the build version. To run a test manually: `PYTHONPATH=<project>/build/python:$PYTHONPATH python ...`
-- Variants: `build_dbg` → `~/opt/triqs_dbg`; `build_san` → `~/opt/triqs_san`; `build_prof` → `~/opt/triqs_prof`; `build_genoa` → `~/opt/triqs_genoa` (cross-compiled `-march=znver4` for Genoa nodes)
+- Variants: `build_dbg` → `~/opt/triqs_dbg`; `build_san` → `~/opt/triqs_san`; `build_prof` → `~/opt/triqs_prof`
 
 ## Code Comments
 - Prefer no comment over one that restates the code
