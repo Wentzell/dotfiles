@@ -139,14 +139,18 @@ if [ -f ~/.shrc ]; then
     . ~/.shrc
 fi
 
-setxkbmap -option "ctrl:nocaps" &> /dev/null
+#setxkbmap -option "ctrl:nocaps" &> /dev/null
 #xbindkeys -p
 
 # -- History Size
 export HISTSIZE=100000
 export SAVEHIST=$HISTSIZE
 
+export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
+
 # FZF https://github.com/junegunn/fzf
 # git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 # ~/.fzf/install
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+eval "$(mise activate)"

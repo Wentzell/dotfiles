@@ -22,14 +22,21 @@
 
 ##################### My aliases  ######################
 
+# -- Mac specifics 
+alias firefox='open -a /Applications/Firefox.app'
+alias ldd='otool -L'
+
 # cuda
 alias cuda_arch="nvidia-smi --query-gpu=compute_cap --format=csv,noheader|head -n 1| sed 's/\.//'"
 
+#
 connect_remote_notebook(){
   ssh -N -f -L localhost:8889:127.0.0.1:8889 $1
 }
 
 	# General
+alias chromium-browser='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome'
+alias clang++='clang++ -Wl,-w'
 alias lock='/usr/bin/i3lock -c 000000'
 alias ll='ls -alF'
 alias la='ls -A'
@@ -51,6 +58,7 @@ aur () {
 }
 alias paclst='pacman -Qqettn'
 alias aurlst='pacman -Qqettm'
+alias brewlst='brew leaves'
 alias piplst="pip list --not-required | tail -n +3 | awk '{print \$1;}'"
 
 	# ssh
@@ -62,12 +70,13 @@ alias sshnokey="ssh -X -o PubkeyAuthentication=no"
 	# https://github.com/Sarcasm/compdb <- Add header files to compile_commands.json
 alias vim="nvim"
 alias vimdiff="nvim -d"
-alias vimsrc="compdb -p build/ list > compile_commands.json &> /dev/null; nvim **/*.cpp(N) **/*.cu(N) **/*.hpp(N) **/*.hxx(N) **/*.h(N)" # **/*.c(N) **/*.h(N)
+alias vimsrc="compdb -p build_mac/ list > compile_commands.json &> /dev/null; nvim **/*.cpp(N) **/*.cu(N) **/*.hpp(N) **/*.hxx(N) **/*.h(N)" # **/*.c(N) **/*.h(N)
 mkbuild () {
-  mkdir -p /home/wentzell/builds/${PWD##*/}$1
-  ln -s /home/wentzell/builds/${PWD##*/}$1 build$1
+  mkdir -p $HOME/builds/${PWD##*/}$1
+  ln -s $HOME/builds/${PWD##*/}$1 build_mac$1
 }
-alias vimtex='nvim --servername $(basename *.tex.latexmain .tex.latexmain) *.tex content/*.tex(N) settings/*.tex(N)'
+#alias vimtex='nvim --servername $(basename *.tex.latexmain .tex.latexmain) *.tex content/*.tex(N) settings/*.tex(N)'
+alias vimtex='mvim --servername SYNCTEX *.tex(N) content/*.tex(N) settings/*.tex(N)'
 
 	# apt
 alias apts="apt-cache search"
@@ -100,23 +109,19 @@ tmuxdev () {
   tmux neww -n DBG -c $HOME
   tmux neww -n DBG -c $HOME
   tmux send-keys -t 0:1 "cd Dropbox/Coding/triqs; clear" C-m
-  tmux send-keys -t 0:2 "cd Dropbox/Coding/triqs/build; clear" C-m
+  tmux send-keys -t 0:2 "cd Dropbox/Coding/triqs/build_mac; clear" C-m
   tmux send-keys -t 0:3 "cd Dropbox/Coding; clear" C-m
   tmux send-keys -t 0:4 "cd Dropbox/Coding; clear" C-m
   tmux send-keys -t 0:5 "cd Dropbox/Coding; clear" C-m
   tmux send-keys -t 0:6 "cd Dropbox/Coding; clear" C-m
-  tmux send-keys -t 0:7 "cd Dropbox/Coding; module load devenv9/gcc-py3-mkl; source ~/opt/triqs_gcc/share/triqs/triqsvars.sh; clear" C-m
-  tmux send-keys -t 0:8 "cd Dropbox/Coding; module load devenv9/gcc-py3-mkl; source ~/opt/triqs_gcc/share/triqs/triqsvars.sh; clear" C-m
-  tmux send-keys -t 0:9 "cd Dropbox/Coding; module load devenv9/icx-py3-mkl; source ~/opt/triqs_icx/share/triqs/triqsvars.sh; clear" C-m
-  tmux send-keys -t 0:10 "cd Dropbox/Coding; module load devenv9/icx-py3-mkl; source ~/opt/triqs_icx/share/triqs/triqsvars.sh; clear" C-m
-  tmux send-keys -t 0:11 "cd Dropbox/Coding; module load devenv9/nvhpc-py3-mkl; source ~/opt/triqs_gcc/share/triqs/triqsvars.sh; clear" C-m
-  tmux send-keys -t 0:12 "cd Dropbox/Coding; module load devenv9/nvhpc-py3-mkl; source ~/opt/triqs_gcc/share/triqs/triqsvars.sh; clear" C-m
-  tmux send-keys -t 0:13 "cd Dropbox/Coding; source ~/opt/triqs_san/share/triqs/triqsvars.sh; clear" C-m
-  tmux send-keys -t 0:14 "cd Dropbox/Coding; source ~/opt/triqs_san/share/triqs/triqsvars.sh; clear" C-m
-  tmux send-keys -t 0:15 "cd Dropbox/Coding; source ~/opt/triqs_prof/share/triqs/triqsvars.sh; export CXXFLAGS=\"-g -gdwarf-4 -fno-omit-frame-pointer -stdlib=libc++ -ffp-contract=fast -march=native\"; clear" C-m
-  tmux send-keys -t 0:16 "cd Dropbox/Coding; source ~/opt/triqs_prof/share/triqs/triqsvars.sh; export CXXFLAGS=\"-g -gdwarf-4 -fno-omit-frame-pointer -stdlib=libc++ -ffp-contract=fast -march=native\"; clear" C-m
-  tmux send-keys -t 0:17 "cd Dropbox/Coding; source ~/opt/triqs_dbg/share/triqs/triqsvars.sh; clear" C-m
-  tmux send-keys -t 0:18 "cd Dropbox/Coding; source ~/opt/triqs_dbg/share/triqs/triqsvars.sh; clear" C-m
+  tmux send-keys -t 0:7 "cd Dropbox/Coding; export CC=gcc-15 CXX=g++-15 CXXFLAGS=''; source ~/opt/triqs_gcc/share/triqs/triqsvars.sh; clear" C-m
+  tmux send-keys -t 0:8 "cd Dropbox/Coding; export CC=gcc-15 CXX=g++-15 CXXFLAGS=''; source ~/opt/triqs_gcc/share/triqs/triqsvars.sh; clear" C-m
+  tmux send-keys -t 0:9 "cd Dropbox/Coding; source ~/opt/triqs_san/share/triqs/triqsvars.sh; clear" C-m
+  tmux send-keys -t 0:10 "cd Dropbox/Coding; source ~/opt/triqs_san/share/triqs/triqsvars.sh; clear" C-m
+  tmux send-keys -t 0:11 "cd Dropbox/Coding; source ~/opt/triqs_prof/share/triqs/triqsvars.sh; export CXXFLAGS=\"-g -gdwarf-4 -fno-omit-frame-pointer -stdlib=libc++ -ffp-contract=fast -march=native\"; clear" C-m
+  tmux send-keys -t 0:12 "cd Dropbox/Coding; source ~/opt/triqs_prof/share/triqs/triqsvars.sh; export CXXFLAGS=\"-g -gdwarf-4 -fno-omit-frame-pointer -stdlib=libc++ -ffp-contract=fast -march=native\"; clear" C-m
+  tmux send-keys -t 0:13 "cd Dropbox/Coding; source ~/opt/triqs_dbg/share/triqs/triqsvars.sh; clear" C-m
+  tmux send-keys -t 0:14 "cd Dropbox/Coding; source ~/opt/triqs_dbg/share/triqs/triqsvars.sh; clear" C-m
   tmux selectw -t 1
   tmux attach
 }
@@ -128,8 +133,8 @@ cmakedd() {
   (cd $(pwd)/..; cmake -B $REAL_BUILD_DIR -GNinja -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_COLOR_DIAGNOSTICS=ON $@)
 }
 alias build="cmake --build ."
-alias make="make -j 60"
-alias ctest="ctest -j 60"
+alias make="make -j 10"
+alias ctest="ctest -j 10"
 alias pip_upgrade="pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U"
 # Clang ignores LIBRARY_PATH
 alias activate='source ~/opt/python/bin/activate'
@@ -139,7 +144,7 @@ print_code_CPP='enscript -G -f Courier7  --color -Ecpp -L 90 -C '
 print_code_PY='enscript -G -f Courier7  --color -Epython -L 90 -C '
 prof() {
   rm -f $1.prof* &> /dev/null
-  LD_PRELOAD=$HOME/opt/gperftools/lib/libprofiler.so CPUPROFILE=$1.prof $@
+  DYLD_INSERT_LIBRARIES=$(brew --prefix)/lib/libprofiler.dylib CPUPROFILE=$1.prof $@
 }
 pprint() {
   # First argument should be the binary, e.g. executable or python module!
@@ -158,7 +163,7 @@ pprint() {
 hprof() {
   #CURRENT_DIR=$PWD; mkdir -p hprof; cd hprof;
   rm -f $1.hprof* &> /dev/null
-  LD_PRELOAD=$HOME/opt/gperftools/lib/libtcmalloc.so HEAPPROFILE=$1.hprof $@
+  DYLD_INSERT_PRELOAD=$(brew --prefix)/lib/libtcmalloc.dylib HEAPPROFILE=$1.hprof $@
   #cd $CURRENT_DIR
 }
 hpprint() {
