@@ -46,21 +46,13 @@ For multi-step tasks, state a brief plan with a verify check per step. Strong su
 # Environment & Workflow
 
 ## Environment
-- `$HOME` (and `~`) is `/mnt/home/wentzell`, the NFS home shared with cluster nodes
-- `/home/wentzell` is local disk; `~/Dropbox` is a symlink into it, so `~/Dropbox/Coding` lives on local disk despite the `~` prefix
 - Most sources are located in repository directories under `~/Dropbox/Coding`
 - Build directories (`build*`) are commonly soft links onto the local disk to keep build files out of Dropbox sync. Never remove a build dir itself (`rm -rf build`) — clear its contents instead (`rm -rf build/*`)
-- NFS caution: avoid recursive `find` / `grep` / `rg` / `bfs` sweeps over `/`, `/mnt/home`, `/mnt/ceph`, or `~`. Scope to a specific subdirectory, prefer the local-disk Dropbox copy, and lean on indexed tools (git grep inside a repo) over filesystem walks.
 
 ## Toolchain
-- LMod modules; default env: `module show devenv9/clang-py3-mkl`
-- Extra libraries in `/mnt/home/wentzell/opt`
+- Homebrew installed in `/opt/homebrew` manages all software
 - Compiler: Clang (preferred) or GCC. Build: Ninja (preferred) or Make
 - Don't invoke the compiler directly — always go through cmake
-
-## Hardware
-- Workstation: 16 physical cores, 500 GB RAM — don't oversubscribe with too many parallel builds
-- Genoa compute nodes (AMD EPYC Zen 4): 96 cores, ~1.5 TB RAM, Slurm constraint `-C genoa`; cross-compile with `-march=znver4`
 
 ## Common Project Structure
 - Layout: `c++/`, `test/c++/`, `python/`, `test/python/`, `docs/` (Sphinx + Doxygen)
@@ -81,7 +73,7 @@ For multi-step tasks, state a brief plan with a verify check per step. Strong su
 - Test: `ctest --test-dir build -j 16` — always use ctest. `python test.py` silently loads the installed module instead of the build version. To run a test manually: `PYTHONPATH=<project>/build/python:$PYTHONPATH python ...`
 
 ## Build Variants
-- `build_dbg` → `~/opt/triqs_dbg`; `build_san` → `~/opt/triqs_san`; `build_prof` → `~/opt/triqs_prof`; `build_genoa` → `~/opt/triqs_genoa` (cross-compiled `-march=znver4` for Genoa nodes)
+- `build_dbg` → `~/opt/triqs_dbg`; `build_san` → `~/opt/triqs_san`; `build_prof` → `~/opt/triqs_prof`
 
 ## Debugging
 - Use a sanitizer build (ASAN/UBSAN) for segfaults, memory errors, and NaN/Inf tracking — release builds give cryptic crashes; UBSAN's float-cast-overflow pinpoints where NaN is first produced
