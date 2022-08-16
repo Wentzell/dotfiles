@@ -1,6 +1,6 @@
 # Build configuration
-RELEASE=llvmorg-14.0.6
-INSTALL_DIR=$HOME/opt/llvm_14.0.6
+RELEASE=llvmorg-15.0.0
+INSTALL_DIR=$HOME/opt/llvm_15.0.0
 #RELEASE=main
 #INSTALL_DIR=$HOME/opt/llvm_main
 SRC_DIR=$PWD
@@ -93,11 +93,11 @@ ninja install
 
 # --- Build and Install Include-what-you-use
 
-cd ${SRC_DIR}
-git clone https://github.com/include-what-you-use/include-what-you-use --branch clang_14 --depth 1
-
-mkdir -p ${SRC_DIR}/iwyu_build
-cd ${SRC_DIR}/iwyu_build
-
-cmake -DCMAKE_INSTALL_PREFIX="${INSTALL_DIR}" "${SRC_DIR}/include-what-you-use"
-make -j ${THREADS} install
+#cd ${SRC_DIR}
+#git clone https://github.com/include-what-you-use/include-what-you-use --branch clang_15 --depth 1
+#
+#mkdir -p ${SRC_DIR}/iwyu_build
+#cd ${SRC_DIR}/iwyu_build
+#
+#cmake -DCMAKE_INSTALL_PREFIX="${INSTALL_DIR}" "${SRC_DIR}/include-what-you-use"
+#make -j ${THREADS} install

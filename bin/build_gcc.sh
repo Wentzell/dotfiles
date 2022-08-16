@@ -1,5 +1,5 @@
 # Build configuration
-RELEASE=gcc-10.2.0
+RELEASE=gcc-12.1.0
 INSTALL_DIR=$HOME/opt/${RELEASE}
 SRC_DIR=$PWD/${RELEASE}
 THREADS=60
@@ -23,8 +23,8 @@ cd ${SRC_DIR}
 	--enable-thread \
        	--disable-multilib \
 	--enable-checking=release \
-	--enable-lto \
-	#--program-suffix=-7   
+	--enable-lto
+	#--program-suffix=-12
 
 make -j ${THREADS}
 make -j ${THREADS} install

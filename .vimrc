@@ -14,7 +14,6 @@ Plug 'preservim/tagbar'
 Plug 'scrooloose/nerdtree'
 Plug 'chrisbra/Recover.vim'
 Plug 'octol/vim-cpp-enhanced-highlight'
-Plug 'vim-scripts/AnsiEsc.vim'
 Plug 'tpope/vim-fugitive'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -34,6 +33,7 @@ if has('nvim')
 
 else
   " vim only plugins
+  Plug 'vim-scripts/AnsiEsc.vim'
   Plug 'derekwyatt/vim-fswitch'
   Plug 'altercation/vim-colors-solarized'
 
@@ -78,6 +78,9 @@ set t_Co=256
 set background=dark
 silent! colorscheme solarized
 
+" Enable highlighting of matching angle braces
+set mps+=<:>
+
 " My Status Line
 set statusline=%t[%{strlen(&fenc)?&fenc:'none'},%{&ff}]%h%m%r%y%=%c,%l/%L\ %P
 set laststatus=2		" Always display status bar
@@ -115,7 +118,9 @@ let g:clang_format#command = 'clang-format'
 :command! Ttex		:r ~/.vim/templates/templ.tex
 
 "Command Make will call make and then open quickfix window
-autocmd BufReadPost quickfix AnsiEsc
+if !has('nvim')
+  autocmd BufReadPost quickfix AnsiEsc
+endif
 "set makeprg=$HOME/bin/pymake
 set makeprg=make
 :command! -nargs=* Make :make -j 60 <args> | cwindow 15
@@ -302,9 +307,6 @@ autocmd Syntax python xnoremap <buffer> == :YAPF<cr>
 " --- Config for clang-format plugin
 autocmd Syntax c,cpp nnoremap <buffer> == :call LanguageClient_textDocument_formatting()<CR>
 autocmd Syntax c,cpp xnoremap <buffer> == :call LanguageClient_textDocument_formatting()<CR>
-
-" --- Enable highlighting of matching angle braces
-autocmd Syntax c,cpp set mps+=<:>
 
 " set up file switch for fswitch plugin
 "au! BufEnter *.cpp let b:fswitchdst = 'h' | let b:fswitchlocs = '../include'

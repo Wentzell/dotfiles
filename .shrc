@@ -57,8 +57,12 @@ alias sshnokey="ssh -X -o PubkeyAuthentication=no"
 
 	# vim
 	# https://github.com/Sarcasm/compdb <- Add header files to compile_commands.json
-alias vimsrc="compdb -p build/ list > compile_commands.json &> /dev/null; vim **/*.cpp(N) **/*.hpp(N) **/*.hxx(N)" # **/*.c(N) **/*.h(N)
-alias vimtex='vim --servername $(basename *.tex.latexmain .tex.latexmain) *.tex content/*.tex(N) settings/*.tex(N)'
+alias vimsrc="compdb -p build/ list > compile_commands.json &> /dev/null; nvim **/*.cpp(N) **/*.cu(N) **/*.hpp(N) **/*.hxx(N) **/*.h(N)" # **/*.c(N) **/*.h(N)
+mkbuild () {
+  mkdir -p /home/wentzell/builds/${PWD##*/}$1
+  ln -s /home/wentzell/builds/${PWD##*/}$1 build$1
+}
+alias vimtex='nvim --servername $(basename *.tex.latexmain .tex.latexmain) *.tex content/*.tex(N) settings/*.tex(N)'
 
 	# apt
 alias apts="apt-cache search"
@@ -72,19 +76,34 @@ alias tls='tmux list-sessions'
 alias tat='tmux attach-session -t'
 alias tkill='tmux kill-session -t'
 tmuxdev () {
-  tmux new-session -d -n Coding -c $HOME
+  tmux new-session -d -s 'S' -n triqs -c $HOME
+  tmux neww -n triqs -c $HOME
   tmux neww -n Coding -c $HOME
   tmux neww -n Coding -c $HOME
   tmux neww -n Coding -c $HOME
   tmux neww -n Coding -c $HOME
-  tmux neww -n Coding -c $HOME
-  tmux neww -n Coding -c $HOME
-  tmux neww -n Coding -c $HOME
-  tmux neww -n Coding -c $HOME
-  tmux neww -n System -c $HOME
-  tmux neww -n System -c $HOME
-  tmux neww -n Latex -c ~/Dropbox/Latex
-  tmux neww -n Latex -c ~/Dropbox/Latex
+  tmux neww -n GCC -c $HOME
+  tmux neww -n GCC -c $HOME
+  tmux neww -n SAN -c $HOME
+  tmux neww -n SAN -c $HOME
+  tmux neww -n PROF -c $HOME
+  tmux neww -n PROF -c $HOME
+  tmux neww -n DBG -c $HOME
+  tmux neww -n DBG -c $HOME
+  tmux send-keys -t S:1 "cd Dropbox/Coding/triqs; clear" C-m
+  tmux send-keys -t S:2 "cd Dropbox/Coding/triqs/build; clear" C-m
+  tmux send-keys -t S:3 "cd Dropbox/Coding; clear" C-m
+  tmux send-keys -t S:4 "cd Dropbox/Coding; clear" C-m
+  tmux send-keys -t S:5 "cd Dropbox/Coding; clear" C-m
+  tmux send-keys -t S:6 "cd Dropbox/Coding; clear" C-m
+  tmux send-keys -t S:7 "cd Dropbox/Coding; module load devenv3/gcc-py3-mkl; source ~/opt/triqs_gcc/share/triqs/triqsvars.sh; clear" C-m
+  tmux send-keys -t S:8 "cd Dropbox/Coding; module load devenv3/gcc-py3-mkl; source ~/opt/triqs_gcc/share/triqs/triqsvars.sh; clear" C-m
+  tmux send-keys -t S:9 "cd Dropbox/Coding; source ~/opt/triqs_san/share/triqs/triqsvars.sh; clear" C-m
+  tmux send-keys -t S:10 "cd Dropbox/Coding; source ~/opt/triqs_san/share/triqs/triqsvars.sh; clear" C-m
+  tmux send-keys -t S:11 "cd Dropbox/Coding; source ~/opt/triqs_prof/share/triqs/triqsvars.sh; clear" C-m
+  tmux send-keys -t S:12 "cd Dropbox/Coding; source ~/opt/triqs_prof/share/triqs/triqsvars.sh; clear" C-m
+  tmux send-keys -t S:13 "cd Dropbox/Coding; source ~/opt/triqs_dbg/share/triqs/triqsvars.sh; clear" C-m
+  tmux send-keys -t S:14 "cd Dropbox/Coding; source ~/opt/triqs_dbg/share/triqs/triqsvars.sh; clear" C-m
   tmux selectw -t 1
   tmux attach
 }
@@ -92,8 +111,9 @@ tmuxdev () {
 
         # Develop
 alias cmake="cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
-alias make="make -j 8"
-alias ctest="ctest -j 8"
+alias cmakedd='PWD=$(realpath .) cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON $(pwd)/..' # Useful for building from symlinked build dir within sources
+alias make="make -j 60"
+alias ctest="ctest -j 60"
 alias pip_upgrade="pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U"
 # Clang ignores LIBRARY_PATH
 alias activate='source ~/opt/python/bin/activate'
@@ -103,10 +123,8 @@ alias cmdbg='cmake -DCMAKE_BUILD_TYPE=Debug'
 print_code_CPP='enscript -G -f Courier7  --color -Ecpp -L 90 -C '
 print_code_PY='enscript -G -f Courier7  --color -Epython -L 90 -C '
 prof() {
-  #CURRENT_DIR=$PWD; mkdir -p prof; cd prof;
   rm -f $1.prof* &> /dev/null
-  LD_PRELOAD=$HOME/opt/gperftools/lib/libprofiler.so CPUPROFILE=$1.prof $@
-  #cd $CURRENT_DIR
+  LD_PRELOAD=/mnt/home/wentzell/opt/gperftools/lib/libprofiler.so CPUPROFILE=$1.prof $@
 }
 pprint() {
   # First argument should be the binary, e.g. executable or python module!
@@ -116,6 +134,10 @@ pprint() {
   pprof --svg --lines $1 $2.prof > $2.prof.lines.svg
   pprof --svg $1 $2.prof > $2.prof.svg
   pprof --collapsed $1 $2.prof | flamegraph.pl - > $2.prof.flamegraph.svg
+  #pprof --pdf --lines $1 $2.prof > $2.prof.pdf
+  #pprof --png --lines $1 $2.prof > $2.prof.png
+  #chromium-browser $1.prof.svg &
+  #chromium-browser $1.prof.flamegraph.svg &
   #pprof --web --lines $1 $1.prof
 }
 hprof() {
@@ -130,6 +152,7 @@ hpprint() {
       pprof --text --lines $1 $f > ${f%.*}.txt
       head -n 4 ${f%.*}.txt
       pprof --svg --lines $1 $f > ${f%.*}.svg
+      #chromium-browser ${f%.*}.svg &
       #pprof --pdf --lines $1 $f > ${f%.*}.pdf
       #pprof --web --lines $1 $f
     done
@@ -138,6 +161,7 @@ hpprint() {
     pprof --text --lines $1 $f > ${f%.*}.txt
     head -n 5 ${f%.*}.txt
     pprof --svg --lines $1 $f > ${f%.*}.svg
+    #chromium-browser ${f%.*}.svg &
     #pprof --pdf --lines $1 $f > ${f%.*}.pdf
     #pprof --web --lines $1 $f
   fi
