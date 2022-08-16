@@ -51,6 +51,7 @@ filetype plugin indent on	" Indenting globally on
 set shiftwidth=2		" Set indent shift
 set backspace=2			" Make backspace work normally
 set nomore			" Do not prompt for 'more'
+set vb t_vb=			" Remove annying beep on mac
 
 " Airline theme
 let g:airline_theme='solarized'
