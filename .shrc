@@ -111,7 +111,10 @@ tmuxdev () {
 
         # Develop
 alias cmake="cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
-alias cmakedd='PWD=$(realpath .) cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON $(pwd)/..' # Useful for building from symlinked build dir within sources
+cmakedd() {
+  REAL_BUILD_DIR=$(realpath .)
+  (cd $(pwd)/..; cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -B $REAL_BUILD_DIR $@)
+}
 alias make="make -j 60"
 alias ctest="ctest -j 60"
 alias pip_upgrade="pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U"
