@@ -9,7 +9,7 @@
     ],
     "extra_template_paths": [
       ".",
-      "/mnt/home/wentzell/opt/myvenv/lib/python3.10/site-packages/jupyter_contrib_nbextensions/templates"
+      "/opt/homebrew/lib/python3.13/site-packages/jupyter_contrib_nbextensions/templates"
     ]
   },
   "version": 1

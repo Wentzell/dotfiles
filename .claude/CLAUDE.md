@@ -3,14 +3,14 @@
 - Quantum Many-Body Physics
 
 ## Common Commands
-- Configure: `cmake -S . -B build -GNinja -DCMAKE_EXPORT_COMPILE_COMMANDS=ON`
+- Configure: `cmake -S . -B build_mac -GNinja -DCMAKE_EXPORT_COMPILE_COMMANDS=ON`
 - Configure Install Prefix only if required: `-DCMAKE_INSTALL_PREFIX=~/opt/REPONAME`
 - To enable Sanitizer checks configure with `-DASAN=ON -DUBSAN=ON`
 - To enable Documentation configure with `-DBuild_Documentation=ON`
-- Build: `cmake --build build`
-- Install: `cmake --install build`
-- Test: `ctest --test-dir build -j 16` (always use ctest, never run Python tests directly. Running `python test.py` without the correct PYTHONPATH will silently load the installed system version of the module instead of the build version, producing misleading results. If you must run a Python test manually, prefix with `PYTHONPATH=<project>/build/python:$PYTHONPATH`)
-- Clean build: `cmake --build build --clean-first`
+- Build: `cmake --build build_mac`
+- Install: `cmake --install build_mac`
+- Test: `ctest --test-dir build_mac -j 16` (always use ctest, never run Python tests directly. Running `python test.py` without the correct PYTHONPATH will silently load the installed system version of the module instead of the build version, producing misleading results. If you must run a Python test manually, prefix with `PYTHONPATH=<project>/build/python:$PYTHONPATH`)
+- Clean build: `cmake --build build_mac --clean-first`
 
 ## Common Project Structure
 - C++ sources and headers: `c++/`
@@ -31,9 +31,8 @@
 - Compiler: Clang (preferred) or GCC
 - Build: Ninja (preferred) or Make
 
-## Environment
-- The HOME environment variable as well as ~ point to /mnt/home/wentzell which is the network-file-system home directory shared with the cluster nodes
-- Most sources are located in repository directories in the Dropbox folder /home/wentzell/Dropbox/Coding on the local disk
+## Paths
+- The Dropbox directory `/Users/nwentzell/Simons Foundation Dropbox/Nils Wentzell/` has a hardlink at `/Users/nwentzell/Dropbox/`. Always use the hardlink path to avoid whitespace issues in shell commands.
 
 ## Communication
 - Give concise answers
@@ -96,6 +95,6 @@ jupytext --to ipynb <file>.py
 - Pre-authorized to create commits without explicit per-commit confirmation. Still hold off on `push`, `push --force`, amending published commits, destructive resets/checkouts, and any history rewrites on shared branches unless asked
 
 ## Build Variants
-- Debug: `build_dbg` directory, triqs installed into `~/opt/triqs_dbg`
-- Sanitizer: `build_san` directory, triqs installed into `~/opt/triqs_san`
-- Profiling: `build_prof` directory, triqs installed into `~/opt/triqs_prof`
+- Debug: `build_mac_dbg` directory, triqs installed into `~/opt/triqs_dbg`
+- Sanitizer: `build_mac_san` directory, triqs installed into `~/opt/triqs_san`
+- Profiling: `build_mac_prof` directory, triqs installed into `~/opt/triqs_prof`
