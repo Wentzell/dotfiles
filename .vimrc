@@ -58,6 +58,7 @@ filetype plugin indent on	" Indenting globally on
 set shiftwidth=2		" Set indent shift
 set backspace=2			" Make backspace work normally
 set nomore			" Do not prompt for 'more'
+set vb t_vb=			" Remove annying beep on mac
 
 " Airline theme
 let g:airline_theme='solarized'
@@ -169,7 +170,7 @@ nmap <Leader>dc 	:DoxComm<cr>
 
 "Just press F5 to make your program:
 map <F5> :Make run<cr><cr><cr>
-autocmd Syntax c,cpp map <buffer> 'll :Make -s -C build<cr><cr><cr>
+autocmd Syntax c,cpp map <buffer> 'll :Make -s -C build_mac<cr><cr><cr>
 
 ";n for next error
 nnoremap ;n	:cn<cr>
@@ -336,8 +337,9 @@ endfunction
 "}}}
 "-------------------------------------- Latex Specific Stuff ------------------------------------------{{{
 "
-let g:LatexBox_viewer = 'zathura'
-let g:LatexBox_latexmk_options = "-pdflatex='pdflatex -synctex=1 \%O \%S'"
+
+let g:LatexBox_viewer = "/Applications/Skim.app/Contents/MacOS/Skim"
+let g:LatexBox_latexmk_options = "-pdflatex='pdflatex -synctex=1 --interaction=nonstopmode \%O \%S'"
 let g:LatexBox_ignore_warnings = ['Underfull',
 				\ 'Overfull',
 				\ 'deprecated',
@@ -351,16 +353,14 @@ let g:LatexBox_ignore_warnings = ['Underfull',
 				\ 'specifier changed to',
 				\ 'Package amsmath Warning']
 
-nnoremap <F9>   :exec "!zathura ".LatexBox_GetOutputFile() line('.')  col('.') "%"<cr><cr>
-
 function! SyncTexForward()
-   let servername = substitute( LatexBox_GetOutputFile(), '.*/\(.\{-}\)\.pdf', '\U\1', 'g' )
-   let execstr = "silent !zathura -x 'gvim -v --servername ". servername ." --remote +\\\%{line} \\\%{input}' --synctex-forward ".line(".").":".col('.').":% ". LatexBox_GetOutputFile() ." 2> /dev/null &"
+   let execstr = "silent !/Applications/Skim.app/Contents/SharedSupport/displayline " . line(".") . " " . LatexBox_GetOutputFile() . " % "
    exec execstr
    :redraw!
 endfunction
 
-nmap <Leader>f :call SyncTexForward()<CR>
+nnoremap <Leader>f :call SyncTexForward()<CR>
+autocmd Syntax tex nnoremap 'll <Leader>ll
 
 :command! Myspell :setlocal spell spelllang=en_us <bar> :syntax spell toplevel"}}}
 
