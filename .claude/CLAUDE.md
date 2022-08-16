@@ -8,13 +8,10 @@
 - Provide concise, focused responses. Skip non-essential context, and keep examples minimal.
 
 ## Environment
-- `$HOME` (and `~`) is `/mnt/home/wentzell`, the NFS home shared with cluster nodes
-- `/home/wentzell` is local disk; `~/Dropbox` is a symlink into it, so `~/Dropbox/Coding` lives on local disk despite the `~` prefix
 - Most sources are located in repository directories under `~/Dropbox/Coding`
-- Be mindful of NFS traffic: avoid large recursive `find` / `grep` / `rg` sweeps over `~` or other NFS paths. Scope searches to a specific subdirectory, prefer the local-disk Dropbox copy when available, and lean on indexed tools (git grep inside a repo) over filesystem walks
 
 ## Software Stack
-- LMod modules; default env: `module show devenv9/clang-py3-mkl`
+- We are using homebrew installed in /opt/homebrew for managing all software
 - Extra libraries in `/mnt/home/wentzell/opt`
 
 ## Tools
