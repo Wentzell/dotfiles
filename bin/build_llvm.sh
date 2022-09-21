@@ -1,6 +1,6 @@
 # Build configuration
-RELEASE=llvmorg-15.0.0
-INSTALL_DIR=$HOME/opt/llvm_15.0.0
+RELEASE=llvmorg-15.0.1
+INSTALL_DIR=$HOME/opt/llvm_15.0.1
 #RELEASE=main
 #INSTALL_DIR=$HOME/opt/llvm_main
 SRC_DIR=$PWD
