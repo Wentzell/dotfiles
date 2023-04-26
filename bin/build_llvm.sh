@@ -1,6 +1,6 @@
 # Build configuration
-RELEASE=llvmorg-15.0.1
-INSTALL_DIR=$HOME/opt/llvm_15.0.1
+RELEASE=llvmorg-16.0.2
+INSTALL_DIR=$HOME/opt/llvm_16.0.2
 #RELEASE=main
 #INSTALL_DIR=$HOME/opt/llvm_main
 SRC_DIR=$PWD
@@ -55,6 +55,7 @@ cmake -GNinja \
       -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;lldb;pstl" \
       -DLLVM_ENABLE_RUNTIMES="compiler-rt;libcxx;libcxxabi;libunwind;openmp" \
       -DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON \
+      -DBUILD_SHARED_LIBS=ON \
       -DLLVM_PARALLEL_COMPILE_JOBS="${THREADS}" \
       -DLLVM_PARALLEL_LINK_JOBS="${THREADS}" \
       -DLLVM_CCACHE_BUILD=ON \
@@ -72,9 +73,8 @@ cmake -GNinja \
       -DCMAKE_C_COMPILER="${CC}" \
       -DCMAKE_CXX_COMPILER="${CXX}" \
       -DLIBOMP_TSAN_SUPPORT=1 \
-      -DCLANG_OPENMP_NVPTX_DEFAULT_ARCH=sm_70 \
-      -DLIBOMPTARGET_NVPTX_COMPUTE_CAPABILITIES="50;52;53;60;61;62;70;72;75;80;86" \
-      -DCLANG_PYTHON_BINDINGS_VERSIONS="3.8;3.9;3.10" \
+      -DLIBOMPTARGET_NVPTX_COMPUTE_CAPABILITIES="all" \
+      -DCLANG_PYTHON_BINDINGS_VERSIONS="3.8;3.9;3.10;3.11" \
       -DLLVM_BINUTILS_INCDIR=/usr/include \
       -DLLDB_ENABLE_PYTHON=ON \
       "${SRC_DIR}/llvm-project/llvm"
@@ -94,7 +94,7 @@ ninja install
 # --- Build and Install Include-what-you-use
 
 #cd ${SRC_DIR}
-#git clone https://github.com/include-what-you-use/include-what-you-use --branch clang_15 --depth 1
+#git clone https://github.com/include-what-you-use/include-what-you-use --branch clang_16 --depth 1
 #
 #mkdir -p ${SRC_DIR}/iwyu_build
 #cd ${SRC_DIR}/iwyu_build
