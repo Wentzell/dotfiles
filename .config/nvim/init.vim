@@ -23,8 +23,21 @@ lua << EOF
     }
   })
 
+  -- Disable semantic highlighting
+  for _, group in ipairs(vim.fn.getcompletion("@lsp", "highlight")) do
+    vim.api.nvim_set_hl(0, group, {})
+  end
 EOF
 
+" ---- Copilot ---- "
+imap <silent><script><expr> <C-l> copilot#Accept("\<CR>")
+imap <silent> <C-j> <Plug>(copilot-next)
+imap <silent> <C-k> <Plug>(copilot-previous)
+imap <silent> <C-/> <Plug>(copilot-dismiss)
+let g:copilot_no_tab_map = v:true
+let g:copilot_assume_mapped = v:true
+
+" ---- Toggle Diagnostics ---- "
 let g:diagnostics_is_on=1
 function! ToggleDiagnostics()
   if g:diagnostics_is_on
@@ -46,12 +59,13 @@ function! DiagnosticsSetup()
 endfunction
 autocmd Syntax c,cpp,python,julia,sh,json call DiagnosticsSetup()
 
+" ---- LSP Bindings ---- "
 autocmd Syntax c,cpp,python,julia,sh,json nnoremap <buffer> <C-]> :lua vim.lsp.buf.definition()<CR>
 autocmd Syntax c,cpp,python,julia,sh,json xnoremap <buffer> <C-]> :lua vim.lsp.buf.definition()<CR>
 autocmd Syntax c,cpp,python,julia,sh,json nnoremap <buffer> <C-h> :lua vim.lsp.buf.rename()<CR>
 autocmd Syntax c,cpp,python,julia,sh,json xnoremap <buffer> <C-h> :lua vim.lsp.buf.rename()<CR>
-autocmd Syntax c,cpp,python,julia,sh,json nnoremap <buffer> == :lua vim.lsp.buf.formatting()<CR>
-autocmd Syntax c,cpp,python,julia,sh,json xnoremap <buffer> == :lua vim.lsp.buf.range_formatting()<CR>
+autocmd Syntax c,cpp,python,julia,sh,json nnoremap <buffer> == :lua vim.lsp.buf.format()<CR>
+autocmd Syntax c,cpp,python,julia,sh,json xnoremap <buffer> == :lua vim.lsp.buf.formatexpr()<CR>
 autocmd Syntax c,cpp,python,julia,sh,json nnoremap <buffer> <leader><leader>f :lua vim.lsp.buf.code_action()<CR>
 
 autocmd Syntax c,cpp nnoremap <Leader>of :ClangdSwitchSourceHeader<cr>
@@ -101,7 +115,7 @@ EOF
 lua << EOF
   -- Add additional capabilities supported by nvim-cmp
   local capabilities = vim.lsp.protocol.make_client_capabilities()
-  capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+  capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
   
   local lspconfig = require('lspconfig')
   

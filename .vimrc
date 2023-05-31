@@ -17,12 +17,12 @@ Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'tpope/vim-fugitive'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
+Plug 'altercation/vim-colors-solarized'
 
 if has('nvim')
   " neovim only plugins
   Plug 'neovim/nvim-lspconfig'
   "Plug 'ishan9299/nvim-solarized-lua'
-  Plug 'altercation/vim-colors-solarized'
   "Plug 'folke/lsp-colors.nvim', { 'branch': 'main' }
 
   " -- Auto Completion --
@@ -30,12 +30,12 @@ if has('nvim')
   Plug 'hrsh7th/cmp-nvim-lsp', { 'branch': 'main' }
   Plug 'saadparwaiz1/cmp_luasnip'
   Plug 'L3MON4D3/LuaSnip'
+  Plug 'github/copilot.vim'
 
 else
   " vim only plugins
   Plug 'vim-scripts/AnsiEsc.vim'
   Plug 'derekwyatt/vim-fswitch'
-  Plug 'altercation/vim-colors-solarized'
 
   Plug 'autozimu/LanguageClient-neovim', {
       \ 'branch': 'dev',
