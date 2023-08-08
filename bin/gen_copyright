@@ -16,7 +16,7 @@ import argparse
 parser = argparse.ArgumentParser(description="""
 A script to generate GPL Copyright headers for a list of files based on their git history
 """)
-parser.add_argument('-license', nargs=None, default='Apache', help="The License to use (Apache [default] or GPLv3")
+parser.add_argument('-license', nargs=None, default='Apache', help="The License to use (Apache [default] or GPL")
 parser.add_argument('-cea', action='store_true', help='Add cea copyright')
 parser.add_argument('-cnrs', action='store_true', help='Add cnrs copyright')
 args, additional_args = parser.parse_known_args()
@@ -50,7 +50,19 @@ license_header = {
 
 }
 
+name_filter = {
+        "tayral" : "Thomas Ayral",
+        "phibeck" : "Sophie Beck",
+        "mmorale3" : "Miguel Morales",
+        "iskakoff" : "Sergei Iskakov",
+        "Hugo Strand" : "Hugo U.R. Strand"
+        }
+
+filter_name = lambda x: name_filter.get(x, x)
+
 def pretty_years(y):
+
+    if len(y) == 0: return ""
 
     s = set(y)
     l = list(y)
@@ -133,6 +145,7 @@ for f in additional_args:
         n[2].add(year)
     by_author.pop("Not Committed Yet", None)
     by_author.pop("gen_copyright", None)
+    by_author.pop("clang_format", None)
 
     for an, a in list(by_author.items()):
         for bn, b in list(by_author.items()):
@@ -152,8 +165,8 @@ for f in additional_args:
     years = set()
     authors = set()
     for author_name, author_mail, author_years in copyright:
+        author_name = filter_name(author_name)
         authors.update([author_name])
-        if "Krivenko" in author_name: continue
         years.update(author_years)
     if any(s in f for s in ["triqs/archive", "triqs/atom_diag", "triqs/det_manip", "triqs/dos", "triqs/gf", "triqs/hilbert_space", "triqs/lattice", "triqs/mc_tools", "triqs/operators", "triqs/plot", "triqs/statistics", "triqs/sumk"]):
         authors.update(["Michel Ferrero"])
@@ -168,23 +181,23 @@ for f in additional_args:
             if args.cea: header = header + "// Copyright (c) %s Commissariat à l'énergie atomique et aux énergies alternatives (CEA)\n" % (pretty_years(years_lt_2019))
             if args.cnrs: header = header + "// Copyright (c) %s Centre national de la recherche scientifique (CNRS)\n" % (pretty_years(years_lt_2019))
 
-        # Specific author contribution
-        for author_name, author_mail, author_years in copyright:
-            if "Krivenko" in author_name:
-                igor_years = [year for year in author_years if year < 2018]
-                if len(igor_years) > 0:
-                    header = header + "// Copyright (c) %s Igor Krivenko\n" % (pretty_years(igor_years))
-            if "Hugo" in author_name:
-                hugo_years = [year for year in author_years if year < 2018]
-                if len(hugo_years) > 0:
-                    header = header + "// Copyright (c) %s Hugo Strand\n" % (pretty_years(hugo_years))
-
         # For >2017 we add a copyright note for The Simons foundation
         if len(years_gt_2017) > 0:
             header = header + "// Copyright (c) %s Simons Foundation\n" % (pretty_years(years_gt_2017))
 
     else:
         header = header + "// Copyright (c) %s Simons Foundation\n" % (pretty_years(years))
+
+    # Specific author contribution
+    for author_name, author_mail, author_years in copyright:
+        if "Krivenko" in author_name:
+            igor_years = [year for year in author_years if year < 2018]
+            if len(igor_years) > 0:
+                header = header + "// Copyright (c) %s Igor Krivenko\n" % (pretty_years(igor_years))
+        if "Hugo" in author_name:
+            hugo_years = [year for year in author_years if year < 2018 or year > 2020]
+            if len(hugo_years) > 0:
+                header = header + "// Copyright (c) %s Hugo U.R. Strand\n" % (pretty_years(hugo_years))
 
     header = header + "//\n" + license_header[args.license]
 
