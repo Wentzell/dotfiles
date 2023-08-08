@@ -1,25 +1,25 @@
 # Build configuration
-RELEASE=llvmorg-16.0.2
-INSTALL_DIR=$HOME/opt/llvm_16.0.2
+RELEASE=llvmorg-16.0.6
+INSTALL_DIR=$HOME/opt/llvm_16.0.6
 #RELEASE=main
 #INSTALL_DIR=$HOME/opt/llvm_main
 SRC_DIR=$PWD
-BUILD_DIR=${SRC_DIR}/llvm_build
+BUILD_DIR=$SRC_DIR/llvm_build
 THREADS=50
 
 ## -- Get the Sources
 
 # Shallow clone of llvm
-cd ${SRC_DIR}
+cd $SRC_DIR
 git clone https://github.com/llvm/llvm-project --branch $RELEASE --depth 1 -c advice.detachedHead=false
 
-#cd ${SRC_DIR}
+#cd $SRC_DIR
 #cd llvm-project/llvm/tools/clang/tools
 #mkdir templight
 #git clone https://github.com/mikael-s-persson/templight templight
 #echo "add_clang_subdirectory(templight)" >> CMakeLists.txt
 
-#cd ${SRC_DIR}
+#cd $SRC_DIR
 #cd llvm-project/llvm/tools
 #git clone https://github.com/facebookincubator/BOLT llvm-bolt
 #cd ..
@@ -44,20 +44,20 @@ GCC_INSTALL_PREFIX=$(dirname $(which gcc))/../
 
 ## --  Build LLVM
 
-mkdir -p ${BUILD_DIR}
-cd ${BUILD_DIR}
+mkdir -p $BUILD_DIR
+cd $BUILD_DIR
 # Cf. https://llvm.org/docs/CMake.html
 # and https://llvm.org/docs/GettingStarted.html
 cmake -GNinja \
       -DCMAKE_BUILD_TYPE=Release \
-      -DCMAKE_INSTALL_PREFIX="${INSTALL_DIR}" \
-      -DGCC_INSTALL_PREFIX=${GCC_INSTALL_PREFIX} \
+      -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR \
+      -DGCC_INSTALL_PREFIX=$GCC_INSTALL_PREFIX \
       -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;lldb;pstl" \
       -DLLVM_ENABLE_RUNTIMES="compiler-rt;libcxx;libcxxabi;libunwind;openmp" \
       -DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON \
       -DBUILD_SHARED_LIBS=ON \
-      -DLLVM_PARALLEL_COMPILE_JOBS="${THREADS}" \
-      -DLLVM_PARALLEL_LINK_JOBS="${THREADS}" \
+      -DLLVM_PARALLEL_COMPILE_JOBS=$THREADS \
+      -DLLVM_PARALLEL_LINK_JOBS=$THREADS \
       -DLLVM_CCACHE_BUILD=ON \
       -DLLVM_ENABLE_PIC=ON \
       -DLLVM_ENABLE_THREADS=ON \
@@ -70,14 +70,15 @@ cmake -GNinja \
       -DLLVM_ENABLE_BINDINGS=OFF \
       -DLLVM_ENABLE_LIBCXX=OFF \
       -DLLVM_OPTIMIZED_TABLEGEN=ON \
-      -DCMAKE_C_COMPILER="${CC}" \
-      -DCMAKE_CXX_COMPILER="${CXX}" \
+      -DCMAKE_C_COMPILER=$CC \
+      -DCMAKE_CXX_COMPILER=$CXX \
       -DLIBOMP_TSAN_SUPPORT=1 \
       -DLIBOMPTARGET_NVPTX_COMPUTE_CAPABILITIES="all" \
       -DCLANG_PYTHON_BINDINGS_VERSIONS="3.8;3.9;3.10;3.11" \
       -DLLVM_BINUTILS_INCDIR=/usr/include \
       -DLLDB_ENABLE_PYTHON=ON \
-      "${SRC_DIR}/llvm-project/llvm"
+      -DLLDB_ENABLE_LIBEDIT=ON \
+      ${SRC_DIR}/llvm-project/llvm
       #-DLLVM_ENABLE_RTTI=ON \
       #-DLLVM_USE_LINKER=gold \
       #-DLINK_POLLY_INTO_TOOLS=ON \
@@ -93,11 +94,11 @@ ninja install
 
 # --- Build and Install Include-what-you-use
 
-#cd ${SRC_DIR}
-#git clone https://github.com/include-what-you-use/include-what-you-use --branch clang_16 --depth 1
-#
-#mkdir -p ${SRC_DIR}/iwyu_build
-#cd ${SRC_DIR}/iwyu_build
-#
-#cmake -DCMAKE_INSTALL_PREFIX="${INSTALL_DIR}" "${SRC_DIR}/include-what-you-use"
-#make -j ${THREADS} install
+cd $SRC_DIR
+git clone https://github.com/include-what-you-use/include-what-you-use --branch clang_16 --depth 1
+
+mkdir -p $SRC_DIR/iwyu_build
+cd $SRC_DIR/iwyu_build
+
+cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR -DCMAKE_PREFIX_PATH=$INSTALL_DIR $SRC_DIR/include-what-you-use
+make -j $THREADS install
