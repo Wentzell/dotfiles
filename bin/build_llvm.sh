@@ -1,8 +1,9 @@
 # Build configuration
-RELEASE=llvmorg-16.0.6
-INSTALL_DIR=$HOME/opt/llvm_16.0.6
-#RELEASE=main
-#INSTALL_DIR=$HOME/opt/llvm_main
+VERSION=17.0.1
+BRANCH=llvmorg-$VERSION
+INSTALL_DIR=$HOME/opt/llvm_$VERSION
+#BRANCH=main
+#INSTALL_DIR=$HOME/opt/llvm_$BRANCH
 SRC_DIR=$PWD
 BUILD_DIR=$SRC_DIR/llvm_build
 THREADS=50
@@ -11,7 +12,7 @@ THREADS=50
 
 # Shallow clone of llvm
 cd $SRC_DIR
-git clone https://github.com/llvm/llvm-project --branch $RELEASE --depth 1 -c advice.detachedHead=false
+git clone https://github.com/llvm/llvm-project --branch $BRANCH --depth 1 -c advice.detachedHead=false
 
 #cd $SRC_DIR
 #cd llvm-project/llvm/tools/clang/tools
@@ -94,11 +95,11 @@ ninja install
 
 # --- Build and Install Include-what-you-use
 
-cd $SRC_DIR
-git clone https://github.com/include-what-you-use/include-what-you-use --branch clang_16 --depth 1
+#cd $SRC_DIR
+#git clone https://github.com/include-what-you-use/include-what-you-use --branch clang_17 --depth 1
 
-mkdir -p $SRC_DIR/iwyu_build
-cd $SRC_DIR/iwyu_build
+#mkdir -p $SRC_DIR/iwyu_build
+#cd $SRC_DIR/iwyu_build
 
-cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR -DCMAKE_PREFIX_PATH=$INSTALL_DIR $SRC_DIR/include-what-you-use
-make -j $THREADS install
+#cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR -DCMAKE_PREFIX_PATH=$INSTALL_DIR $SRC_DIR/include-what-you-use
+#make -j $THREADS install
