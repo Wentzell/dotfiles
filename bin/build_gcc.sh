@@ -1,5 +1,5 @@
 # Build configuration
-RELEASE=gcc-12.1.0
+RELEASE=gcc-13.2.0
 INSTALL_DIR=$HOME/opt/${RELEASE}
 SRC_DIR=$PWD/${RELEASE}
 THREADS=60
