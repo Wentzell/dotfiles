@@ -11,6 +11,7 @@
 *.png
 stdout.*
 stderr.*
+.cache
 
 ## Singularity
 #####################
