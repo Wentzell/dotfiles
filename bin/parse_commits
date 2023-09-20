@@ -49,6 +49,10 @@ if __name__ == "__main__":
         else:
             mdict["General"].append(line)
 
+# Filter out copy-right and clang-format authors
+for s in ['clang_format', 'gen_copyright']:
+    if s in authors: authors.remove(s)
+
 sys.stdout.write("\n\nWe thank all contributors: " + ", ".join(authors) + "\n")
 sys.stdout.write("\nFind below an itemized list of changes in this release.\n")
 for group, mlist in mdict.items():
