@@ -21,7 +21,10 @@
 #Light Gray  0;37     White         1;37
 
 ##################### My aliases  ######################
-#
+
+# cuda
+alias cuda_arch="nvidia-smi --query-gpu=compute_cap --format=csv,noheader|head -n 1| sed 's/\.//'"
+
 connect_remote_notebook(){
   ssh -N -f -L localhost:8889:127.0.0.1:8889 $1
 }
@@ -84,6 +87,8 @@ tmuxdev () {
   tmux neww -n Coding -c $HOME
   tmux neww -n GCC -c $HOME
   tmux neww -n GCC -c $HOME
+  tmux neww -n ICX -c $HOME
+  tmux neww -n ICX -c $HOME
   tmux neww -n SAN -c $HOME
   tmux neww -n SAN -c $HOME
   tmux neww -n PROF -c $HOME
@@ -96,14 +101,16 @@ tmuxdev () {
   tmux send-keys -t S:4 "cd Dropbox/Coding; clear" C-m
   tmux send-keys -t S:5 "cd Dropbox/Coding; clear" C-m
   tmux send-keys -t S:6 "cd Dropbox/Coding; clear" C-m
-  tmux send-keys -t S:7 "cd Dropbox/Coding; module load devenv3/gcc-py3-mkl; source ~/opt/triqs_gcc/share/triqs/triqsvars.sh; clear" C-m
-  tmux send-keys -t S:8 "cd Dropbox/Coding; module load devenv3/gcc-py3-mkl; source ~/opt/triqs_gcc/share/triqs/triqsvars.sh; clear" C-m
-  tmux send-keys -t S:9 "cd Dropbox/Coding; source ~/opt/triqs_san/share/triqs/triqsvars.sh; clear" C-m
-  tmux send-keys -t S:10 "cd Dropbox/Coding; source ~/opt/triqs_san/share/triqs/triqsvars.sh; clear" C-m
-  tmux send-keys -t S:11 "cd Dropbox/Coding; source ~/opt/triqs_prof/share/triqs/triqsvars.sh; clear" C-m
-  tmux send-keys -t S:12 "cd Dropbox/Coding; source ~/opt/triqs_prof/share/triqs/triqsvars.sh; clear" C-m
-  tmux send-keys -t S:13 "cd Dropbox/Coding; source ~/opt/triqs_dbg/share/triqs/triqsvars.sh; clear" C-m
-  tmux send-keys -t S:14 "cd Dropbox/Coding; source ~/opt/triqs_dbg/share/triqs/triqsvars.sh; clear" C-m
+  tmux send-keys -t S:7 "cd Dropbox/Coding; module load devenv6/gcc-py3-mkl; source ~/opt/triqs_gcc/share/triqs/triqsvars.sh; clear" C-m
+  tmux send-keys -t S:8 "cd Dropbox/Coding; module load devenv6/gcc-py3-mkl; source ~/opt/triqs_gcc/share/triqs/triqsvars.sh; clear" C-m
+  tmux send-keys -t S:9 "cd Dropbox/Coding; module load devenv6/icx-py3-mkl; source ~/opt/triqs_icx/share/triqs/triqsvars.sh; clear" C-m
+  tmux send-keys -t S:10 "cd Dropbox/Coding; module load devenv6/icx-py3-mkl; source ~/opt/triqs_icx/share/triqs/triqsvars.sh; clear" C-m
+  tmux send-keys -t S:11 "cd Dropbox/Coding; source ~/opt/triqs_san/share/triqs/triqsvars.sh; clear" C-m
+  tmux send-keys -t S:12 "cd Dropbox/Coding; source ~/opt/triqs_san/share/triqs/triqsvars.sh; clear" C-m
+  tmux send-keys -t S:13 "cd Dropbox/Coding; source ~/opt/triqs_prof/share/triqs/triqsvars.sh; clear" C-m
+  tmux send-keys -t S:14 "cd Dropbox/Coding; source ~/opt/triqs_prof/share/triqs/triqsvars.sh; clear" C-m
+  tmux send-keys -t S:15 "cd Dropbox/Coding; source ~/opt/triqs_dbg/share/triqs/triqsvars.sh; clear" C-m
+  tmux send-keys -t S:16 "cd Dropbox/Coding; source ~/opt/triqs_dbg/share/triqs/triqsvars.sh; clear" C-m
   tmux selectw -t 1
   tmux attach
 }
