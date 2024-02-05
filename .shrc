@@ -101,10 +101,10 @@ tmuxdev () {
   tmux send-keys -t S:4 "cd Dropbox/Coding; clear" C-m
   tmux send-keys -t S:5 "cd Dropbox/Coding; clear" C-m
   tmux send-keys -t S:6 "cd Dropbox/Coding; clear" C-m
-  tmux send-keys -t S:7 "cd Dropbox/Coding; module load devenv6/gcc-py3-mkl; source ~/opt/triqs_gcc/share/triqs/triqsvars.sh; clear" C-m
-  tmux send-keys -t S:8 "cd Dropbox/Coding; module load devenv6/gcc-py3-mkl; source ~/opt/triqs_gcc/share/triqs/triqsvars.sh; clear" C-m
-  tmux send-keys -t S:9 "cd Dropbox/Coding; module load devenv6/icx-py3-mkl; source ~/opt/triqs_icx/share/triqs/triqsvars.sh; clear" C-m
-  tmux send-keys -t S:10 "cd Dropbox/Coding; module load devenv6/icx-py3-mkl; source ~/opt/triqs_icx/share/triqs/triqsvars.sh; clear" C-m
+  tmux send-keys -t S:7 "cd Dropbox/Coding; module load devenv7/gcc-py3-mkl; source ~/opt/triqs_gcc/share/triqs/triqsvars.sh; clear" C-m
+  tmux send-keys -t S:8 "cd Dropbox/Coding; module load devenv7/gcc-py3-mkl; source ~/opt/triqs_gcc/share/triqs/triqsvars.sh; clear" C-m
+  tmux send-keys -t S:9 "cd Dropbox/Coding; module load devenv7/icx-py3-mkl; source ~/opt/triqs_icx/share/triqs/triqsvars.sh; clear" C-m
+  tmux send-keys -t S:10 "cd Dropbox/Coding; module load devenv7/icx-py3-mkl; source ~/opt/triqs_icx/share/triqs/triqsvars.sh; clear" C-m
   tmux send-keys -t S:11 "cd Dropbox/Coding; source ~/opt/triqs_san/share/triqs/triqsvars.sh; clear" C-m
   tmux send-keys -t S:12 "cd Dropbox/Coding; source ~/opt/triqs_san/share/triqs/triqsvars.sh; clear" C-m
   tmux send-keys -t S:13 "cd Dropbox/Coding; source ~/opt/triqs_prof/share/triqs/triqsvars.sh; clear" C-m

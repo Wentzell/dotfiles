@@ -1,5 +1,5 @@
 # Build configuration
-VERSION=17.0.1
+VERSION=17.0.6
 BRANCH=llvmorg-$VERSION
 INSTALL_DIR=$HOME/opt/llvm_$VERSION
 #BRANCH=main
@@ -75,7 +75,7 @@ cmake -GNinja \
       -DCMAKE_CXX_COMPILER=$CXX \
       -DLIBOMP_TSAN_SUPPORT=1 \
       -DLIBOMPTARGET_NVPTX_COMPUTE_CAPABILITIES="all" \
-      -DCLANG_PYTHON_BINDINGS_VERSIONS="3.8;3.9;3.10;3.11" \
+      -DCLANG_PYTHON_BINDINGS_VERSIONS="3.8;3.9;3.10;3.11;3.12" \
       -DLLVM_BINUTILS_INCDIR=/usr/include \
       -DLLDB_ENABLE_PYTHON=ON \
       -DLLDB_ENABLE_LIBEDIT=ON \
@@ -95,11 +95,11 @@ ninja install
 
 # --- Build and Install Include-what-you-use
 
-#cd $SRC_DIR
-#git clone https://github.com/include-what-you-use/include-what-you-use --branch clang_17 --depth 1
+cd $SRC_DIR
+git clone https://github.com/include-what-you-use/include-what-you-use --branch clang_17 --depth 1
 
-#mkdir -p $SRC_DIR/iwyu_build
-#cd $SRC_DIR/iwyu_build
+mkdir -p $SRC_DIR/iwyu_build
+cd $SRC_DIR/iwyu_build
 
-#cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR -DCMAKE_PREFIX_PATH=$INSTALL_DIR $SRC_DIR/include-what-you-use
-#make -j $THREADS install
+cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR -DCMAKE_PREFIX_PATH=$INSTALL_DIR $SRC_DIR/include-what-you-use
+make -j $THREADS install
