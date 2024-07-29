@@ -1,5 +1,6 @@
 # Build configuration
-VERSION=17.0.6
+# Version 18.1.7 may need to be patched to fix OMP TSAN issue https://github.com/llvm/llvm-project/commit/c09787b7d05083791b417c5b97a8cfd6d0874ed9
+VERSION=18.1.7
 BRANCH=llvmorg-$VERSION
 INSTALL_DIR=$HOME/opt/llvm_$VERSION
 #BRANCH=main
@@ -71,6 +72,7 @@ cmake -GNinja \
       -DLLVM_ENABLE_BINDINGS=OFF \
       -DLLVM_ENABLE_LIBCXX=OFF \
       -DLLVM_OPTIMIZED_TABLEGEN=ON \
+      -DLLVM_USE_LINKER=lld \
       -DCMAKE_C_COMPILER=$CC \
       -DCMAKE_CXX_COMPILER=$CXX \
       -DLIBOMP_TSAN_SUPPORT=1 \
@@ -96,7 +98,7 @@ ninja install
 # --- Build and Install Include-what-you-use
 
 cd $SRC_DIR
-git clone https://github.com/include-what-you-use/include-what-you-use --branch clang_17 --depth 1
+git clone https://github.com/include-what-you-use/include-what-you-use --branch clang_18 --depth 1
 
 mkdir -p $SRC_DIR/iwyu_build
 cd $SRC_DIR/iwyu_build

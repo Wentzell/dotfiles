@@ -134,7 +134,7 @@ print_code_CPP='enscript -G -f Courier7  --color -Ecpp -L 90 -C '
 print_code_PY='enscript -G -f Courier7  --color -Epython -L 90 -C '
 prof() {
   rm -f $1.prof* &> /dev/null
-  LD_PRELOAD=/mnt/home/wentzell/opt/gperftools/lib/libprofiler.so CPUPROFILE=$1.prof $@
+  LD_PRELOAD=$HOME/opt/gperftools/lib/libprofiler.so CPUPROFILE=$1.prof $@
 }
 pprint() {
   # First argument should be the binary, e.g. executable or python module!

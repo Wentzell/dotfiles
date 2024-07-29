@@ -76,15 +76,15 @@ lua << EOF
   vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
     -- Customizing how diagnostics are displayed
     -- See :help on_publish_diagnostics
-    signs = { severity_limit = 'Warning' },
-    underline = { severity_limit = 'Error' },
+    signs = { min = vim.diagnostic.severity.WARN },
+    underline = { min = vim.diagnostic.severity.ERROR },
     update_in_insert = false,
     severity_sort = true,
     virtual_text = {
       -- Show source in diagnostics (neovim 0.6+ only)
       -- source = "always",  -- Or "if_many"
       -- Only for Errors
-      severity_limit = 'Error',
+      min = vim.diagnostic.severity.ERROR,
       -- Change prefix/character preceding the diagnostics' virtual text
       prefix = '▎',
     }
