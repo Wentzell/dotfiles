@@ -117,11 +117,11 @@ tmuxdev () {
 
 
         # Develop
-alias cmake="cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
 cmakedd() {
   REAL_BUILD_DIR=$(realpath .)
-  (cd $(pwd)/..; cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -B $REAL_BUILD_DIR $@)
+  (cd $(pwd)/..; cmake -B $REAL_BUILD_DIR -GNinja -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_COLOR_DIAGNOSTICS=ON $@)
 }
+alias build="cmake --build ."
 alias make="make -j 60"
 alias ctest="ctest -j 60"
 alias pip_upgrade="pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U"
@@ -129,7 +129,6 @@ alias pip_upgrade="pip list --outdated --format=freeze | grep -v '^\-e' | cut -d
 alias activate='source ~/opt/python/bin/activate'
 alias ctags='ctags -R --options=$HOME/.ctagsrc'
 alias valmem='valgrind --leak-check=full --max-stackframe=4000000'
-alias cmdbg='cmake -DCMAKE_BUILD_TYPE=Debug'
 print_code_CPP='enscript -G -f Courier7  --color -Ecpp -L 90 -C '
 print_code_PY='enscript -G -f Courier7  --color -Epython -L 90 -C '
 prof() {
