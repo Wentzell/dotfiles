@@ -23,6 +23,7 @@ name_filter = {
         "iskakoff" : "Sergei Iskakov",
         "Hugo Strand" : "Hugo U.R. Strand",
         "nkavokine" : "Nikita Kavokine",
+        "jasonkaye" : "Jason Kaye"
         }
 
 filter_name = lambda x: name_filter.get(x, x)
