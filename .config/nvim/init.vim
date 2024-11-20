@@ -13,7 +13,7 @@ lua << EOF
   
   -- require'lspconfig'.pyright.setup{} -- npm i -g pyright
   -- require'lspconfig'.pylsp.setup{} -- pip install 'python-lsp-server[all]'
-  require'lspconfig'.ruff_lsp.setup{} -- pip install ruff ruff-lsp
+  require'lspconfig'.ruff.setup{} -- pip install ruff ruff-lsp
   require'lspconfig'.julials.setup{} -- julia --project=~/.julia/environments/nvim-lspconfig -e 'using Pkg; Pkg.add("LanguageServer")'
   require'lspconfig'.bashls.setup{} -- npm i -g bash-language-server
   require'lspconfig'.jsonls.setup{} -- npm i -g vscode-langservers-extracted
