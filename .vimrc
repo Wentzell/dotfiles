@@ -18,6 +18,8 @@ Plug 'tpope/vim-fugitive'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'altercation/vim-colors-solarized'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 
 if has('nvim')
   " neovim only plugins
@@ -76,6 +78,7 @@ let g:tagbar_width = 25
 " Settings for solarized color scheme
 set t_Co=256
 set background=dark
+set notermguicolors
 silent! colorscheme solarized
 
 " Enable highlighting of matching angle braces
@@ -122,8 +125,8 @@ if !has('nvim')
   autocmd BufReadPost quickfix AnsiEsc
 endif
 "set makeprg=$HOME/bin/pymake
-set makeprg=make
-:command! -nargs=* Make :make -j 60 <args> | cwindow 15
+set makeprg=cmake
+:command! -nargs=* Make :make --build build <args> | cwindow 15
 "}}}
 "-------------------------------------- Key Mappings ------------------------------------------{{{
 
@@ -168,8 +171,7 @@ nmap <Leader>dc 	:DoxComm<cr>
 "inoremap {}     {}
 
 "Just press F5 to make your program:
-map <F5> :Make run<cr><cr><cr>
-autocmd Syntax c,cpp map <buffer> 'll :Make -s -C build<cr><cr><cr>
+autocmd Syntax c,cpp map <buffer> 'll :Make<cr><cr><cr>
 
 ";n for next error
 nnoremap ;n	:cn<cr>
