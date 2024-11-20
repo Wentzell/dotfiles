@@ -1,10 +1,8 @@
 # Build configuration
 # Version 18.1.7 may need to be patched to fix OMP TSAN issue https://github.com/llvm/llvm-project/commit/c09787b7d05083791b417c5b97a8cfd6d0874ed9
-VERSION=18.1.7
+VERSION=19.1.3
 BRANCH=llvmorg-$VERSION
 INSTALL_DIR=$HOME/opt/llvm_$VERSION
-#BRANCH=main
-#INSTALL_DIR=$HOME/opt/llvm_$BRANCH
 SRC_DIR=$PWD
 BUILD_DIR=$SRC_DIR/llvm_build
 THREADS=50
@@ -42,7 +40,7 @@ export CXXFLAGS='-O3 -march=native'
 #export CFLAGS='-O3 -march=broadwell'
 #export CXXFLAGS='-stdlib=libc++ -O3 -march=broadwell'
 
-GCC_INSTALL_PREFIX=$(dirname $(which gcc))/../
+#GCC_INSTALL_PREFIX=$(dirname $(which gcc))/../
 
 ## --  Build LLVM
 
@@ -53,7 +51,6 @@ cd $BUILD_DIR
 cmake -GNinja \
       -DCMAKE_BUILD_TYPE=Release \
       -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR \
-      -DGCC_INSTALL_PREFIX=$GCC_INSTALL_PREFIX \
       -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;lldb;pstl" \
       -DLLVM_ENABLE_RUNTIMES="compiler-rt;libcxx;libcxxabi;libunwind;openmp" \
       -DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON \
@@ -77,11 +74,12 @@ cmake -GNinja \
       -DCMAKE_CXX_COMPILER=$CXX \
       -DLIBOMP_TSAN_SUPPORT=1 \
       -DLIBOMPTARGET_NVPTX_COMPUTE_CAPABILITIES="all" \
-      -DCLANG_PYTHON_BINDINGS_VERSIONS="3.8;3.9;3.10;3.11;3.12" \
+      -DCLANG_PYTHON_BINDINGS_VERSIONS="3.8;3.9;3.10;3.11;3.12;3.13" \
       -DLLVM_BINUTILS_INCDIR=/usr/include \
       -DLLDB_ENABLE_PYTHON=ON \
       -DLLDB_ENABLE_LIBEDIT=ON \
       ${SRC_DIR}/llvm-project/llvm
+      #-DGCC_INSTALL_PREFIX=$GCC_INSTALL_PREFIX \
       #-DLLVM_ENABLE_RTTI=ON \
       #-DLLVM_USE_LINKER=gold \
       #-DLINK_POLLY_INTO_TOOLS=ON \
@@ -98,7 +96,7 @@ ninja install
 # --- Build and Install Include-what-you-use
 
 cd $SRC_DIR
-git clone https://github.com/include-what-you-use/include-what-you-use --branch clang_18 --depth 1
+git clone https://github.com/include-what-you-use/include-what-you-use --branch clang_19 --depth 1
 
 mkdir -p $SRC_DIR/iwyu_build
 cd $SRC_DIR/iwyu_build
