@@ -52,7 +52,7 @@ if __name__ == "__main__":
     for line in commit_messages:
         if line in app4triqs_commit_messages: continue
 
-        m = re.match('\[(.*?)\] (.*)', line)
+        m = re.match(r'\[(.*?)\] (.*)', line)
         if(m):
             if m.group(1) in list(mdict.keys()):
                 mdict[m.group(1)].append(m.group(2))
