@@ -71,8 +71,8 @@ alias sshnokey="ssh -X -o PubkeyAuthentication=no"
 alias vim="nvim"
 alias vimsrc="compdb -p build_mac/ list > compile_commands.json &> /dev/null; nvim **/*.cpp(N) **/*.cu(N) **/*.hpp(N) **/*.hxx(N) **/*.h(N)" # **/*.c(N) **/*.h(N)
 mkbuild () {
-  mkdir -p /Users/nwentzell/builds/${PWD##*/}$1
-  ln -s /Users/nwentzell/builds/${PWD##*/}$1 build_mac$1
+  mkdir -p $HOME/builds/${PWD##*/}$1
+  ln -s $HOME/builds/${PWD##*/}$1 build_mac$1
 }
 #alias vimtex='nvim --servername $(basename *.tex.latexmain .tex.latexmain) *.tex content/*.tex(N) settings/*.tex(N)'
 alias vimtex='mvim --servername SYNCTEX *.tex(N) content/*.tex(N) settings/*.tex(N)'
@@ -130,7 +130,7 @@ cmakedd() {
   (cd $(pwd)/..; cmake -B $REAL_BUILD_DIR -GNinja -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_COLOR_DIAGNOSTICS=ON $@)
 }
 alias build="cmake --build ."
-alias make="make -j 60"
+alias make="make -j 10"
 alias ctest="ctest -j 10"
 alias pip_upgrade="pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U"
 # Clang ignores LIBRARY_PATH
@@ -141,7 +141,7 @@ print_code_CPP='enscript -G -f Courier7  --color -Ecpp -L 90 -C '
 print_code_PY='enscript -G -f Courier7  --color -Epython -L 90 -C '
 prof() {
   rm -f $1.prof* &> /dev/null
-  DYLD_INSERT_LIBRARIES=/opt/homebrew/lib/libprofiler.dylib CPUPROFILE=$1.prof $@
+  DYLD_INSERT_LIBRARIES=$(brew --prefix)/lib/libprofiler.dylib CPUPROFILE=$1.prof $@
 }
 pprint() {
   # First argument should be the binary, e.g. executable or python module!
@@ -160,7 +160,7 @@ pprint() {
 hprof() {
   #CURRENT_DIR=$PWD; mkdir -p hprof; cd hprof;
   rm -f $1.hprof* &> /dev/null
-  DYLD_INSERT_PRELOAD=/usr/local/lib/libtcmalloc.dylib HEAPPROFILE=$1.hprof $@
+  DYLD_INSERT_PRELOAD=$(brew --prefix)/lib/libtcmalloc.dylib HEAPPROFILE=$1.hprof $@
   #cd $CURRENT_DIR
 }
 hpprint() {

@@ -37,6 +37,7 @@ export CTEST_OUTPUT_ON_FAILURE=1
 export TRIQS_SHOW_EXCEPTION_TRACE=1
 export OMP_NUM_THREADS=1
 export DOCKER_DEFAULT_PLATFORM=linux/amd64
+export BREW_PREFIX=$(brew --prefix)
 
 # === My Software
 export PYTHONPATH=$HOME/opt:$PYTHONPATH
@@ -57,25 +58,25 @@ export MSAN_SYMBOLIZER_PATH=$(which llvm-symbolizer)
 export MSAN_OPTIONS=symbolize=1:halt_on_error=1
 
 # Use gnu coreutils over mac commands
-export PATH=/opt/homebrew/opt/coreutils/libexec/gnubin:$PATH
+export PATH=$BREW_PREFIX/opt/coreutils/libexec/gnubin:$PATH
 
 # Other software
 export MATHJAX_ROOT=$HOME/opt/MathJax
 
 # Homebrew
-export PATH=/opt/homebrew/bin:$PATH
+export PATH=$BREW_PREFIX/bin:$PATH
 
 # LLVM/clang
-export PATH=/opt/homebrew/opt/llvm/bin:$PATH
-export PYTHONPATH=/opt/homebrew/opt/llvm/lib/python2.7/site-packages:$PYTHONPATH
+export PATH=$BREW_PREFIX/opt/llvm/bin:$PATH
+export PYTHONPATH=$BREW_PREFIX/opt/llvm/lib/python3.13/site-packages:$PYTHONPATH
 
 # Python
-export PYTHONPATH=/Users/nwentzell/Library/Python/3.11/lib/python/site-packages:$PYTHONPATH
-export PYTHONPATH=/Users/nwentzell/Dropbox/Coding/pyed:$PYTHONPATH
-export PATH=/Users/nwentzell/Library/Python/3.11/bin:$PATH
+export PYTHONPATH=$HOME/opt/myvenv/lib/python3.13/site-packages:$PYTHONPATH
+export PATH=$HOME/opt/myvenv/bin:$PATH
+export VIRTUAL_ENV=$HOME/opt/myvenv
 
 # TRIQS
-source /Users/nwentzell/opt/triqs/share/triqs/triqsvars.sh
+source $HOME/opt/triqs/share/triqs/triqsvars.sh
 export TRIQS_SHOW_EXCEPTION_TRACE=1
 
 export FC=gfortran
