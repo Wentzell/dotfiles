@@ -1,6 +1,5 @@
 # Build configuration
-# Version 18.1.7 may need to be patched to fix OMP TSAN issue https://github.com/llvm/llvm-project/commit/c09787b7d05083791b417c5b97a8cfd6d0874ed9
-VERSION=19.1.3
+VERSION=20.1.0
 BRANCH=llvmorg-$VERSION
 INSTALL_DIR=$HOME/opt/llvm_$VERSION
 SRC_DIR=$PWD
@@ -95,11 +94,11 @@ ninja install
 
 # --- Build and Install Include-what-you-use
 
-cd $SRC_DIR
-git clone https://github.com/include-what-you-use/include-what-you-use --branch clang_19 --depth 1
+#cd $SRC_DIR
+#git clone https://github.com/include-what-you-use/include-what-you-use --branch clang_20 --depth 1
 
-mkdir -p $SRC_DIR/iwyu_build
-cd $SRC_DIR/iwyu_build
+#mkdir -p $SRC_DIR/iwyu_build
+#cd $SRC_DIR/iwyu_build
 
-cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR -DCMAKE_PREFIX_PATH=$INSTALL_DIR $SRC_DIR/include-what-you-use
-make -j $THREADS install
+#cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR -DCMAKE_PREFIX_PATH=$INSTALL_DIR $SRC_DIR/include-what-you-use
+#make -j $THREADS install

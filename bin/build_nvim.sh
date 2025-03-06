@@ -1,4 +1,4 @@
-VERSION=v0.10.2
+VERSION=v0.10.4
 PREFIX=~/opt/neovim
 
 git clone https://github.com/neovim/neovim --depth 1 --branch $VERSION
