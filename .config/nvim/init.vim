@@ -10,25 +10,19 @@ lua << EOF
     cmd       = { 'clangd', '--all-scopes-completion', '--background-index', '--completion-style=bundled', '--header-insertion=iwyu', '--clang-tidy' };
     filetypes = { 'c', 'h', 'cpp', 'cxx', 'hxx', 'objc', 'objcpp' }
   })
-  
-  -- require'lspconfig'.pyright.setup{} -- npm i -g pyright
-  -- require'lspconfig'.pylsp.setup{} -- pip install 'python-lsp-server[all]'
   require'lspconfig'.ruff.setup{} -- pip install ruff ruff-lsp
-  require'lspconfig'.julials.setup{} -- julia --project=~/.julia/environments/nvim-lspconfig -e 'using Pkg; Pkg.add("LanguageServer")'
-  require'lspconfig'.bashls.setup{} -- npm i -g bash-language-server
-  require'lspconfig'.jsonls.setup{} -- npm i -g vscode-langservers-extracted
-  require'lspconfig'.esbonio.setup({ -- Sphinx: pip install esbonio
-    init_options = {
-      server = { logLevel = "debug" };
-      sphinx = { confDir = "build/doc", srcDir = "doc" }
-    }
-  })
 
   -- Disable semantic highlighting
   for _, group in ipairs(vim.fn.getcompletion("@lsp", "highlight")) do
     vim.api.nvim_set_hl(0, group, {})
   end
 EOF
+
+" ---- Fix Diff View to not change syntax highlighting ---- "
+hi DiffAdd ctermfg=none
+hi DiffDelete ctermfg=none
+hi DiffChange ctermfg=none
+hi DiffText ctermfg=none
 
 " ---- Copilot ---- "
 imap <silent><script><expr> <C-l> copilot#Accept("\<CR>")
@@ -71,6 +65,11 @@ autocmd Syntax c,cpp,python,julia,sh,json nnoremap <buffer> <leader><leader>f :l
 
 autocmd Syntax c,cpp nnoremap <Leader>of :ClangdSwitchSourceHeader<cr>
 
+augroup DisableLineNumbersInDiff
+  autocmd!
+  autocmd WinEnter * if &diff | setlocal nonumber | endif
+augroup END
+
 lua << EOF
 
   vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
@@ -111,7 +110,6 @@ EOF
 "vim.lsp.buf.range_code_action()
 "vim.lsp.buf.hover()
 
-
 " ---- Auto Completion -----
 lua << EOF
   -- Add additional capabilities supported by nvim-cmp
@@ -121,7 +119,7 @@ lua << EOF
   local lspconfig = require('lspconfig')
   
   -- Enable some language servers with the additional completion capabilities offered by nvim-cmp
-  local servers = { 'clangd', 'pyright', 'pylsp', 'julials', 'bashls', 'jsonls' }
+  local servers = { 'clangd', 'ruff' }
   for _, lsp in ipairs(servers) do
     lspconfig[lsp].setup {
       -- on_attach = my_custom_on_attach,
