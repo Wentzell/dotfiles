@@ -18,6 +18,13 @@ lua << EOF
   end
 EOF
 
+" ---- Copilot Chat Setup -----
+lua << EOF
+require("CopilotChat").setup {
+  -- See Configuration section for options
+}
+EOF
+
 " ---- Fix Diff View to not change syntax highlighting ---- "
 hi DiffAdd ctermfg=none
 hi DiffDelete ctermfg=none

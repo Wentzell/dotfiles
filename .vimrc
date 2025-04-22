@@ -33,6 +33,8 @@ if has('nvim')
   Plug 'saadparwaiz1/cmp_luasnip'
   Plug 'L3MON4D3/LuaSnip'
   Plug 'github/copilot.vim'
+  Plug 'nvim-lua/plenary.nvim'
+  Plug 'CopilotC-Nvim/CopilotChat.nvim'
 
 else
   " vim only plugins
