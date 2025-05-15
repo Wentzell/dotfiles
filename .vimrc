@@ -24,6 +24,7 @@ Plug 'junegunn/fzf.vim'
 if has('nvim')
   " neovim only plugins
   Plug 'neovim/nvim-lspconfig'
+  Plug 'chrisbra/matchit'
   "Plug 'ishan9299/nvim-solarized-lua'
   "Plug 'folke/lsp-colors.nvim', { 'branch': 'main' }
 
@@ -137,6 +138,10 @@ let mapleader = ","
 inoremap ;; <Esc>
 xnoremap ;; <Esc>
 
+" easy jump between buffers
+nnoremap <leader><leader>e 	:b#<cr>
+xnoremap <leader><leader>e 	:b#<cr>
+
 " easy copy/paste to clipboard
 xnoremap <leader><leader>y 	"*y
 nnoremap <leader><leader>p 	"*p
@@ -154,6 +159,8 @@ noremap <leader><leader>s	<C-W>s
 noremap <leader><leader>v	<C-W><C-V>
 noremap <leader><leader>x	<C-W>c
 noremap <leader><leader>c	<C-W>x
+noremap <leader>m	        <C-W><
+noremap <leader>.	        <C-W>>
 
 " nerdtree
 noremap <leader><leader>n 	:NERDTreeToggle<cr>

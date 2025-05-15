@@ -18,13 +18,6 @@ lua << EOF
   end
 EOF
 
-" ---- Copilot Chat Setup -----
-lua << EOF
-require("CopilotChat").setup {
-  -- See Configuration section for options
-}
-EOF
-
 " ---- Fix Diff View to not change syntax highlighting ---- "
 hi DiffAdd ctermfg=none
 hi DiffDelete ctermfg=none
@@ -38,6 +31,16 @@ imap <silent> <C-k> <Plug>(copilot-previous)
 imap <silent> <C-/> <Plug>(copilot-dismiss)
 let g:copilot_no_tab_map = v:true
 let g:copilot_assume_mapped = v:true
+
+" ---- Copilot Chat Setup -----
+" Use Nerd Font https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/SourceCodePro.zip
+xnoremap <leader><leader>a :CopilotChat<CR>
+nnoremap <leader><leader>a :CopilotChat<CR>
+
+lua << EOF
+  require("CopilotChat").setup({
+  })
+EOF
 
 " ---- Toggle Diagnostics ---- "
 let g:diagnostics_is_on=1
@@ -101,12 +104,16 @@ lua << EOF
   vim.cmd [[autocmd CursorHold * lua vim.diagnostic.open_float({focusable=false})]]
 
   -- Customizing how diagnostic symbols
-  local signs = { Error = "⛔", Warn = "⚡", Hint = "💡", Info = "ℹ" }
-
-  for type, icon in pairs(signs) do
-    local hl = "DiagnosticSign" .. type
-    vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
-  end
+  vim.diagnostic.config({
+  signs = {
+    text = {
+      [vim.diagnostic.severity.ERROR] = "⛔",
+      [vim.diagnostic.severity.WARN]  = "⚡",
+      [vim.diagnostic.severity.HINT]  = "💡",
+      [vim.diagnostic.severity.INFO]  = "ℹ",
+      }
+    }
+  })
 EOF
 
 " Other useful lsp commands
