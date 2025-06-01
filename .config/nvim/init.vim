@@ -39,6 +39,7 @@ nnoremap <leader><leader>a :CopilotChat<CR>
 
 lua << EOF
   require("CopilotChat").setup({
+    model = "claude-sonnet-4"
   })
 EOF
 
