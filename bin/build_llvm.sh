@@ -1,5 +1,5 @@
 # Build configuration
-VERSION=20.1.0
+VERSION=20.1.6
 BRANCH=llvmorg-$VERSION
 INSTALL_DIR=$HOME/opt/llvm_$VERSION
 SRC_DIR=$PWD
@@ -94,11 +94,11 @@ ninja install
 
 # --- Build and Install Include-what-you-use
 
-#cd $SRC_DIR
-#git clone https://github.com/include-what-you-use/include-what-you-use --branch clang_20 --depth 1
+cd $SRC_DIR
+git clone https://github.com/include-what-you-use/include-what-you-use --branch clang_20 --depth 1
 
-#mkdir -p $SRC_DIR/iwyu_build
-#cd $SRC_DIR/iwyu_build
+mkdir -p $SRC_DIR/iwyu_build
+cd $SRC_DIR/iwyu_build
 
-#cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR -DCMAKE_PREFIX_PATH=$INSTALL_DIR $SRC_DIR/include-what-you-use
-#make -j $THREADS install
+cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR -DCMAKE_PREFIX_PATH=$INSTALL_DIR $SRC_DIR/include-what-you-use
+make -j $THREADS install
