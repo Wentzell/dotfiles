@@ -1,24 +1,20 @@
-# Build configuration
-RELEASE=boost-1.71.0_gcc
-INSTALL_DIR=$HOME/opt/boost-1.71.0_gcc
-THREADS=40
+# ── Build configuration ────────────────────────────────────────────────────────
+RELEASE=boost-1.88.0
+INSTALL_DIR=$HOME/opt/$RELEASE-$CC
+THREADS=40 # adjust to the machine you build on
 
-# Shallow clone of boost
-git clone https://github.com/boostorg/boost --branch boost-1.71.0 --depth 1 --recursive 
+# ── Obtain the Boost sources ───────────────────────────────────────────────────
+git clone https://github.com/boostorg/boost \
+          --branch $RELEASE --depth 1 --recursive
 cd boost
 
-# # === Build using clang
-export CC=clang
-export CXX=clang++
-export CXXFLAGS='-O3 -march=native -stdlib=libc++'
-export LDFLAGS='-stdlib=libc++'
-# Cf. https://github.com/boostorg/boost/wiki/Getting-Started%3A-Overview#installing-boost
-./bootstrap.sh --with-toolset=clang
-./b2 toolset=clang cxxflags="$CXXFLAGS" linkflags="$LDFLAGS" install --prefix=${INSTALL_DIR} -j ${THREADS}
+# ── Configure Boost.Build ──────────────────────────────────────────────────────
 
-# # === Build using gcc
-# export CC=gcc
-# export CXX=g++
-# export CXXFLAGS='-O3 -march=native'
-# ./bootstrap.sh
-# ./b2 toolset=clang cxxflags="$CXXFLAGS" install --prefix=${INSTALL_DIR} -j ${THREADS}
+# Cf. https://github.com/boostorg/boost/wiki/Getting-Started%3A-Overview#installing-boost
+./bootstrap.sh --with-toolset=$CC --with-python=$(which python3)
+
+# Enable automatic MPI detection
+echo "using mpi ;" >> project-config.jam   # one-liner that turns MPI on
+
+# ── Build & install ────────────────────────────────────────────────────────────
+./b2 toolset=$CC cxxflags="$CXXFLAGS" linkflags="$LDFLAGS" --prefix=$INSTALL_DIR -j$THREADS install
