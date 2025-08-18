@@ -1,36 +1,63 @@
 ;--------------------------------------------------------------------------------
-; 	My Git config file	\O/		
+;         My Git config file        \O/                
 ;
 ;--------------------------------------------------------------------------------
 
 
-
 [user]
-	name = Nils Wentzell
-	email = nwentzell@flatironinstitute.org
-[merge]
-	tool = vimdiff
-[merge "vimdiff"]
-	path = nvim
+        name = Nils Wentzell
+        email = nwentzell@flatironinstitute.org
+
 [core]
-	editor = nvim
-	excludesfile = ~/.glob_git_ignore
+        editor = nvim
+        excludesfile = ~/.glob_git_ignore
+	pager = delta
+
 [push]
-	default = current
+        default = current
 [pull]
-	default = current
         ff = only
+[fetch]
+        prune = true
+	pruneTags = true
+
+[merge]
+        tool = vimdiff
+        conflictStyle = zdiff3
+[mergetool "vimdiff"]
+        path = nvim
+
 [diff]
-	submodule = log
-	tool = vimdiff
+        submodule = log
+        tool = vimdiff
+[difftool]
+        prompt = false
 [difftool "vimdiff"]
         path = nvim
-[difftool]
-	prompt = false
+
 [alias]
-	d = difftool -w
-	bl = blame -w -M
-	l = log --graph --abbrev-commit --decorate --format=format:'%C(blue)%h%C(reset) - %C(cyan)%aD%C(reset) %C(green)(%ar)%C(reset)%C(yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all
-	permission-reset = !git diff -p -R | grep -E \"^(diff|(old|new) mode)\" | git apply
+        d = difftool -w
+        wdiff = diff --word-diff=color
+        bl = blame -w -M -C
+        l = log --graph --abbrev-commit --decorate --format=format:'%C(blue)%h%C(reset) - %C(cyan)%aD%C(reset) %C(green)(%ar)%C(reset)%C(yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all
+        permission-reset = !git diff -p -R | grep -E '^(diff|(old|new) mode)' | git apply
 [init]
-	templatedir = ~/.git_template
+        templatedir = ~/.git_template
+
+[interactive]
+	diffFilter = delta --color-only --paging=never
+[delta]
+        features = solarized-diff
+        navigate = true
+        line-numbers = true
+[delta "solarized-diff"]
+	dark = true
+        syntax-theme = Solarized (dark)
+        true-color = always
+        zero-style = "syntax"
+
+        plus-style = "syntax #073642"
+        plus-emph-style = "bold ul syntax #004b46"
+
+        minus-style = "syntax #3a1f1f"
+        minus-emph-style = "bold ul syntax #5a2a2a"
