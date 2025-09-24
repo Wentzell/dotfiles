@@ -1,0 +1,33 @@
+{
+  "model": "claude-opus-4-1-20250805",
+  "includeCoAuthoredBy": true,
+  "cleanupPeriodDays": 90,
+
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "WebFetch",
+      "Read",
+      "Bash(cd:*)",
+      "Bash(cmake:*)",
+      "Bash(ctest:*)",
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "Bash(ls:*)",
+      "Bash(module:*)",
+      "Bash(tree:*)",
+      "Bash(git status:*)",
+      "Bash(git log:*)",
+      "Bash(git diff:*)",
+      "Bash(git show:*)",
+      "Bash(git branch:*)"
+    ]
+  },
+
+  "env": {
+    "EDITOR": "vim",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+    "CMAKE_COLOR_DIAGNOSTICS": "ON"
+  }
+}
