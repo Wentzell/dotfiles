@@ -11,7 +11,7 @@
 [core]
         editor = nvim
         excludesfile = ~/.glob_git_ignore
-	pager = delta
+        pager = delta
 
 [push]
         default = current
@@ -19,7 +19,7 @@
         ff = only
 [fetch]
         prune = true
-	pruneTags = true
+        #pruneTags = true
 
 [merge]
         tool = vimdiff
