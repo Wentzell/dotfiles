@@ -1,5 +1,5 @@
 # Build configuration
-VERSION=20.1.6
+VERSION=21.1.2
 BRANCH=llvmorg-$VERSION
 INSTALL_DIR=$HOME/opt/llvm_$VERSION
 SRC_DIR=$PWD
@@ -79,6 +79,7 @@ cmake -GNinja \
       -DLLDB_ENABLE_LIBEDIT=ON \
       ${SRC_DIR}/llvm-project/llvm
       #-DGCC_INSTALL_PREFIX=$GCC_INSTALL_PREFIX \
+      #-DLLVM_ENABLE_PER_TARGET_RUNTIME_DIR=OFF <- No lib/x86.. subdir \
       #-DLLVM_ENABLE_RTTI=ON \
       #-DLLVM_USE_LINKER=gold \
       #-DLINK_POLLY_INTO_TOOLS=ON \
@@ -92,13 +93,13 @@ cmake -GNinja \
 cmake --build .
 ninja install
 
-# --- Build and Install Include-what-you-use
-
-cd $SRC_DIR
-git clone https://github.com/include-what-you-use/include-what-you-use --branch clang_20 --depth 1
-
-mkdir -p $SRC_DIR/iwyu_build
-cd $SRC_DIR/iwyu_build
-
-cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR -DCMAKE_PREFIX_PATH=$INSTALL_DIR $SRC_DIR/include-what-you-use
-make -j $THREADS install
+## --- Build and Install Include-what-you-use
+#
+#cd $SRC_DIR
+#git clone https://github.com/include-what-you-use/include-what-you-use --branch clang_20 --depth 1
+#
+#mkdir -p $SRC_DIR/iwyu_build
+#cd $SRC_DIR/iwyu_build
+#
+#cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR -DCMAKE_PREFIX_PATH=$INSTALL_DIR $SRC_DIR/include-what-you-use
+#make -j $THREADS install
