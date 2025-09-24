@@ -33,7 +33,7 @@ let g:copilot_no_tab_map = v:true
 let g:copilot_assume_mapped = v:true
 
 " ---- Copilot Chat Setup -----
-" Use Nerd Font https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/SourceCodePro.zip
+" Use Nerd Font https://github.com/getnf/getnf
 xnoremap <leader><leader>a :CopilotChat<CR>
 nnoremap <leader><leader>a :CopilotChat<CR>
 

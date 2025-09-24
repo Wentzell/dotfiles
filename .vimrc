@@ -8,7 +8,6 @@
 call plug#begin()
 
 Plug 'vim-scripts/GrepCommands'
-Plug 'tpope/vim-repeat'
 Plug 'scrooloose/nerdcommenter'
 Plug 'preservim/tagbar'
 Plug 'scrooloose/nerdtree'
@@ -18,15 +17,10 @@ Plug 'tpope/vim-fugitive'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'altercation/vim-colors-solarized'
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
 
 if has('nvim')
-  " neovim only plugins
   Plug 'neovim/nvim-lspconfig'
   Plug 'chrisbra/matchit'
-  "Plug 'ishan9299/nvim-solarized-lua'
-  "Plug 'folke/lsp-colors.nvim', { 'branch': 'main' }
 
   " -- Auto Completion --
   Plug 'hrsh7th/nvim-cmp', { 'branch': 'main' }
@@ -47,12 +41,6 @@ else
       \ 'do': 'bash install.sh',
       \ }
 endif
-
-"Plug 'Latex-Box-Team/Latex-Box'
-"Plug 'tpope/vim-surround'
-"Plug 'machakann/vim-sandwich'
-"Plug 'dhruvasagar/vim-marp'
-"Plug 'JuliaEditorSupport/julia-vim'
 
 call plug#end()
 "}}}
@@ -104,32 +92,14 @@ let g:clang_format#command = 'clang-format'
 "}}}
 "-------------------------------------- Custom Commands ------------------------------------------{{{
 
-" Simple small comment line
-:command! CommLineSmall 	:normal 80i-<Esc>,ciA<cr>
-"  Small comment line with text
-:command! CommTLineSmall	:normal 80i-<Esc>,ci40hi
-" Simple comment line
-:command! CommLine 	:normal 70i=<Esc>,ciA<cr>
-" Comment line with text
-:command! CommTLine 	:normal 70i=<Esc>,ci35hi
-" Start Doxygen multiline comment
-:command! DoxComm	:normal i/**<cr><cr>/<Esc>ka<TAB>
-" Build file and open quickfix window
-:command! Mdb		:make | cwindow 15
-" Insert templates
-:command! Ttest		:r ~/.vim/templates/test.cpp
-:command! TtestF	:r ~/.vim/templates/test_F.cpp
-:command! Tpytest	:r ~/.vim/templates/test.py
-:command! TCMake	:r ~/.vim/templates/CMakeLists.txt
-:command! Ttex		:r ~/.vim/templates/templ.tex
-
 "Command Make will call make and then open quickfix window
 if !has('nvim')
   autocmd BufReadPost quickfix AnsiEsc
 endif
-"set makeprg=$HOME/bin/pymake
+
 set makeprg=cmake
-:command! -nargs=* Make :make --build build <args> | cwindow 15
+:command! -nargs=* Make :make --build build_mac <args> | cwindow 15
+
 "}}}
 "-------------------------------------- Key Mappings ------------------------------------------{{{
 
@@ -166,20 +136,7 @@ noremap <leader>.	        <C-W>>
 noremap <leader><leader>n 	:NERDTreeToggle<cr>
 noremap <leader><leader>t       :TagbarToggle<cr>
 
-" comment insertions
-nmap <Leader>chl 	:CommLineSmall<cr>
-nmap <Leader>ctl 	:CommTLineSmall<cr>
-nmap <Leader>Chl 	:CommLine<cr>
-nmap <Leader>Ctl 	:CommTLine<cr>
-nmap <Leader>dc 	:DoxComm<cr>
-
-" automatically add closing brackets
-"inoremap {      {}<Left>
-"inoremap {<cr>  {<cr>}<Esc>O
-"inoremap {{     {
-"inoremap {}     {}
-
-"Just press F5 to make your program:
+" Build program
 autocmd Syntax c,cpp map <buffer> 'll :Make<cr><cr><cr>
 
 ";n for next error
@@ -189,15 +146,8 @@ nnoremap ;p	:cp<cr>
 " create and goto file under cursor
 map <leader>gf :e <cfile><cr>
 
-" reload vimrc and automatically do so if .vimrc saved
-nmap <Leader>vrc :so $MYVIMRC<cr>
-autocmd! bufwritepost .vimrc source %
-
 " search highlighting on / off
 nnoremap ;h	:set hlsearch!<cr>
-
-" replace selected text
-xnoremap <C-r> "hy:%s/<C-r>h//gc<left><left><left>
 
 " Set wrapping and fix movement keys!
 noremap <silent> <Leader>w :call ToggleWrap()<CR>
@@ -224,7 +174,6 @@ endfunction
 "}}}
 "-------------------------------------- File Type Autocommands ------------------------------------------{{{
 
-au BufNewFile,BufRead	*.plt	set filetype=gnuplot		" set plt files to gnuplot type
 au BufNewFile,BufRead	*MAKE*	set filetype=make		" set files with MAKE in name to make type
 "}}}
 "-------------------------------------- Folding ------------------------------------------{{{
@@ -275,20 +224,6 @@ if !has('nvim')
         \	      '--suggest-missing-includes'],
         \ }
 
-        """\ 'julia': ['julia', '--startup-file=no', '--history-file=no', '-e', '
-        """\       using LanguageServer;
-        """\       using Pkg;
-        """\       import StaticLint;
-        """\       import SymbolServer;
-        """\       env_path = dirname(Pkg.Types.Context().env.project_file);
-        """\
-        """\       server = LanguageServer.LanguageServerInstance(stdin, stdout, env_path, "");
-        """\       server.runlinter = true;
-        """\       run(server);']
-        """
-        """\       '--compile-commands-dir='.getcwd().'/build',
-  "
-
   " --- Language Server Bindings
   autocmd Syntax c,cpp,python nnoremap <buffer> <C-]> :call LanguageClient#textDocument_definition()<CR>
   autocmd Syntax c,cpp,python xnoremap <buffer> <C-]> :call LanguageClient#textDocument_definition()<CR>
@@ -329,52 +264,14 @@ au! BufEnter *.hpp let b:fswitchdst = 'cpp'
 " Switch to the file and load it into the current window >
 nmap <silent> <Leader>of :FSHere<cr>
 
-" Translate Mathematica cpp expressions to correct expression
-function! Math2Cpp()
-   :s/\\\[\(\w\{-}\)\]/\1/ge
-   :s/Beta/BETA/ge
-   :s/CapitalLambda/Lam/ge
-   :s/\(\d\+\)\./\1/ge
-   :s/\(\d\+\)/\1.0/ge
-   :s/Power/pow/ge
-   :s/Pi/PI/ge
-   :s/ArcTanh/atanh/ge
-   :s/ArcTan/atan/ge
-   :s/HeavisideThetan/Theta/ge
-   :s/Log/log/ge
-   :s/Abs/abs/ge
-endfunction
 "}}}
 "-------------------------------------- Latex Specific Stuff ------------------------------------------{{{
 "
-let g:LatexBox_viewer = 'zathura'
-let g:LatexBox_latexmk_options = "-pdflatex='pdflatex -synctex=1 \%O \%S'"
-let g:LatexBox_ignore_warnings = ['Underfull',
-				\ 'Overfull',
-				\ 'deprecated',
-				\ 'fancyhdr',
-				\ 'titlesec',
-				\ 'hyperref',
-				\ 'minitoc',
-				\ 'Font shape',
-				\ 'Some font shapes',
-				\ 'Empty \`thebibliography',
-				\ 'specifier changed to',
-				\ 'Package amsmath Warning']
 
-nnoremap <F9>   :exec "!zathura ".LatexBox_GetOutputFile() line('.')  col('.') "%"<cr><cr>
-
-function! SyncTexForward()
-   let servername = substitute( LatexBox_GetOutputFile(), '.*/\(.\{-}\)\.pdf', '\U\1', 'g' )
-   let execstr = "silent !zathura -x 'gvim -v --servername ". servername ." --remote +\\\%{line} \\\%{input}' --synctex-forward ".line(".").":".col('.').":% ". LatexBox_GetOutputFile() ." 2> /dev/null &"
-   exec execstr
-   :redraw!
-endfunction
-
-nmap <Leader>f :call SyncTexForward()<CR>
-
+autocmd Syntax tex nnoremap 'll <Leader>ll
 :command! Myspell :setlocal spell spelllang=en_us <bar> :syntax spell toplevel"}}}
 
+"}}}
 " --- Presentation mode
 "let g:airline_solarized_bg='light'
 "set background=light
