@@ -36,7 +36,8 @@
         path = nvim
 
 [alias]
-        d = difftool -w
+        d = difftool
+        dw = difftool -w
         wdiff = diff --word-diff=color
         bl = blame -w -M -C
         l = log --graph --abbrev-commit --decorate --format=format:'%C(blue)%h%C(reset) - %C(cyan)%aD%C(reset) %C(green)(%ar)%C(reset)%C(yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all
@@ -61,3 +62,8 @@
 
         minus-style = "syntax #3a1f1f"
         minus-emph-style = "bold ul syntax #5a2a2a"
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
