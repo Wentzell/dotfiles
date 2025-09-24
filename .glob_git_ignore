@@ -20,6 +20,7 @@ stderr.*
 
 ## Coding
 ######################
+*.claude
 *.h5
 *.dat
 *.o
