@@ -14,7 +14,7 @@ set $mod Mod1
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below. ISO 10646 = Unicode
 #font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
-font xft:DroidSansMono 10
+font xft:DroidSansMono 14
 # The font above is very space-efficient, that is, it looks good, sharp and
 # clear in small sizes. However, if you need a lot of unicode glyphs or
 # right-to-left text rendering, you should instead use pango for rendering and
@@ -25,13 +25,13 @@ font xft:DroidSansMono 10
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec i3-sensible-terminal # mate-terminal
+bindsym $mod+Return exec xfce4-terminal # mate-terminal
 
 # default setup
-exec i3-msg 'workspace 2; exec i3-sensible-terminal' # mate-terminal'
-exec i3-msg 'workspace 1; exec chromium' # mate-terminal'
-#exec i3-msg 'workspace 1; exec owncloud' # mate-terminal'
-exec i3-msg 'workspace 1; exec dropbox' # mate-terminal'
+exec i3-msg 'workspace 2; exec xfce4-terminal' # mate-terminal'
+exec i3-msg 'workspace 1; exec firefox'
+#exec i3-msg 'workspace 1; exec owncloud'
+#exec i3-msg 'workspace 1; exec dropbox'
 
 # kill focused window
 bindsym $mod+Shift+q kill
