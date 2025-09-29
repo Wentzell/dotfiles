@@ -5,6 +5,8 @@
 ## Common Commands
 - Configure: `cmake -S . -B build -GNinja -DCMAKE_EXPORT_COMPILE_COMMANDS=ON`
 - Configure Install Prefix only if required: `-DCMAKE_INSTALL_PREFIX=~/opt/REPONAME`
+- To enable Sanitizer checks configure with `-DASAN=ON -DUBSAN=ON`
+- To enable Documentation configure with `-DBuild_Documentation=ON`
 - Build: `cmake --build build`
 - Install: `cmake --install build`
 - Test: `ctest --test-dir build -j 16`
@@ -32,5 +34,7 @@
 - Give concise answers
 - Check your assumptions
 - Ask for clarifications
+- Group changes logically into small commits with concise messages
+- Avoid using emojis
 - Don't assume that the user is correct
 - Strive for expressive and clear code
