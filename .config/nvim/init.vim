@@ -117,14 +117,6 @@ lua << EOF
   })
 EOF
 
-" Other useful lsp commands
-"vim.lsp.diagnostic.goto_prev()
-"vim.lsp.diagnostic.goto_next()
-"vim.lsp.buf.references()
-"vim.lsp.buf.range_formatting()
-"vim.lsp.buf.range_code_action()
-"vim.lsp.buf.hover()
-
 " ---- Auto Completion -----
 lua << EOF
   -- Add additional capabilities supported by nvim-cmp
