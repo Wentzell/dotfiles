@@ -3,7 +3,7 @@
 "								"
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-"-------------------------------------- Load plugins ------------------------------------------{{{
+"-------------------------------------- Load plugins ------------------------------------------
 
 call plug#begin()
 
@@ -43,8 +43,8 @@ else
 endif
 
 call plug#end()
-"}}}
-"-------------------------------------- General Settings ------------------------------------------{{{
+
+"-------------------------------------- General Settings ------------------------------------------
 
 syntax on			" Syntax highlighting on
 filetype plugin indent on	" Indenting globally on
@@ -81,16 +81,15 @@ set laststatus=2		" Always display status bar
 set hidden			" Can hide changed buffers!
 set number 			" Show line numbers
 
-" Remove all trailing whitespaces on write
-"autocmd BufWritePre * %s/\s\+$//e
+" Remove all trailing whitespaces
 :command! Delwsp :%s/\s\+$//e
 
 let g:clang_format#command = 'clang-format'
 
 " fix replace color highlight
 :hi incsearch term=standout cterm=standout ctermfg=9 ctermbg=7 gui=reverse
-"}}}
-"-------------------------------------- Custom Commands ------------------------------------------{{{
+
+"-------------------------------------- Custom Commands ------------------------------------------
 
 "Command Make will call make and then open quickfix window
 if !has('nvim')
@@ -100,8 +99,7 @@ endif
 set makeprg=cmake
 :command! -nargs=* Make :make --build build_mac <args> | cwindow 15
 
-"}}}
-"-------------------------------------- Key Mappings ------------------------------------------{{{
+"-------------------------------------- Key Mappings ------------------------------------------
 
 " rebind leader key and escape
 let mapleader = ","
@@ -143,9 +141,6 @@ autocmd Syntax c,cpp map <buffer> 'll :Make<cr><cr><cr>
 nnoremap ;n	:cn<cr>
 nnoremap ;p	:cp<cr>
 
-" create and goto file under cursor
-map <leader>gf :e <cfile><cr>
-
 " search highlighting on / off
 nnoremap ;h	:set hlsearch!<cr>
 
@@ -171,18 +166,18 @@ function ToggleWrap()
     noremap  <buffer> <silent> $   g$
   endif
 endfunction
-"}}}
-"-------------------------------------- File Type Autocommands ------------------------------------------{{{
+
+"-------------------------------------- File Type Autocommands ------------------------------------------
 
 au BufNewFile,BufRead	*MAKE*	set filetype=make		" set files with MAKE in name to make type
-"}}}
-"-------------------------------------- Folding ------------------------------------------{{{
+
+"-------------------------------------- Folding ------------------------------------------
 
 set foldmethod=marker foldlevelstart=0 foldnestmax=1
 autocmd Syntax c,cpp setlocal foldmethod=syntax 	" Enable Syntax folding
 autocmd Syntax c,cpp normal zR			        " Start unfolded
-"}}}
-"-------------------------------------- General Coding Config ------------------------------------------{{{
+
+"-------------------------------------- General Coding Config ------------------------------------------
 
 set wildmenu
 inoremap <C-n> <C-x><C-o>
@@ -193,19 +188,6 @@ if !has('nvim')
   let g:LanguageClient_diagnosticsList = "Disabled" " We do not want to populate the quickfix window
   let g:LanguageClient_rootMarkers = ['.git']
   let g:LanguageClient_loadSettings = 1
-  " pip install 'python-language-server[all]'
-  " then create .vim/settings.json with e.g.
-  " {
-  " 	"pyls.plugins.pyflakes.enabled": true,
-  " 	"pyls.plugins.pydocstyle.enabled": true,
-  " 	"pyls.plugins.rope.enabled": true,
-  " 	"pyls.plugins.pycodestyle.enabled": true,
-  " 	"pyls.plugins.mccabe.enabled": true,
-  " 	"pyls.plugins.autopep8.enabled": true,
-  " 	"pyls.plugins.papf.enabled": true,
-  " 	"pyls.plugins.pylint.enabled": true
-  " }
-  " check with  \ 'python': ['pyls', '-vv', '--log-file', '~/.vim/pyls.log'],
   let g:LanguageClient_serverCommands = {
         \ 'python': ['pyright'],
         \ 'c': ['clangd',
@@ -239,24 +221,22 @@ if !has('nvim')
 
 endif
 
-"}}}
-"-------------------------------------- Python Specific Stuff ------------------------------------------{{{
+
+"-------------------------------------- Python Specific Stuff ------------------------------------------
 "
 autocmd FileType python set shiftwidth=4
 
 " --- Config for yapf
 autocmd Syntax python nnoremap <buffer> == :YAPF<cr>
 autocmd Syntax python xnoremap <buffer> == :YAPF<cr>
-"}}}
-"-------------------------------------- Cpp Specific Stuff ------------------------------------------{{{
+
+"-------------------------------------- Cpp Specific Stuff ------------------------------------------
 
 " --- Config for clang-format plugin
 autocmd Syntax c,cpp nnoremap <buffer> == :call LanguageClient_textDocument_formatting()<CR>
 autocmd Syntax c,cpp xnoremap <buffer> == :call LanguageClient_textDocument_formatting()<CR>
 
 " set up file switch for fswitch plugin
-"au! BufEnter *.cpp let b:fswitchdst = 'h' | let b:fswitchlocs = '../include'
-"au! BufEnter *.h let b:fswitchdst = 'cpp' | let b:fswitchlocs = '../src'
 au! BufEnter *.cpp let b:fswitchdst = 'hpp'
 au! BufEnter *.hpp let b:fswitchdst = 'cpp'
 
@@ -264,14 +244,14 @@ au! BufEnter *.hpp let b:fswitchdst = 'cpp'
 " Switch to the file and load it into the current window >
 nmap <silent> <Leader>of :FSHere<cr>
 
-"}}}
-"-------------------------------------- Latex Specific Stuff ------------------------------------------{{{
+
+"-------------------------------------- Latex Specific Stuff ------------------------------------------
 "
 
 autocmd Syntax tex nnoremap 'll <Leader>ll
-:command! Myspell :setlocal spell spelllang=en_us <bar> :syntax spell toplevel"}}}
+:command! Myspell :setlocal spell spelllang=en_us <bar> :syntax spell toplevel
 
-"}}}
+
 " --- Presentation mode
 "let g:airline_solarized_bg='light'
 "set background=light
