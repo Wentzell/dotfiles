@@ -81,7 +81,7 @@ alias tls='tmux list-sessions'
 alias tat='tmux attach-session -t'
 alias tkill='tmux kill-session -t'
 tmuxdev () {
-  tmux new-session -d -s 'S' -n triqs -c $HOME
+  tmux new-session -d -n triqs -c $HOME
   tmux neww -n triqs -c $HOME
   tmux neww -n Coding -c $HOME
   tmux neww -n Coding -c $HOME
@@ -91,28 +91,32 @@ tmuxdev () {
   tmux neww -n GCC -c $HOME
   tmux neww -n ICX -c $HOME
   tmux neww -n ICX -c $HOME
+  tmux neww -n NVHPC -c $HOME
+  tmux neww -n NVHPC -c $HOME
   tmux neww -n SAN -c $HOME
   tmux neww -n SAN -c $HOME
   tmux neww -n PROF -c $HOME
   tmux neww -n PROF -c $HOME
   tmux neww -n DBG -c $HOME
   tmux neww -n DBG -c $HOME
-  tmux send-keys -t S:1 "cd Dropbox/Coding/triqs; clear" C-m
-  tmux send-keys -t S:2 "cd Dropbox/Coding/triqs/build; clear" C-m
-  tmux send-keys -t S:3 "cd Dropbox/Coding; clear" C-m
-  tmux send-keys -t S:4 "cd Dropbox/Coding; clear" C-m
-  tmux send-keys -t S:5 "cd Dropbox/Coding; clear" C-m
-  tmux send-keys -t S:6 "cd Dropbox/Coding; clear" C-m
-  tmux send-keys -t S:7 "cd Dropbox/Coding; module load devenv8/gcc-py3-mkl; source ~/opt/triqs_gcc/share/triqs/triqsvars.sh; clear" C-m
-  tmux send-keys -t S:8 "cd Dropbox/Coding; module load devenv8/gcc-py3-mkl; source ~/opt/triqs_gcc/share/triqs/triqsvars.sh; clear" C-m
-  tmux send-keys -t S:9 "cd Dropbox/Coding; module load devenv8/icx-py3-mkl; source ~/opt/triqs_icx/share/triqs/triqsvars.sh; clear" C-m
-  tmux send-keys -t S:10 "cd Dropbox/Coding; module load devenv8/icx-py3-mkl; source ~/opt/triqs_icx/share/triqs/triqsvars.sh; clear" C-m
-  tmux send-keys -t S:11 "cd Dropbox/Coding; source ~/opt/triqs_san/share/triqs/triqsvars.sh; clear" C-m
-  tmux send-keys -t S:12 "cd Dropbox/Coding; source ~/opt/triqs_san/share/triqs/triqsvars.sh; clear" C-m
-  tmux send-keys -t S:13 "cd Dropbox/Coding; source ~/opt/triqs_prof/share/triqs/triqsvars.sh; export CXXFLAGS=\"-g -gdwarf-4 -fno-omit-frame-pointer -stdlib=libc++ -ffp-contract=fast -march=native\"; clear" C-m
-  tmux send-keys -t S:14 "cd Dropbox/Coding; source ~/opt/triqs_prof/share/triqs/triqsvars.sh; export CXXFLAGS=\"-g -gdwarf-4 -fno-omit-frame-pointer -stdlib=libc++ -ffp-contract=fast -march=native\"; clear" C-m
-  tmux send-keys -t S:15 "cd Dropbox/Coding; source ~/opt/triqs_dbg/share/triqs/triqsvars.sh; clear" C-m
-  tmux send-keys -t S:16 "cd Dropbox/Coding; source ~/opt/triqs_dbg/share/triqs/triqsvars.sh; clear" C-m
+  tmux send-keys -t 0:1 "cd Dropbox/Coding/triqs; clear" C-m
+  tmux send-keys -t 0:2 "cd Dropbox/Coding/triqs/build; clear" C-m
+  tmux send-keys -t 0:3 "cd Dropbox/Coding; clear" C-m
+  tmux send-keys -t 0:4 "cd Dropbox/Coding; clear" C-m
+  tmux send-keys -t 0:5 "cd Dropbox/Coding; clear" C-m
+  tmux send-keys -t 0:6 "cd Dropbox/Coding; clear" C-m
+  tmux send-keys -t 0:7 "cd Dropbox/Coding; module load devenv9/gcc-py3-mkl; source ~/opt/triqs_gcc/share/triqs/triqsvars.sh; clear" C-m
+  tmux send-keys -t 0:8 "cd Dropbox/Coding; module load devenv9/gcc-py3-mkl; source ~/opt/triqs_gcc/share/triqs/triqsvars.sh; clear" C-m
+  tmux send-keys -t 0:9 "cd Dropbox/Coding; module load devenv9/icx-py3-mkl; source ~/opt/triqs_icx/share/triqs/triqsvars.sh; clear" C-m
+  tmux send-keys -t 0:10 "cd Dropbox/Coding; module load devenv9/icx-py3-mkl; source ~/opt/triqs_icx/share/triqs/triqsvars.sh; clear" C-m
+  tmux send-keys -t 0:11 "cd Dropbox/Coding; module load devenv9/nvhpc-py3-mkl; source ~/opt/triqs_gcc/share/triqs/triqsvars.sh; clear" C-m
+  tmux send-keys -t 0:12 "cd Dropbox/Coding; module load devenv9/nvhpc-py3-mkl; source ~/opt/triqs_gcc/share/triqs/triqsvars.sh; clear" C-m
+  tmux send-keys -t 0:13 "cd Dropbox/Coding; source ~/opt/triqs_san/share/triqs/triqsvars.sh; clear" C-m
+  tmux send-keys -t 0:14 "cd Dropbox/Coding; source ~/opt/triqs_san/share/triqs/triqsvars.sh; clear" C-m
+  tmux send-keys -t 0:15 "cd Dropbox/Coding; source ~/opt/triqs_prof/share/triqs/triqsvars.sh; export CXXFLAGS=\"-g -gdwarf-4 -fno-omit-frame-pointer -stdlib=libc++ -ffp-contract=fast -march=native\"; clear" C-m
+  tmux send-keys -t 0:16 "cd Dropbox/Coding; source ~/opt/triqs_prof/share/triqs/triqsvars.sh; export CXXFLAGS=\"-g -gdwarf-4 -fno-omit-frame-pointer -stdlib=libc++ -ffp-contract=fast -march=native\"; clear" C-m
+  tmux send-keys -t 0:17 "cd Dropbox/Coding; source ~/opt/triqs_dbg/share/triqs/triqsvars.sh; clear" C-m
+  tmux send-keys -t 0:18 "cd Dropbox/Coding; source ~/opt/triqs_dbg/share/triqs/triqsvars.sh; clear" C-m
   tmux selectw -t 1
   tmux attach
 }
