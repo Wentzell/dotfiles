@@ -60,6 +60,8 @@ alias sshnokey="ssh -X -o PubkeyAuthentication=no"
 
 	# vim
 	# https://github.com/Sarcasm/compdb <- Add header files to compile_commands.json
+alias vim="nvim"
+alias vimdiff="nvim -d"
 alias vimsrc="compdb -p build/ list > compile_commands.json &> /dev/null; nvim **/*.cpp(N) **/*.cu(N) **/*.hpp(N) **/*.hxx(N) **/*.h(N)" # **/*.c(N) **/*.h(N)
 mkbuild () {
   mkdir -p /home/wentzell/builds/${PWD##*/}$1
