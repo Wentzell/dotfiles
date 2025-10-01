@@ -10,3 +10,6 @@
 [submodule ".vim/autoload/vim-plug"]
 	path = .vim/autoload/vim-plug
 	url = https://github.com/junegunn/vim-plug
+[submodule ".config/nvim"]
+	path = .config/nvim
+	url = github:Wentzell/tiny-nvim
