@@ -4,7 +4,6 @@
   "cleanupPeriodDays": 90,
 
   "permissions": {
-    "ask": [ "Edit" ],
     "allow": [
       "WebSearch",
       "WebFetch",
@@ -21,7 +20,15 @@
       "Bash(git log:*)",
       "Bash(git diff:*)",
       "Bash(git show:*)",
-      "Bash(git branch:*)"
+      "Bash(git branch:*)",
+      "Bash(git check-attr:*)",
+      "Bash(gh run list:*)",
+      "Bash(gh run view:*)",
+      "Bash(gh run watch:*)",
+      "Bash(gh pr view:*)",
+      "Bash(gh pr diff:*)",
+      "Bash(gh pr checks:*)",
+      "Bash(gh issue view:*)"
     ]
   },
 
