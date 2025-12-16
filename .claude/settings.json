@@ -1,8 +1,12 @@
 {
-  "model": "claude-sonnet-4-5-20250929",
-  "includeCoAuthoredBy": true,
   "cleanupPeriodDays": 90,
-
+  "env": {
+    "EDITOR": "vim",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+    "CMAKE_COLOR_DIAGNOSTICS": "ON"
+  },
+  "includeCoAuthoredBy": true,
   "permissions": {
     "allow": [
       "WebSearch",
@@ -31,11 +35,5 @@
       "Bash(gh issue view:*)"
     ]
   },
-
-  "env": {
-    "EDITOR": "vim",
-    "PYTHONDONTWRITEBYTECODE": "1",
-    "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-    "CMAKE_COLOR_DIAGNOSTICS": "ON"
-  }
+  "alwaysThinkingEnabled": true
 }
