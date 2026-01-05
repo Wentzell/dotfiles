@@ -35,6 +35,8 @@ cmake-build-*
 *.pyc
 compile_commands.json
 .pre-commit-config.yaml
+AGENTS.md
+CLAUDE.md
 
 ## Latex
 ######################
