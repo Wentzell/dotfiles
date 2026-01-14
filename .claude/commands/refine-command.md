@@ -29,53 +29,63 @@ Iteratively improve an existing command prompt by testing it against example rep
 
 Initialize iteration counter to 1.
 
-### Step 1: Create Repository Copies
+### Step 1: Create Test Branches
 
 For each example repository at path `<repo-path>`:
-- Determine the repository name from the path
-- Create an isolated copy in `/tmp/refine-<command>-iter-<N>/<repo-name>`:
-  ```bash
-  mkdir -p /tmp/refine-<command>-iter-<N>
-  cp -r <repo-path> /tmp/refine-<command>-iter-<N>/<repo-name>
-  ```
+```bash
+# Record the original branch/commit to return to later
+ORIGINAL_REF=$(git -C <repo-path> symbolic-ref --short HEAD 2>/dev/null || git -C <repo-path> rev-parse HEAD)
+BASE_COMMIT=$(git -C <repo-path> rev-parse HEAD)
 
-Using copies instead of worktrees ensures the original repositories remain completely unmodified.
+# Create and checkout test branch
+git -C <repo-path> checkout -b refine-<command>-iter-<N>
+```
 
-Track all copy paths for cleanup.
+Track for each repository:
+- The repository path
+- The original ref (branch name or commit hash)
+- The base commit for diff comparison
 
-### Step 2: Execute Command in Parallel
+### Step 2: Execute Command on Each Repository
 
-Launch a sub-agent for each repository copy to execute the command being refined:
-- Change working directory to the copy
-- Execute the command (invoke it as the user would)
-- Capture:
-  - The full output/conversation
-  - The resulting `git diff` showing all changes made
-  - Any errors or issues encountered
+Launch a sub-agent for each repository to execute the command being refined.
 
-Run all sub-agents in parallel using a single message with multiple Task tool calls.
+**Important sub-agent configuration:**
+- Run sub-agents in **foreground mode** (do NOT use `run_in_background: true`) - background agents cannot prompt for permissions and will fail
+- Set the working directory to the repository path
+
+**Sub-agent task prompt should include:**
+- The full command prompt content being tested
+- Clear instruction to work within the repository
+- Request to report: changes made, commits created, any errors encountered
+
+**Capture from each sub-agent:**
+- The full output/conversation
+- The resulting changes (staged and unstaged)
+- Any errors or issues encountered
+
+If testing multiple repositories, run sub-agents sequentially (one at a time) to allow for interactive permission prompts.
 
 ### Step 3: Analyze Results
 
 After all sub-agents complete, analyze the outcomes:
 
-1. **Collect diffs** from each copy:
+1. **Collect changes** from each repository:
    ```bash
-   git -C <copy-path> diff HEAD
+   # All changes since base commit (committed + uncommitted)
+   git -C <repo-path> diff <base-commit>
+
+   # Commits made by the sub-agent
+   git -C <repo-path> log --oneline <base-commit>..HEAD
    ```
 
-2. **Collect commits** made by the subagent:
-   ```bash
-   git -C <copy-path> log --oneline <original-HEAD>..HEAD
-   ```
-
-3. **Compare across repositories:**
+2. **Compare across repositories:**
    - What types of changes were made?
    - Were changes consistent in style and approach?
    - Any unexpected or undesirable modifications?
    - Any failures or edge cases?
 
-4. **Identify improvement opportunities:**
+3. **Identify improvement opportunities:**
    - Instructions that were ambiguous or misinterpreted
    - Missing guidance that led to inconsistent results
    - Overly specific instructions that don't generalize
@@ -110,17 +120,21 @@ Present findings to the user:
 
 1. Edit the command file with the approved changes
 2. Increment iteration counter
-3. Clean up current copies:
+3. Clean up test branches from this iteration:
    ```bash
-   rm -rf /tmp/refine-<command>-iter-<N>
+   # For each repository
+   git -C <repo-path> checkout <original-ref>
+   git -C <repo-path> branch -D refine-<command>-iter-<N>
    ```
 4. Return to Step 1 for next iteration
 
 ## Cleanup
 
-Remove all remaining copies:
+Restore all repositories to their original state:
 ```bash
-rm -rf /tmp/refine-<command>-iter-*
+# For each repository
+git -C <repo-path> checkout <original-ref>
+git -C <repo-path> branch -D refine-<command>-iter-<N> 2>/dev/null || true
 ```
 
 If refinements were applied, present the final diff of the command file:
@@ -136,4 +150,10 @@ Ask user if they want to commit the changes.
 - **Preserve intent:** Maintain the original purpose while improving clarity and robustness
 - **Learn from failures:** Each failed or inconsistent result reveals prompt weaknesses
 - **Iterate incrementally:** Make focused improvements rather than wholesale rewrites
-- **Isolate testing:** Never modify original repositories; always work on copies
+- **Clean restoration:** Test branches are deleted after each iteration; original repos are unchanged
+
+## Technical Notes
+
+- **Sub-agent permissions:** Background sub-agents cannot prompt for permissions. Always run in foreground mode.
+- **Branch naming:** Test branches use `refine-<command>-iter-<N>` to avoid conflicts and enable easy cleanup.
+- **Original ref tracking:** Store both branch name (if on branch) and commit hash to handle detached HEAD states.
