@@ -1,22 +1,46 @@
 Profile the executable or script ${ARGUMENTS}
 
-- Build any compiled code with the CXXFLAGS="-g -gdwarf-4 -fno-omit-frame-pointer -stdlib=libc++ -ffp-contract=fast -march=native"
-- If the TRIQS library is required, use the profiled build at `$HOME/opt/triqs_prof`
-- Use the `build_prof` directory for the profiling build
-- Choose a `PROFILE_NAME` based on the executable or script
-- For an executable:
-  `PROFILE_COMMAND` executes the executable
-  `PROFILE_BINARY` is the executable
-- For a Python Script:
-  `PROFILE_COMMAND` executes the Python script
-  `PROFILE_BINARY` is the compiled Python module used in the script
-- Change to the directory where the script or executable is located
-- Generate benchmark data using gperftools:
-  ```bash
-  LD_PRELOAD=$HOME/opt/gperftools/lib/libprofiler.so CPUPROFILE=[PROFILE_NAME].prof [PROFILE_COMMAND]
-  ```
-- Visualize the profiling graph using the `pprof` executable:
-  ```bash
-  pprof --svg [PROFILE_BINARY] [PROFILE_NAME].prof > [PROFILE_NAME].prof.svg
-  pprof --svg --lines [PROFILE_BINARY] [PROFILE_NAME].prof > [PROFILE_NAME].prof.lines.svg
-  ```
+## Build Configuration
+
+- Use the `build_prof` directory for profiling builds
+- Build with flags: `CXXFLAGS="-g -gdwarf-4 -fno-omit-frame-pointer -stdlib=libc++ -ffp-contract=fast -march=native"`
+- If TRIQS is required, use the profiled build at `$HOME/opt/triqs_prof`
+
+## Linking gperftools
+
+**Preferred: Link at build time** (avoids LD_PRELOAD permission issues)
+
+Add to CMakeLists.txt:
+```cmake
+find_library(PROFILER_LIBRARY profiler)
+if(PROFILER_LIBRARY)
+  target_link_libraries(${TARGET} ${PROFILER_LIBRARY})
+endif()
+```
+
+Reconfigure, rebuild, and verify with: `ldd <executable> | grep profiler`
+
+**Alternative: LD_PRELOAD** (may have permission issues)
+```bash
+module load gperftools  # or use $HOME/opt/gperftools/lib/libprofiler.so
+LD_PRELOAD=<path>/libprofiler.so CPUPROFILE=<name>.prof ./<executable>
+```
+
+## Profiling Workflow
+
+1. **Run with profiler** (when linked at build time):
+   ```bash
+   sh -c 'CPUPROFILE=<name>.prof ./<executable>'
+   ```
+
+2. **Text analysis** (quick hotspot identification):
+   ```bash
+   pprof --text <executable> <name>.prof | head -40
+   pprof --text --lines <executable> <name>.prof | head -50
+   ```
+
+3. **Generate visualizations** (redirect stderr to keep SVG clean):
+   ```bash
+   pprof --svg <executable> <name>.prof 2>/dev/null > <name>.prof.svg
+   pprof --svg --lines <executable> <name>.prof 2>/dev/null > <name>.prof.lines.svg
+   ```
