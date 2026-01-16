@@ -17,8 +17,10 @@
       "Bash(ctest:*)",
       "Bash(find:*)",
       "Bash(grep:*)",
+      "Bash(ldd:*)",
       "Bash(ls:*)",
       "Bash(module:*)",
+      "Bash(pprof:*)",
       "Bash(tree:*)",
       "Bash(git status:*)",
       "Bash(git log:*)",
@@ -34,6 +36,10 @@
       "Bash(gh pr checks:*)",
       "Bash(gh issue view:*)"
     ]
+  },
+  "enabledPlugins": {
+    "clangd-lsp@claude-plugins-official": true,
+    "pyright-lsp@claude-plugins-official": true
   },
   "alwaysThinkingEnabled": true
 }
