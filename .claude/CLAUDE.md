@@ -43,6 +43,10 @@
 - Tests need to be run from their respective directory, so they can locate any reference files
 - Use ctest to run tests
 - Feature branches get merged into unstable. We avoid merge commits and instead clean-up the history and rebase
-- Debug builds use the build_dbg directory, profiling builds the build_prof
-- Debug builds of triqs should go into ~/opt/triqs_dbg and profiling builds into ~/opt/triqs_prof
+- Debug builds use the build_dbg directory
+- Debug builds of triqs are installed into ~/opt/triqs_dbg
+- Sanitizer builds use the build_san directory
+- Sanitized builds of triqs are installed into ~/opt/triqs_san
+- Profiling builds the build_prof
+- Profiling builds of triqs are installed into ~/opt/triqs_prof
 - Profiling builds should use CXXFLAGS="-g -gdwarf-4 -fno-omit-frame-pointer -stdlib=libc++ -ffp-contract=fast -march=native"
