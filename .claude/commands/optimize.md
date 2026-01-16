@@ -10,8 +10,9 @@ This command guides an iterative optimization process using profiling data to id
 
 2. **Configure profiling build** (see /profile for details)
    - Ensure `build_prof` directory exists with proper flags
-   - Verify gperftools is linked: `ldd <executable> | grep profiler`
-   - If not linked, add CMake snippet and reconfigure
+   - Use gperftools from `~/opt/gperftools`
+   - Preferred: Use LD_PRELOAD (no rebuild needed)
+   - Alternative: Link gperftools and verify with `ldd <executable> | grep profiler`
 
 3. **Calibrate workload**
    - Time the benchmark: `time ./<executable>`
@@ -25,7 +26,12 @@ This command guides an iterative optimization process using profiling data to id
    - Record baseline: e.g., "Baseline: 46.4s with 700k samples"
 
 2. **Generate initial profile**
-   - Run: `sh -c 'CPUPROFILE=<name>.prof ./<executable>'`
+   - Run with LD_PRELOAD:
+     ```bash
+     LD_PRELOAD=~/opt/gperftools/lib/libprofiler.so CPUPROFILE=<name>.prof CPUPROFILE_FREQUENCY=50 ./<executable>
+     ```
+   - Use `CPUPROFILE_FREQUENCY=50` (or lower) to avoid signal conflicts that cause termination
+   - Check for profile files (may have PID suffix if process forks): `ls -la *.prof*`
    - Analyze: `pprof --text <executable> <name>.prof | head -40`
    - Generate SVGs for visualization
 

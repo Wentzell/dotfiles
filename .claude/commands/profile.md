@@ -6,31 +6,41 @@ Profile the executable or script ${ARGUMENTS}
 - Build with flags: `CXXFLAGS="-g -gdwarf-4 -fno-omit-frame-pointer -stdlib=libc++ -ffp-contract=fast -march=native"`
 - If TRIQS is required, use the profiled build at `$HOME/opt/triqs_prof`
 
-## Linking gperftools
+## gperftools Setup
 
-**Preferred: Link at build time** (avoids LD_PRELOAD permission issues)
+Use the local gperftools installation at `~/opt/gperftools`.
+
+**Preferred: LD_PRELOAD** (simplest, no rebuild required)
+```bash
+LD_PRELOAD=~/opt/gperftools/lib/libprofiler.so CPUPROFILE=<name>.prof CPUPROFILE_FREQUENCY=50 ./<executable>
+```
+
+**Alternative: Link at build time**
 
 Add to CMakeLists.txt:
 ```cmake
-find_library(PROFILER_LIBRARY profiler)
-if(PROFILER_LIBRARY)
-  target_link_libraries(${TARGET} ${PROFILER_LIBRARY})
+find_library(PROFILER_LIB profiler HINTS $ENV{HOME}/opt/gperftools/lib NO_DEFAULT_PATH)
+set(PROFILER_INCLUDE $ENV{HOME}/opt/gperftools/include)
+if(PROFILER_LIB)
+  target_link_libraries(${TARGET} ${PROFILER_LIB})
+  target_include_directories(${TARGET} PRIVATE ${PROFILER_INCLUDE})
 endif()
 ```
 
 Reconfigure, rebuild, and verify with: `ldd <executable> | grep profiler`
 
-**Alternative: LD_PRELOAD** (may have permission issues)
-```bash
-module load gperftools  # or use $HOME/opt/gperftools/lib/libprofiler.so
-LD_PRELOAD=<path>/libprofiler.so CPUPROFILE=<name>.prof ./<executable>
-```
+## Important Notes
+
+- **Signal issues**: Use `CPUPROFILE_FREQUENCY=50` (or lower) to avoid conflicts with debugging signals that can cause immediate termination
+- **Forking processes**: When the process forks (e.g., Google Benchmark), the profile may be written to `<name>.prof_<PID>` instead of `<name>.prof`. Check for these files: `ls -la *.prof*`
 
 ## Profiling Workflow
 
-1. **Run with profiler** (when linked at build time):
+1. **Run with profiler**:
    ```bash
-   sh -c 'CPUPROFILE=<name>.prof ./<executable>'
+   CPUPROFILE=<name>.prof CPUPROFILE_FREQUENCY=50 ./<executable>
+   # Check for output files (may have PID suffix if process forked)
+   ls -la *.prof*
    ```
 
 2. **Text analysis** (quick hotspot identification):
