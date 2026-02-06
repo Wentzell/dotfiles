@@ -11,7 +11,6 @@
     "commit": "Co-Authored-By: Claude <noreply@anthropic.com>"
   },
   "permissions": {
-    "additionalDirectories": ["/home/wentzell/Dropbox/Coding", "~/opt"],
     "allow": [
       "WebSearch",
       "WebFetch",
@@ -41,17 +40,28 @@
       "Bash(gh pr diff *)",
       "Bash(gh pr checks *)",
       "Bash(gh issue view *)"
+    ],
+    "additionalDirectories": [
+      "/home/wentzell/Dropbox/Coding",
+      "~/opt"
     ]
+  },
+  "enabledPlugins": {
+    "clangd-lsp@claude-plugins-official": true,
+    "pyright-lsp@claude-plugins-official": true,
+    "code-review@claude-code-plugins": true,
+    "feature-dev@claude-code-plugins": true,
+    "pr-review-toolkit@claude-code-plugins": true,
+    "commit-commands@claude-code-plugins": true
   },
   "sandbox": {
     "enabled": true,
     "autoAllowBashIfSandboxed": true,
-    "excludedCommands": ["git", "gh"]
+    "excludedCommands": [
+      "git",
+      "gh"
+    ]
   },
-  "enabledPlugins": {
-    "clangd-lsp@claude-plugins-official": true,
-    "pyright-lsp@claude-plugins-official": true
-  },
-  "teammateMode": "auto",
-  "alwaysThinkingEnabled": true
+  "alwaysThinkingEnabled": true,
+  "teammateMode": "auto"
 }
