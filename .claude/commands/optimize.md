@@ -2,6 +2,12 @@ Explore and iteratively apply performance optimizations for ${ARGUMENTS}
 
 This command guides an iterative optimization process using profiling data to identify and address performance bottlenecks.
 
+## Profiler Selection
+
+- **gperftools**: Best for full program profiling, identifying unexpected hotspots
+- **Google Benchmark**: Best for comparing implementations of specific functions, microbenchmarks
+- Often useful to combine: gperftools to identify hotspot, then microbenchmark to iterate on optimization
+
 ## Phase 1: Setup
 
 1. **Identify benchmark case(s)** from ${ARGUMENTS}
@@ -19,6 +25,12 @@ This command guides an iterative optimization process using profiling data to id
    - Adjust parameters so runtime is ~1 minute (meaningful sampling without excessive wait)
    - Document the parameter changes (don't commit them)
 
+4. **Create targeted benchmarks** (optional, for isolated component optimization)
+   - If gperftools shows a hotspot in a specific component, create a microbenchmark
+   - Add benchmark in `benchmarks/` directory using Google Benchmark
+   - Parameterize problem size, tolerance, or other key variables
+   - This allows rapid iteration without full program runs
+
 ## Phase 2: Baseline
 
 1. **Establish baseline timing**
@@ -30,7 +42,15 @@ This command guides an iterative optimization process using profiling data to id
      ```bash
      LD_PRELOAD=~/opt/gperftools/lib/libprofiler.so CPUPROFILE=<name>.prof CPUPROFILE_FREQUENCY=50 ./<executable>
      ```
+   - For Python scripts using TRIQS (must use triqs_prof for line-level info):
+     ```bash
+     source ~/opt/triqs_prof/share/triqs/triqsvars.sh
+     LD_PRELOAD=~/opt/gperftools/lib/libprofiler.so \
+       CPUPROFILE=<name>.prof CPUPROFILE_FREQUENCY=10 CPUPROFILE_REALTIME=1 \
+       python <script>
+     ```
    - Use `CPUPROFILE_FREQUENCY=50` (or lower) to avoid signal conflicts that cause termination
+   - For Python, use `CPUPROFILE_REALTIME=1` and lower frequency (10) to avoid crashes
    - Check for profile files (may have PID suffix if process forks): `ls -la *.prof*`
    - Analyze: `pprof --text <executable> <name>.prof | head -40`
    - Generate SVGs for visualization
@@ -52,16 +72,23 @@ Repeat for each optimization attempt:
   - **Raw pointers**: Use `.data()` to avoid bounds checking in tight loops
   - **Cache values**: Store frequently accessed array elements in locals
   - **Reduce operations**: Precompute divisions, combine redundant lookups
+  - **Tolerance tuning**: For numerical algorithms, benchmark with different tolerances to find the performance/accuracy sweet spot
 
 ### 3.2 Verify
-- **Run tests**: `ctest --test-dir build_prof -R <relevant_tests>`
+- **Build first**: `cmake --build build_prof`
+- **Run tests**: `ctest --test-dir build_prof -R <relevant_tests> -j 16`
 - Tests MUST pass before measuring performance
-- If tests fail, fix the bug or revert
+- If tests fail, fix the bug or revert immediately
 
 ### 3.3 Measure
-- Re-run profiler with same workload
+- Re-run profiler or microbenchmark with same workload
 - Compare timing to baseline/previous iteration
 - Compute improvement: `(old - new) / old * 100%`
+
+For microbenchmarks:
+```bash
+./build_prof/benchmarks/bench_<name> --benchmark_filter=<pattern> --benchmark_repetitions=5 --benchmark_report_aggregates_only=true
+```
 
 ### 3.4 Decide
 - **If improvement (>3%)**: Commit with descriptive message, continue
@@ -87,6 +114,14 @@ Repeat for each optimization attempt:
 4. **Restore benchmark parameters**
    - Revert any temporary parameter changes made for profiling
    - Commit only the actual optimizations
+
+## Phase 5: Cleanup (Optional)
+
+After optimization is complete, run `/simplify` on the optimized files to:
+- Remove temporary variables introduced during optimization
+- Improve readability without sacrificing performance
+- Extract helper functions if code became repetitive
+- Use structured bindings or other modern C++ features
 
 ## Stopping Criteria
 
