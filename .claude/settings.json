@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "cleanupPeriodDays": 90,
   "env": {
     "EDITOR": "vim",
@@ -6,42 +7,51 @@
     "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
     "CMAKE_COLOR_DIAGNOSTICS": "ON"
   },
-  "includeCoAuthoredBy": true,
+  "attribution": {
+    "commit": "Co-Authored-By: Claude <noreply@anthropic.com>"
+  },
   "permissions": {
+    "additionalDirectories": ["/home/wentzell/Dropbox/Coding", "~/opt"],
     "allow": [
       "WebSearch",
       "WebFetch",
       "Read",
-      "Bash(cd:*)",
-      "Bash(cloc:*)",
-      "Bash(cmake:*)",
-      "Bash(ctest:*)",
-      "Bash(find:*)",
-      "Bash(grep:*)",
-      "Bash(ldd:*)",
-      "Bash(ls:*)",
-      "Bash(module:*)",
-      "Bash(pprof:*)",
-      "Bash(tree:*)",
-      "Bash(wc:*)",
-      "Bash(git status:*)",
-      "Bash(git log:*)",
-      "Bash(git diff:*)",
-      "Bash(git show:*)",
-      "Bash(git branch:*)",
-      "Bash(git check-attr:*)",
-      "Bash(gh run list:*)",
-      "Bash(gh run view:*)",
-      "Bash(gh run watch:*)",
-      "Bash(gh pr view:*)",
-      "Bash(gh pr diff:*)",
-      "Bash(gh pr checks:*)",
-      "Bash(gh issue view:*)"
+      "Bash(cd *)",
+      "Bash(cloc *)",
+      "Bash(cmake *)",
+      "Bash(ctest *)",
+      "Bash(find *)",
+      "Bash(grep *)",
+      "Bash(ldd *)",
+      "Bash(ls *)",
+      "Bash(module *)",
+      "Bash(pprof *)",
+      "Bash(tree *)",
+      "Bash(wc *)",
+      "Bash(git status *)",
+      "Bash(git log *)",
+      "Bash(git diff *)",
+      "Bash(git show *)",
+      "Bash(git branch *)",
+      "Bash(git check-attr *)",
+      "Bash(gh run list *)",
+      "Bash(gh run view *)",
+      "Bash(gh run watch *)",
+      "Bash(gh pr view *)",
+      "Bash(gh pr diff *)",
+      "Bash(gh pr checks *)",
+      "Bash(gh issue view *)"
     ]
+  },
+  "sandbox": {
+    "enabled": true,
+    "autoAllowBashIfSandboxed": true,
+    "excludedCommands": ["git", "gh"]
   },
   "enabledPlugins": {
     "clangd-lsp@claude-plugins-official": true,
     "pyright-lsp@claude-plugins-official": true
   },
+  "teammateMode": "auto",
   "alwaysThinkingEnabled": true
 }
