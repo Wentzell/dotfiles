@@ -24,11 +24,16 @@
 - List Modules: `module list`
 - Available Modules: `module avail`
 - Default Environment Information: `module show devenv9/clang-py3-mkl`
+- Some additional libraries are installed in the /mnt/home/wentzell/opt directory
 
 ## Tools
 - Explore Directory Structure: `tree -d`
 - Compiler: Clang (preferred) or GCC
 - Build: Ninja (preferred) or Make
+
+## Environment
+- The HOME environment variable as well as ~ point to /mnt/home/wentzell which is the network-file-system home directory shared with the cluster nodes
+- Most sources are located in repository directories in the Dropbox folder /home/wentzell/Dropbox/Coding on the local disk
 
 ## General
 - Do not add 'Generated with Claude Code' to commit messages
@@ -50,3 +55,4 @@
 - Profiling builds the build_prof
 - Profiling builds of triqs are installed into ~/opt/triqs_prof
 - Profiling builds should use CXXFLAGS="-g -gdwarf-4 -fno-omit-frame-pointer -stdlib=libc++ -ffp-contract=fast -march=native"
+- Don't compile code by directly invoking the compiler. Always go through the dedicated cmake setup
