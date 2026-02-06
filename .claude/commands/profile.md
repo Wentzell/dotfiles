@@ -1,3 +1,8 @@
+---
+description: Profile CPU usage with gperftools
+argument-hint: <executable|script>
+---
+
 Profile the executable or script ${ARGUMENTS}
 
 ## Build Configuration

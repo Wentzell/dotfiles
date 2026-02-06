@@ -1,3 +1,8 @@
+---
+description: Iteratively optimize performance using profiling
+argument-hint: <target>
+---
+
 Explore and iteratively apply performance optimizations for ${ARGUMENTS}
 
 This command guides an iterative optimization process using profiling data to identify and address performance bottlenecks.

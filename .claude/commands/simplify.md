@@ -1,3 +1,8 @@
+---
+description: Iteratively simplify code while keeping functionality
+argument-hint: <file|directory>
+---
+
 # Simplify ${ARGUMENTS}
 
 Iteratively simplify code while maintaining functionality.

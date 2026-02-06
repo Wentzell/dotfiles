@@ -1,3 +1,8 @@
+---
+description: Reorganize and clean up git commit history
+argument-hint: <commit-range>
+---
+
 Tidy up commits in the range ${ARGUMENTS}
 
 Enter plan mode to analyze the commits and design the reorganization strategy before making any changes.

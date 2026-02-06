@@ -8,10 +8,12 @@ This directory contains custom slash commands for Claude Code. Each `.md` file d
 
 ## Available Commands
 
-- `/commit` - Run git clang-format on C++ changes and commit
-- `/profile <executable|script>` - Profile CPU usage using gperftools
-- `/simplify <target>` - Iteratively simplify code while maintaining functionality
-- `/tidy-commits <range>` - Reorganize and clean up git commit history
+- `/commit` - Run clang-format and commit pending changes
+- `/optimize <target>` - Iteratively optimize performance using profiling
+- `/profile <executable|script>` - Profile CPU usage with gperftools
+- `/refine-command <command> <repo-paths...>` - Iteratively improve a command prompt via testing
+- `/simplify <file|directory>` - Iteratively simplify code while keeping functionality
+- `/tidy-commits <commit-range>` - Reorganize and clean up git commit history
 
 ## Command File Format
 

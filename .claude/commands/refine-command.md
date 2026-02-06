@@ -1,8 +1,11 @@
+---
+description: Iteratively improve a command prompt via testing
+argument-hint: <command-name> <repo-path> [repo-paths...]
+---
+
 # Refine Command Prompt
 
 Iteratively improve an existing command prompt by testing it against example repositories.
-
-**Arguments:** `${ARGUMENTS}` = `<command-name> <example-repo-path> [additional-repo-paths...]`
 
 ## Prerequisites
 
