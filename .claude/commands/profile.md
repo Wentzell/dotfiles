@@ -15,6 +15,14 @@ Use the local gperftools installation at `~/opt/gperftools`.
 LD_PRELOAD=~/opt/gperftools/lib/libprofiler.so CPUPROFILE=<name>.prof CPUPROFILE_FREQUENCY=50 ./<executable>
 ```
 
+**For Python scripts using TRIQS** (must use triqs_prof for line-level info):
+```bash
+source ~/opt/triqs_prof/share/triqs/triqsvars.sh
+LD_PRELOAD=~/opt/gperftools/lib/libprofiler.so \
+  CPUPROFILE=<name>.prof CPUPROFILE_FREQUENCY=10 CPUPROFILE_REALTIME=1 \
+  python <script>
+```
+
 **Alternative: Link at build time**
 
 Add to CMakeLists.txt:
@@ -31,8 +39,10 @@ Reconfigure, rebuild, and verify with: `ldd <executable> | grep profiler`
 
 ## Important Notes
 
-- **Signal issues**: Use `CPUPROFILE_FREQUENCY=50` (or lower) to avoid conflicts with debugging signals that can cause immediate termination
+- **Signal issues**: Use `CPUPROFILE_FREQUENCY=50` (or lower) to avoid conflicts with debugging signals. For Python scripts, use `CPUPROFILE_REALTIME=1` and `CPUPROFILE_FREQUENCY=10` to avoid crashes
+- **TRIQS environment**: When profiling Python scripts that use TRIQS, you MUST source `~/opt/triqs_prof/share/triqs/triqsvars.sh` to load the profiled build. Otherwise, the profile will be captured from the non-profiled build and will lack line-level debug information
 - **Forking processes**: When the process forks (e.g., Google Benchmark), the profile may be written to `<name>.prof_<PID>` instead of `<name>.prof`. Check for these files: `ls -la *.prof*`
+- **Verify correct binary**: Check `pprof --raw <binary> <profile> | grep "^108:"` to confirm the profile was captured from the profiled build (paths should point to `triqs_prof`, not `triqs`)
 
 ## Profiling Workflow
 
