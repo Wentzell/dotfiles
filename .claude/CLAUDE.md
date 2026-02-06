@@ -35,24 +35,24 @@
 - The HOME environment variable as well as ~ point to /mnt/home/wentzell which is the network-file-system home directory shared with the cluster nodes
 - Most sources are located in repository directories in the Dropbox folder /home/wentzell/Dropbox/Coding on the local disk
 
-## General
-- Do not add 'Generated with Claude Code' to commit messages
-- Add claude as a co-author
+## Communication
 - Give concise answers
+- Avoid using emojis
 - Check your assumptions
 - Ask for clarifications
-- Group changes logically into small commits with concise messages
-- Avoid using emojis
 - Don't assume that the user is correct
+
+## Code Style
 - Strive for expressive and clear code
-- Tests need to be run from their respective directory, so they can locate any reference files
-- Use ctest to run tests
-- Feature branches get merged into unstable. We avoid merge commits and instead clean-up the history and rebase
-- Debug builds use the build_dbg directory
-- Debug builds of triqs are installed into ~/opt/triqs_dbg
-- Sanitizer builds use the build_san directory
-- Sanitized builds of triqs are installed into ~/opt/triqs_san
-- Profiling builds the build_prof
-- Profiling builds of triqs are installed into ~/opt/triqs_prof
-- Profiling builds should use CXXFLAGS="-g -gdwarf-4 -fno-omit-frame-pointer -stdlib=libc++ -ffp-contract=fast -march=native"
 - Don't compile code by directly invoking the compiler. Always go through the dedicated cmake setup
+- Use ctest to run tests
+- Tests need to be run from their respective directory, so they can locate any reference files
+
+## Git Workflow
+- Group changes logically into small commits with concise messages
+- Feature branches get merged into unstable. We avoid merge commits and instead clean-up the history and rebase
+
+## Build Variants
+- Debug: `build_dbg` directory, triqs installed into `~/opt/triqs_dbg`
+- Sanitizer: `build_san` directory, triqs installed into `~/opt/triqs_san`
+- Profiling: `build_prof` directory, triqs installed into `~/opt/triqs_prof`
