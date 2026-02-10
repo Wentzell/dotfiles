@@ -9,6 +9,7 @@ This directory contains custom slash commands for Claude Code. Each `.md` file d
 ## Available Commands
 
 - `/commit` - Run clang-format and commit pending changes
+- `/debrief` - Distill session learnings into memory files
 - `/optimize <target>` - Iteratively optimize performance using profiling
 - `/profile <executable|script>` - Profile CPU usage with gperftools
 - `/refine-command <command> <repo-paths...>` - Iteratively improve a command prompt via testing
