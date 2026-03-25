@@ -9,7 +9,7 @@
 - To enable Documentation configure with `-DBuild_Documentation=ON`
 - Build: `cmake --build build`
 - Install: `cmake --install build`
-- Test: `ctest --test-dir build -j 16`
+- Test: `ctest --test-dir build -j 16` (always use ctest, never run Python tests directly. Running `python test.py` without the correct PYTHONPATH will silently load the installed system version of the module instead of the build version, producing misleading results. If you must run a Python test manually, prefix with `PYTHONPATH=<project>/build/python:$PYTHONPATH`)
 - Clean: `rm -rf build/*`
 
 ## Common Project Structure
@@ -42,11 +42,27 @@
 - Ask for clarifications
 - Don't assume that the user is correct
 
+## Debugging
+- For segfaults and memory errors, always use a sanitizer build (ASAN/UBSAN) first — it gives precise error locations vs cryptic crashes or hangs in release builds
+
+## DLR (Discrete Lehmann Representation)
+- The DLR representation is only valid for Green's-function-like objects that have a spectral (Lehmann) representation. Never apply DLR operations (make_gf_dlr, mesh conversions, evaluation at Matsubara frequencies/imaginary times) to quantities without a spectral representation, such as error bars or uncertainties.
+
 ## Code Style
 - Strive for expressive and clear code
 - Don't compile code by directly invoking the compiler. Always go through the dedicated cmake setup
 - Use ctest to run tests
 - Tests need to be run from their respective directory, so they can locate any reference files
+
+## Test Reference Files
+- Many tests compare results against `.ref.h5` reference files stored in the source `test/` directory
+- CMake copies reference files to the build directory at configure time. After updating a `.ref.h5` in the source tree, you must also copy it to the build directory (or reconfigure) for ctest to pick up the change
+- Monte Carlo tests with fixed seeds produce deterministic results. Changing the evaluation code path (even if mathematically equivalent) changes floating-point rounding, which causes MC trajectory divergence and requires regenerating reference data
+- To regenerate: run the test (it writes `.out.h5`), then copy `.out.h5` over `.ref.h5` in both source and build directories
+- Always verify that the regenerated reference gives passing tests before committing
+- CRITICAL: Reference files must be committed in the same commit as the code change that caused them to change — never as a separate follow-up commit
+- Only regenerate reference files when you understand exactly why the output changed. Document the reason in the commit message (e.g. "mesh type changed from non-symmetrized to symmetrized DLR", "alpha clipping changed MC trajectory for multi-orbital test")
+- Before regenerating, verify that only the expected quantities changed and by the expected amount. Unexplained changes indicate a bug, not a need to update refs
 
 ## Git Workflow
 - Group changes logically into small commits with concise messages
