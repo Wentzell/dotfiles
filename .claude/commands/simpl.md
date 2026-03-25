@@ -1,6 +1,7 @@
 ---
 description: Iteratively simplify code while keeping functionality
 argument-hint: <file|directory>
+effort: high
 ---
 
 # Simplify ${ARGUMENTS}

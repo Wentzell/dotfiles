@@ -1,6 +1,7 @@
 ---
 description: Iteratively improve a command prompt via testing
 argument-hint: <command-name> <repo-path> [repo-paths...]
+model: sonnet
 ---
 
 # Refine Command Prompt

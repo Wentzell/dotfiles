@@ -5,7 +5,8 @@
     "EDITOR": "vim",
     "PYTHONDONTWRITEBYTECODE": "1",
     "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-    "CMAKE_COLOR_DIAGNOSTICS": "ON"
+    "CMAKE_COLOR_DIAGNOSTICS": "ON",
+    "CLAUDE_CODE_SUBPROCESS_ENV_SCRUB": "1"
   },
   "attribution": {
     "commit": "Co-Authored-By: Claude <noreply@anthropic.com>"
@@ -19,8 +20,6 @@
       "Bash(cloc *)",
       "Bash(cmake *)",
       "Bash(ctest *)",
-      "Bash(find *)",
-      "Bash(grep *)",
       "Bash(ldd *)",
       "Bash(ls *)",
       "Bash(module *)",
@@ -33,12 +32,22 @@
       "Bash(git show *)",
       "Bash(git branch *)",
       "Bash(git check-attr *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git checkout *)",
+      "Bash(git cherry-pick *)",
+      "Bash(git reset *)",
+      "Bash(git rev-parse *)",
+      "Bash(git symbolic-ref *)",
+      "Bash(git stash *)",
+      "Bash(git clang-format *)",
       "Bash(gh run list *)",
       "Bash(gh run view *)",
       "Bash(gh run watch *)",
       "Bash(gh pr view *)",
       "Bash(gh pr diff *)",
       "Bash(gh pr checks *)",
+      "Bash(gh pr create *)",
       "Bash(gh issue view *)"
     ],
     "additionalDirectories": [
@@ -62,6 +71,5 @@
       "gh"
     ]
   },
-  "alwaysThinkingEnabled": true,
-  "teammateMode": "auto"
+  "alwaysThinkingEnabled": true
 }

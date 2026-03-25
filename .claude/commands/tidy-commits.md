@@ -1,6 +1,9 @@
 ---
 description: Reorganize and clean up git commit history
 argument-hint: <commit-range>
+model: sonnet
+effort: medium
+allowed-tools: Bash, Read, Glob, Grep
 ---
 
 Tidy up commits in the range ${ARGUMENTS}

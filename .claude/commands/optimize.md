@@ -1,6 +1,7 @@
 ---
 description: Iteratively optimize performance using profiling
 argument-hint: <target>
+effort: high
 ---
 
 Explore and iteratively apply performance optimizations for ${ARGUMENTS}
@@ -122,7 +123,7 @@ For microbenchmarks:
 
 ## Phase 5: Cleanup (Optional)
 
-After optimization is complete, run `/simplify` on the optimized files to:
+After optimization is complete, run `/simpl` on the optimized files to:
 - Remove temporary variables introduced during optimization
 - Improve readability without sacrificing performance
 - Extract helper functions if code became repetitive

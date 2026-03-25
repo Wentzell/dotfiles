@@ -1,5 +1,8 @@
 ---
 description: Run clang-format and commit pending changes
+model: sonnet
+effort: medium
+allowed-tools: Bash, Read, Glob, Grep
 ---
 
 ## Context
