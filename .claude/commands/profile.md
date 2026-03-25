@@ -64,8 +64,17 @@ Reconfigure, rebuild, and verify with: `ldd <executable> | grep profiler`
    pprof --text --lines <executable> <name>.prof | head -50
    ```
 
-3. **Generate visualizations** (redirect stderr to keep SVG clean):
+3. **Focused analysis** (isolate a specific function and its callees):
+   ```bash
+   pprof --text --focus='<regex>' <executable> <name>.prof | head -40
+   pprof --text --lines --focus='<regex>' <executable> <name>.prof | head -50
+   ```
+   The `--focus=<regex>` flag filters the profile to only show samples where the call stack matches the regex. This is useful to isolate a specific subsystem (e.g. `--focus='M3ph_iw::accumulate'`) and ignore unrelated work like setup or initialization. Can be combined with `--svg` for focused callgraphs.
+
+4. **Generate visualizations** (redirect stderr to keep SVG clean):
    ```bash
    pprof --svg <executable> <name>.prof 2>/dev/null > <name>.prof.svg
    pprof --svg --lines <executable> <name>.prof 2>/dev/null > <name>.prof.lines.svg
+   # Focused variant:
+   pprof --svg --lines --focus='<regex>' <executable> <name>.prof 2>/dev/null > <name>.prof.lines.svg
    ```
