@@ -44,6 +44,7 @@
 
 ## Debugging
 - For segfaults and memory errors, always use a sanitizer build (ASAN/UBSAN) first — it gives precise error locations vs cryptic crashes or hangs in release builds
+- For tracking NaN/Inf origins, use a UBSAN build — UBSAN's float-cast-overflow and other UB checks can pinpoint where NaN is first produced
 
 ## DLR (Discrete Lehmann Representation)
 - The DLR representation is only valid for Green's-function-like objects that have a spectral (Lehmann) representation. Never apply DLR operations (make_gf_dlr, mesh conversions, evaluation at Matsubara frequencies/imaginary times) to quantities without a spectral representation, such as error bars or uncertainties.
