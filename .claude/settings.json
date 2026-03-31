@@ -71,5 +71,39 @@
       "gh"
     ]
   },
-  "alwaysThinkingEnabled": true
+  "hooks": {
+    "Stop": [
+      { "hooks": [{ "type": "command", "command": "~/.claude/hooks/tmux-status.sh done" }] }
+    ],
+    "StopFailure": [
+      { "hooks": [{ "type": "command", "command": "~/.claude/hooks/tmux-status.sh error" }] }
+    ],
+    "UserPromptSubmit": [
+      { "hooks": [{ "type": "command", "command": "~/.claude/hooks/tmux-status.sh busy" }] }
+    ],
+    "SessionStart": [
+      { "hooks": [{ "type": "command", "command": "~/.claude/hooks/tmux-status.sh done" }] }
+    ],
+    "SessionEnd": [
+      { "hooks": [{ "type": "command", "command": "~/.claude/hooks/tmux-status.sh clear" }] }
+    ],
+    "PermissionRequest": [
+      { "hooks": [{ "type": "command", "command": "~/.claude/hooks/tmux-status.sh input" }] }
+    ],
+    "PreToolUse": [
+      { "hooks": [{ "type": "command", "command": "~/.claude/hooks/tmux-status.sh busy" }] },
+      {
+        "matcher": "AskUserQuestion",
+        "hooks": [{ "type": "command", "command": "~/.claude/hooks/tmux-status.sh input" }]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "AskUserQuestion",
+        "hooks": [{ "type": "command", "command": "~/.claude/hooks/tmux-status.sh busy" }]
+      }
+    ]
+  },
+  "alwaysThinkingEnabled": true,
+  "effortLevel": "high"
 }
