@@ -1,7 +1,6 @@
 ---
 description: Profile CPU usage with gperftools
 argument-hint: <executable|script>
-model: sonnet
 effort: medium
 ---
 

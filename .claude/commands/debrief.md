@@ -1,6 +1,5 @@
 ---
 description: Distill session learnings into memory files
-model: sonnet
 effort: medium
 ---
 
