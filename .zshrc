@@ -150,3 +150,15 @@ export SAVEHIST=$HISTSIZE
 # git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 # ~/.fzf/install
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# Auto-rename tmux windows 1-8 to git repo root directory name
+_tmux_auto_rename() {
+    [[ -n "$TMUX" ]] || return
+    local idx=$(tmux display-message -p '#{window_index}')
+    (( idx >= 1 && idx <= 8 )) || return
+    local root
+    root=$(git rev-parse --show-toplevel 2>/dev/null) || return
+    tmux rename-window "${root:t}"
+}
+chpwd_functions+=(_tmux_auto_rename)
+_tmux_auto_rename
