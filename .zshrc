@@ -160,8 +160,11 @@ _tmux_auto_rename() {
     local idx=$(tmux display-message -p '#{window_index}')
     (( idx >= 1 && idx <= 8 )) || return
     local root
-    root=$(git rev-parse --show-toplevel 2>/dev/null) || return
-    tmux rename-window "${root:t}"
+    if root=$(git rev-parse --show-toplevel 2>/dev/null); then
+        tmux rename-window "${root:t}"
+    else
+        tmux rename-window "Coding"
+    fi
 }
 chpwd_functions+=(_tmux_auto_rename)
 _tmux_auto_rename
