@@ -44,6 +44,9 @@ addenv $HOME/.local
   #addenv $f
 #done
 
+# === Mise (tool version manager)
+eval "$(mise activate --shims)"
+
 # Sanitizers
 export ASAN_SYMBOLIZER_PATH=$(which llvm-symbolizer)
 export ASAN_OPTIONS=symbolize=1:detect_leaks=0 # fast_unwind_on_malloc=0

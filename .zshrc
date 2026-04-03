@@ -151,6 +151,9 @@ export SAVEHIST=$HISTSIZE
 # ~/.fzf/install
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
+# === Mise (tool version manager)
+eval "$(mise activate zsh)"
+
 # Auto-rename tmux windows 1-8 to git repo root directory name
 _tmux_auto_rename() {
     [[ -n "$TMUX" ]] || return
