@@ -65,6 +65,31 @@
 - Only regenerate reference files when you understand exactly why the output changed. Document the reason in the commit message (e.g. "mesh type changed from non-symmetrized to symmetrized DLR", "alpha clipping changed MC trajectory for multi-orbital test")
 - Before regenerating, verify that only the expected quantities changed and by the expected amount. Unexplained changes indicate a bug, not a need to update refs
 
+## Jupyter Notebook Editing
+- NEVER use the Write or Edit tools on .ipynb files -- this corrupts the JSON structure
+- For simple cell replacements: use the NotebookEdit tool (operates at cell level, safe)
+- For inserting/deleting cells or larger refactors: use jupytext (see below)
+
+### jupytext workflow
+- We use jupytext with py:percent format
+- Cell boundaries use `# %%` markers; markdown cells use `# %% [markdown]`
+- Edit the .py file using standard Edit/Write tools, then convert back to .ipynb
+- Convert back (preserving existing outputs): `jupytext --to ipynb --update <file>.py`
+- To execute the notebook in place: `jupyter nbconvert --execute --inplace <file>.ipynb`
+
+### If a .ipynb exists but has no paired .py file
+Generate the .py file first:
+```bash
+jupytext --to py:percent <file>.ipynb
+```
+Then edit the .py file and convert back with `jupytext --to ipynb --update <file>.py`.
+
+### Creating a new notebook
+Create a .py file with `# %%` cell markers directly. Convert with:
+```bash
+jupytext --to ipynb <file>.py
+```
+
 ## Git Workflow
 - Group changes logically into small commits with concise messages
 - Feature branches get merged into unstable. We avoid merge commits and instead clean-up the history and rebase
