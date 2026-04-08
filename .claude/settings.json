@@ -1,12 +1,15 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "cleanupPeriodDays": 90,
+  "alwaysThinkingEnabled": true,
+  "effortLevel": "medium",
   "env": {
     "EDITOR": "vim",
     "PYTHONDONTWRITEBYTECODE": "1",
     "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
     "CMAKE_COLOR_DIAGNOSTICS": "ON",
-    "CLAUDE_CODE_SUBPROCESS_ENV_SCRUB": "1"
+    "CLAUDE_CODE_SUBPROCESS_ENV_SCRUB": "1",
+    "CLAUDE_CODE_AUTO_COMPACT_WINDOW": "200000"
   },
   "attribution": {
     "commit": "Co-Authored-By: Claude <noreply@anthropic.com>"
@@ -103,7 +106,5 @@
         "hooks": [{ "type": "command", "command": "~/.claude/hooks/tmux-status.sh busy" }]
       }
     ]
-  },
-  "alwaysThinkingEnabled": true,
-  "effortLevel": "high"
+  }
 }
