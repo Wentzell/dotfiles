@@ -15,6 +15,18 @@
   "attribution": {
     "commit": "Co-Authored-By: Claude <noreply@anthropic.com>"
   },
+  "sandbox": {
+    "enabled": false,
+    "failIfUnavailable": false
+  },
+  "enabledPlugins": {
+    "clangd-lsp@claude-plugins-official": true,
+    "pyright-lsp@claude-plugins-official": true,
+    "code-review@claude-code-plugins": true,
+    "feature-dev@claude-code-plugins": true,
+    "pr-review-toolkit@claude-code-plugins": true,
+    "commit-commands@claude-code-plugins": true
+  },
   "permissions": {
     "allow": [
       "WebSearch",
@@ -55,30 +67,11 @@
       "Bash(gh issue view *)"
     ],
     "deny": [
-      "Bash(rm -rf *)",
-      "Bash(git push --force*)",
-      "Bash(git reset --hard*)",
       "Edit(~/.ssh/**)"
     ],
     "additionalDirectories": [
       "/home/wentzell/Dropbox/Coding",
       "~/opt"
-    ]
-  },
-  "enabledPlugins": {
-    "clangd-lsp@claude-plugins-official": true,
-    "pyright-lsp@claude-plugins-official": true,
-    "code-review@claude-code-plugins": true,
-    "feature-dev@claude-code-plugins": true,
-    "pr-review-toolkit@claude-code-plugins": true,
-    "commit-commands@claude-code-plugins": true
-  },
-  "sandbox": {
-    "enabled": true,
-    "autoAllowBashIfSandboxed": true,
-    "excludedCommands": [
-      "git",
-      "gh"
     ]
   },
   "hooks": {

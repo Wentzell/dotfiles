@@ -10,7 +10,7 @@
 - Build: `cmake --build build`
 - Install: `cmake --install build`
 - Test: `ctest --test-dir build -j 16` (always use ctest, never run Python tests directly. Running `python test.py` without the correct PYTHONPATH will silently load the installed system version of the module instead of the build version, producing misleading results. If you must run a Python test manually, prefix with `PYTHONPATH=<project>/build/python:$PYTHONPATH`)
-- Clean: `rm -rf build/*`
+- Clean build: `cmake --build build --clean-first`
 
 ## Common Project Structure
 - C++ sources and headers: `c++/`
