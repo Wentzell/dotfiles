@@ -157,13 +157,14 @@ eval "$(mise activate zsh)"
 # Auto-rename tmux windows 1-8 to git repo root directory name
 _tmux_auto_rename() {
     [[ -n "$TMUX" ]] || return
-    local idx=$(tmux display-message -p '#{window_index}')
+    local pane=${TMUX_PANE:?}
+    local idx=$(tmux display-message -t "$pane" -p '#{window_index}')
     (( idx >= 1 && idx <= 8 )) || return
     local root
     if root=$(git rev-parse --show-toplevel 2>/dev/null); then
-        tmux rename-window "${root:t}"
+        tmux rename-window -t "$pane" "${root:t}"
     else
-        tmux rename-window "Coding"
+        tmux rename-window -t "$pane" "Coding"
     fi
 }
 chpwd_functions+=(_tmux_auto_rename)
