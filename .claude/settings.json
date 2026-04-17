@@ -2,8 +2,9 @@
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "cleanupPeriodDays": 180,
   "alwaysThinkingEnabled": true,
-  "effortLevel": "medium",
-  "autoUpdatesChannel": "stable",
+  "effortLevel": "xhigh",
+  "autoUpdatesChannel": "latest",
+  "skipAutoPermissionPrompt": true,
   "env": {
     "EDITOR": "vim",
     "PYTHONDONTWRITEBYTECODE": "1",
@@ -15,46 +16,30 @@
   "attribution": {
     "commit": "Co-Authored-By: Claude <noreply@anthropic.com>"
   },
-  "sandbox": {
-    "enabled": false,
-    "failIfUnavailable": false
-  },
   "enabledPlugins": {
     "clangd-lsp@claude-plugins-official": true,
     "pyright-lsp@claude-plugins-official": true,
-    "code-review@claude-code-plugins": true,
-    "feature-dev@claude-code-plugins": true,
-    "pr-review-toolkit@claude-code-plugins": true,
-    "commit-commands@claude-code-plugins": true
+    "code-review@claude-plugins-official": true,
+    "feature-dev@claude-plugins-official": true,
+    "pr-review-toolkit@claude-plugins-official": true,
+    "commit-commands@claude-plugins-official": true
   },
   "permissions": {
     "allow": [
       "WebSearch",
       "WebFetch",
       "Read",
-      "Bash(cd *)",
       "Bash(cloc *)",
       "Bash(cmake *)",
       "Bash(ctest *)",
       "Bash(ldd *)",
-      "Bash(ls *)",
       "Bash(module *)",
       "Bash(pprof *)",
-      "Bash(tree *)",
-      "Bash(wc *)",
-      "Bash(git status *)",
-      "Bash(git log *)",
-      "Bash(git diff *)",
-      "Bash(git show *)",
-      "Bash(git branch *)",
-      "Bash(git check-attr *)",
       "Bash(git add *)",
       "Bash(git commit *)",
       "Bash(git checkout *)",
       "Bash(git cherry-pick *)",
       "Bash(git reset *)",
-      "Bash(git rev-parse *)",
-      "Bash(git symbolic-ref *)",
       "Bash(git stash *)",
       "Bash(git clang-format *)",
       "Bash(gh run list *)",
@@ -72,7 +57,8 @@
     "additionalDirectories": [
       "/home/wentzell/Dropbox/Coding",
       "~/opt"
-    ]
+    ],
+    "defaultMode": "auto"
   },
   "hooks": {
     "Stop": [
