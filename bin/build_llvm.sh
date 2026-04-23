@@ -1,5 +1,5 @@
 # Build configuration
-VERSION=21.1.8
+VERSION=22.1.4
 BRANCH=llvmorg-$VERSION
 INSTALL_DIR=$HOME/opt/llvm_$VERSION
 SRC_DIR=$PWD
@@ -50,7 +50,7 @@ cd $BUILD_DIR
 cmake -GNinja \
       -DCMAKE_BUILD_TYPE=Release \
       -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR \
-      -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;lldb;pstl" \
+      -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra;lld;lldb" \
       -DLLVM_ENABLE_RUNTIMES="compiler-rt;libcxx;libcxxabi;libunwind;openmp" \
       -DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON \
       -DBUILD_SHARED_LIBS=ON \
@@ -96,7 +96,7 @@ ninja install
 # --- Build and Install Include-what-you-use
 
 cd $SRC_DIR
-git clone https://github.com/include-what-you-use/include-what-you-use --branch clang_21 --depth 1
+git clone https://github.com/include-what-you-use/include-what-you-use --branch clang_22 --depth 1
 
 mkdir -p $SRC_DIR/iwyu_build
 cd $SRC_DIR/iwyu_build
