@@ -93,6 +93,7 @@ jupytext --to ipynb <file>.py
 ## Git Workflow
 - Group changes logically into small commits with concise messages
 - Feature branches get merged into unstable. We avoid merge commits and instead clean-up the history and rebase
+- Pre-authorized to create commits without explicit per-commit confirmation. Still hold off on `push`, `push --force`, amending published commits, destructive resets/checkouts, and any history rewrites on shared branches unless asked
 
 ## Build Variants
 - Debug: `build_dbg` directory, triqs installed into `~/opt/triqs_dbg`
