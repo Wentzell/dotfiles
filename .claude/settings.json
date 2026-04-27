@@ -142,10 +142,7 @@
   "enabledPlugins": {
     "clangd-lsp@claude-plugins-official": true,
     "pyright-lsp@claude-plugins-official": true,
-    "code-review@claude-plugins-official": true,
-    "feature-dev@claude-plugins-official": true,
-    "pr-review-toolkit@claude-plugins-official": true,
-    "commit-commands@claude-plugins-official": true
+    "commit-commands@anthropics-claude-code": true
   },
   "sandbox": {
     "enabled": false
@@ -153,5 +150,7 @@
   "alwaysThinkingEnabled": true,
   "effortLevel": "xhigh",
   "autoUpdatesChannel": "latest",
+  "theme": "dark-ansi",
+  "editorMode": "vim",
   "skipAutoPermissionPrompt": true
 }
