@@ -12,23 +12,17 @@ Produce a structured public-API review of the current branch vs. a base branch.
 - Base branch: **${ARGUMENTS}** — if empty, default to `unstable`, then `main`, then `master`. Verify with `git rev-parse --verify <base>`; if none found, report and stop. Bind the result to `BASE`.
 - Output file: `/tmp/api-review-<current>-vs-<base>.md` via the Write tool. After writing, print a short summary (counts of new/modified files, flag count, coverage summary) and the file path. Use fenced ```cpp / ```python blocks for snippets.
 
-## Step 1: Detect binding system + categorize changed files
-
-Detect which Python-binding system the repo uses by inspecting the working tree:
-- **clair+c2py** (modern, used in `triqs`): per-module `python/**/*.toml`, `*.wrap.cxx` / `*.wrap.hxx` files, `C2PY_*` annotations in headers
-- **legacy cpp2py** (still used in `h5` and other unmigrated repos): `python/**/*_desc.py` files with `add_constructor` / `add_method` / `add_property` calls
-
-Both can coexist briefly during migration. Note which system applies and use the matching extraction rules below.
+## Step 1: Categorize changed files
 
 ```
 git diff --name-status --diff-filter=ACMRD "${BASE}...HEAD"
 ```
 
 **Public-API files** (analyze):
-- `c++/**/*.hpp` — exclude `test/`, `third_party/`, `**/detail/**`. Also drives the Python binding under clair+c2py via `C2PY_*` annotations.
-- **clair+c2py only** — `python/**/*.toml` (clair config), `python/**/*.cpp` (per-module binding source).
-- **legacy cpp2py only** — `python/**/*_desc.py` (Python binding descriptors).
-- `python/**/*.py` — exclude tests and `__init__.py` unless it defines public API beyond imports / re-exports / `__all__`.
+- `c++/**/*.hpp` — exclude `test/`, `third_party/`, `**/detail/**`. Also drives the Python binding via `C2PY_*` annotations (clair+c2py framework).
+- `python/**/*.toml` — clair binding config (declares `package_name`, `namespaces`).
+- `python/**/*.cpp` — small per-module binding source: `namespace c2py_module` type aliases (template instantiations), `extern template` declarations for exposed free functions, and the `#include "*.wrap.cxx"` line.
+- `python/**/*.py` — exclude tests; usually `__init__.py` re-exports the compiled `.so` and adds hand-written wrappers / factories / `__all__`.
 
 **Generated / non-API files** (count only): `*.wrap.cxx`, `*.wrap.hxx` (clair output), `.cpp` implementation files, `CMakeLists.txt`, `*.cmake`, `test/**`, `doc/**`, build/CI.
 
@@ -42,35 +36,28 @@ If no public-API files changed, report "No public API changes detected", list no
 
 ### C++ headers (.hpp) — extract from `public:` and namespace scope
 
-- Class/struct: name, template params, base classes, Doxygen brief; under clair+c2py also any `C2PY_RENAME(PyName)` (note both C++ and Python names).
-- Public constructors with parameters and defaults. Under clair+c2py all non-ignored constructors are auto-bound.
+- Class/struct: name, template params, base classes, Doxygen brief, and any `C2PY_RENAME(PyName)` (note both C++ and Python names).
+- Public constructors with parameters and defaults — all non-ignored constructors are auto-bound.
 - Public member functions: full signature including `[[nodiscard]]`, `const`, `noexcept`, return type, defaults; include `///` or `@brief` doc (clair forwards these as Python docstrings).
-- Under clair+c2py — `C2PY_PROPERTY_GET(py_name)` getters become Python properties (note the `py_name` and the C++ method name); `C2PY_IGNORE` items: list as "(hidden from Python)" without full extraction.
+- `C2PY_PROPERTY_GET(py_name)` getters — list as Python properties under `py_name`, noting the C++ method name.
+- `C2PY_IGNORE` items — note as "(hidden from Python)" without full extraction.
 - Public type aliases (`using`).
 - Operators.
 - Options/config structs: every member with type, default, per-member doc.
-- Free functions at namespace scope (full signature + brief). Under clair+c2py exposure to Python depends on `extern template` lines in the corresponding `python/.../*.cpp`.
+- Free functions at namespace scope (full signature + brief). Whether they are exposed to Python depends on `extern template` lines in the corresponding `python/.../*.cpp` (Step 2, Python module source).
 - Friend serializers/MPI (`h5_write`, `h5_read`, `mpi_broadcast`, `mpi_reduce`) — group as "Serialization/MPI" and just list which exist.
 - Concepts and enums.
 
 Skip: `private:`/`protected:` sections, `#ifdef C2PY_INCLUDED` blocks, include guards, copyright, `#include`s, inline function bodies (signature only). Group overloads of the same function.
 
-### clair+c2py — `python/**/*.toml`
+### Python binding config (`*.toml`)
 
 Record `package_name`, `documentation`, and the `namespaces` list. Changes to `namespaces` mean new/removed C++ namespaces exposed to Python.
 
-### clair+c2py — `python/**/*.cpp` (per-module source)
+### Python module source (`python/.../*.cpp`)
 
 - `namespace c2py_module` type aliases (e.g. `using AtomDiagReal = triqs::atom_diag::atom_diag<false>;`) — these define which template instantiations land in Python and under what name.
 - `extern template` declarations for free functions — additions/removals here are the canonical signal that a free function was added/removed from the Python surface.
-
-### Legacy cpp2py — `python/**/*_desc.py`
-
-- Python class name (`py_type`) and its C++ type (`c_type`).
-- Each `add_constructor()` with its C++ signature and doc string.
-- Each `add_method()` / `add_method_copy()` with name, signature, and doc.
-- Each `add_property()` with name, getter/setter signature, and doc.
-- Module-level functions via `module.add_function()`.
 
 ### Python modules (`__init__.py`, `*.py`)
 
@@ -94,7 +81,7 @@ Check: constructors + key methods for classes; each overload for free functions;
 
 ## Step 4: Flags
 
-Scan for `TODO`/`FIXME`/`HACK`/`XXX` (quote verbatim), missing `///`/`@brief`/docstrings on public symbols (these become the Python docstrings), `[[deprecated]]`/`@deprecated`, inconsistent naming/parameter ordering across overloads. Under clair+c2py also flag: bound C++ methods (no `C2PY_IGNORE`) with no documentation; free functions added in a header without a matching `extern template` in the binding `.cpp` (effectively unbound); `C2PY_RENAME` whose Python name diverges from project conventions. Under legacy cpp2py also flag: public C++ methods with no corresponding `add_method` when peers on the same class are bound.
+Scan for `TODO`/`FIXME`/`HACK`/`XXX` (quote verbatim), missing `///`/`@brief`/docstrings on public symbols (these become the Python docstrings), `[[deprecated]]`/`@deprecated`, public C++ methods that are bound (no `C2PY_IGNORE`) but lack documentation, free functions added in a header without a matching `extern template` in the binding `.cpp` (effectively unbound), inconsistent naming/parameter ordering across overloads, and `C2PY_RENAME` whose Python name diverges from the project's naming conventions.
 
 ## Output format
 
