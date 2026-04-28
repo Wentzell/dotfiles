@@ -149,7 +149,7 @@
   "enabledPlugins": {
     "clangd-lsp@claude-plugins-official": true,
     "pyright-lsp@claude-plugins-official": true,
-    "commit-commands@anthropics-claude-code": true
+    "commit-commands@claude-plugins-official": true
   },
   "sandbox": {
     "enabled": false
