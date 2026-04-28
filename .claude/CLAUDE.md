@@ -27,6 +27,10 @@
 ## Common Project Structure
 - Layout: `c++/`, `test/c++/`, `python/`, `test/python/`, `docs/` (Sphinx + Doxygen)
 
+## Python Bindings
+- `triqs` uses the modern **clair+c2py** system: bindings driven by `C2PY_IGNORE` / `C2PY_RENAME(PyName)` / `C2PY_PROPERTY_GET(py_name)` annotations in `c++/**/*.hpp`, plus per-module `python/.../*.toml` (`package_name`, `namespaces`) and `python/.../*.cpp` (`namespace c2py_module` template-instantiation aliases + `extern template` for free functions). `///` / `/** */` comments become Python docstrings. `*.wrap.cxx` and `*.wrap.hxx` are clair-generated — never hand-edit.
+- Other TRIQS-ecosystem repos (e.g. `h5`) still use the legacy **cpp2py** descriptor system: `python/**/*_desc.py` with `add_constructor` / `add_method` / `add_property` / `module.add_function`. Detect which is in use by file presence before reasoning about bindings.
+
 ## Common Commands
 - Configure: `cmake -S . -B build -GNinja -DCMAKE_EXPORT_COMPILE_COMMANDS=ON`
 - Configure Install Prefix only if required: `-DCMAKE_INSTALL_PREFIX=~/opt/REPONAME`
