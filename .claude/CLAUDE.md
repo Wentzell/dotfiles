@@ -42,7 +42,6 @@
 
 ## Test Reference Files
 - Tests compare against `.ref.h5` files in `test/`. CMake copies them to the build dir at configure time, so after editing a ref in the source tree, also copy it to build/ (or reconfigure)
-- MC tests with fixed seeds are sensitive to FP rounding — even mathematically-equivalent code changes diverge MC trajectories and require regenerated refs
 - To regenerate: run the test (writes `.out.h5`), copy over `.ref.h5` in both source and build trees, verify the test now passes, and confirm only expected quantities changed by the expected amount — unexplained changes mean a bug, not stale refs
 - CRITICAL: commit regenerated refs in the same commit as the code change, with the reason in the message (e.g. "alpha clipping changed MC trajectory for multi-orbital test")
 
