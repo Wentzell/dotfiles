@@ -6,7 +6,8 @@
     "PYTHONDONTWRITEBYTECODE": "1",
     "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
     "CMAKE_COLOR_DIAGNOSTICS": "ON",
-    "CLAUDE_CODE_AUTO_COMPACT_WINDOW": "300000"
+    "CLAUDE_CODE_AUTO_COMPACT_WINDOW": "250000",
+    "CLAUDE_CODE_HIDE_CWD": "1"
   },
   "attribution": {
     "commit": "Co-Authored-By: Claude <noreply@anthropic.com>"
@@ -21,6 +22,8 @@
       "Bash(ctest *)",
       "Bash(ldd *)",
       "Bash(module *)",
+      "Bash(nm *)",
+      "Bash(objdump *)",
       "Bash(pprof *)",
       "Bash(git add *)",
       "Bash(git commit *)",
@@ -139,6 +142,10 @@
       }
     ]
   },
+  "statusLine": {
+    "type": "command",
+    "command": "~/.claude/statusline.sh"
+  },
   "enabledPlugins": {
     "clangd-lsp@claude-plugins-official": true,
     "pyright-lsp@claude-plugins-official": true,
@@ -148,13 +155,9 @@
     "enabled": false
   },
   "alwaysThinkingEnabled": true,
-  "effortLevel": "xhigh",
+  "effortLevel": "high",
   "autoUpdatesChannel": "latest",
   "theme": "dark-ansi",
   "editorMode": "vim",
-  "skipAutoPermissionPrompt": true,
-  "statusLine": {
-    "type": "command",
-    "command": "~/.claude/statusline.sh"
-  }
+  "skipAutoPermissionPrompt": true
 }
