@@ -15,7 +15,9 @@
 
 ## Environment
 - `$HOME` (and `~`) is `/mnt/home/wentzell`, the NFS home shared with cluster nodes
-- Most sources are located in repository directories in the Dropbox folder /home/wentzell/Dropbox/Coding on the local disk
+- `/home/wentzell` is local disk; `~/Dropbox` is a symlink into it, so `~/Dropbox/Coding` lives on local disk despite the `~` prefix
+- Most sources are located in repository directories under `~/Dropbox/Coding`
+- Be mindful of NFS traffic: avoid large recursive `find` / `grep` / `rg` sweeps over `~` or other NFS paths. Scope searches to a specific subdirectory, prefer the local-disk Dropbox copy when available, and lean on indexed tools (git grep inside a repo) over filesystem walks
 
 ## Software Stack
 - LMod modules; default env: `module show devenv9/clang-py3-mkl`
