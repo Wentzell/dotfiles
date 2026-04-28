@@ -6,18 +6,16 @@ allowed-tools: Bash, Read, Glob, Grep
 
 ## Context
 
-- Current branch: !`git branch --show-current`
-- Git status: !`git status`
-- Staged and unstaged changes: !`git diff HEAD`
+- Branch: !`git branch --show-current`
+- Status: !`git status`
+- Diff: !`git diff HEAD`
 - Recent commits: !`git log --oneline -10`
 
 ## Task
 
-Commit pending changes:
-
-1. Run `git clang-format` on all staged C++ source files to ensure consistent formatting. If clang-format made changes, stage those formatting changes as well.
-2. If tests have not already been verified in this session, run them using `ctest` to ensure they pass. If tests fail, fix the issues before proceeding.
-3. Create a commit with a concise message:
-   - Start with a verb (Add, Fix, Update, Move, Make, etc.)
+1. Run `git clang-format` on staged C++ files; stage any resulting changes.
+2. If tests have not already passed in this session, run `ctest` and fix any failures first.
+3. Commit with a concise message:
+   - Start with a verb (Add, Fix, Update, Move, Make, ...)
    - Match the style of recent commits
-   - For multi-line descriptions, use bullet points with `-`
+   - Bullet multi-line descriptions with `-`

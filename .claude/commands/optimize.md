@@ -4,155 +4,51 @@ argument-hint: <target>
 effort: high
 ---
 
-Explore and iteratively apply performance optimizations for ${ARGUMENTS}
+Iteratively optimize ${ARGUMENTS} using profiling data to find and address bottlenecks.
 
-This command guides an iterative optimization process using profiling data to identify and address performance bottlenecks.
+## Profilers
 
-## Profiler Selection
+- **gperftools** — full-program profiling, finds unexpected hotspots
+- **Google Benchmark** — microbenchmarks for iterating on a specific function
+- Combine them: gperftools to localize, microbench to iterate
 
-- **gperftools**: Best for full program profiling, identifying unexpected hotspots
-- **Google Benchmark**: Best for comparing implementations of specific functions, microbenchmarks
-- Often useful to combine: gperftools to identify hotspot, then microbenchmark to iterate on optimization
+See `/profile` for gperftools setup, env vars, and analysis commands.
 
 ## Phase 1: Setup
 
-1. **Identify benchmark case(s)** from ${ARGUMENTS}
-   - Locate the executable or test that exercises the code to optimize
-   - Note any parameters that control workload size
-
-2. **Configure profiling build** (see /profile for details)
-   - Ensure `build_prof` directory exists with proper flags
-   - Use gperftools from `~/opt/gperftools`
-   - Preferred: Use LD_PRELOAD (no rebuild needed)
-   - Alternative: Link gperftools and verify with `ldd <executable> | grep profiler`
-
-3. **Calibrate workload**
-   - Time the benchmark: `time ./<executable>`
-   - Adjust parameters so runtime is ~1 minute (meaningful sampling without excessive wait)
-   - Document the parameter changes (don't commit them)
-
-4. **Create targeted benchmarks** (optional, for isolated component optimization)
-   - If gperftools shows a hotspot in a specific component, create a microbenchmark
-   - Add benchmark in `benchmarks/` directory using Google Benchmark
-   - Parameterize problem size, tolerance, or other key variables
-   - This allows rapid iteration without full program runs
+1. Identify the executable/test that exercises the code in ${ARGUMENTS}; note workload-size parameters.
+2. Confirm `build_prof/` is configured and that the binary picks up libprofiler (LD_PRELOAD or `ldd | grep profiler`).
+3. Calibrate workload to ~1 minute runtime — meaningful sampling without excessive wait. Don't commit the parameter changes.
+4. Optional: add a Google Benchmark microbenchmark under `benchmarks/` for the targeted hotspot, parametrized over problem size / tolerance.
 
 ## Phase 2: Baseline
 
-1. **Establish baseline timing**
-   - Run benchmark 2-3 times to confirm consistent timing
-   - Record baseline: e.g., "Baseline: 46.4s with 700k samples"
+1. Run the benchmark 2–3× to confirm timing is stable; record baseline (e.g. "46.4s, 700k samples").
+2. Capture an initial profile (see `/profile`). Analyze with `pprof --text` and generate SVGs.
+3. List functions consuming >5% flat; focus on the hottest code path first. Read and understand it before changing anything.
 
-2. **Generate initial profile**
-   - Run with LD_PRELOAD:
-     ```bash
-     LD_PRELOAD=~/opt/gperftools/lib/libprofiler.so CPUPROFILE=<name>.prof CPUPROFILE_FREQUENCY=50 ./<executable>
-     ```
-   - For Python scripts using TRIQS (must use triqs_prof for line-level info):
-     ```bash
-     source ~/opt/triqs_prof/share/triqs/triqsvars.sh
-     LD_PRELOAD=~/opt/gperftools/lib/libprofiler.so \
-       CPUPROFILE=<name>.prof CPUPROFILE_FREQUENCY=10 CPUPROFILE_REALTIME=1 \
-       python <script>
-     ```
-   - Use `CPUPROFILE_FREQUENCY=50` (or lower) to avoid signal conflicts that cause termination
-   - For Python, use `CPUPROFILE_REALTIME=1` and lower frequency (10) to avoid crashes
-   - Check for profile files (may have PID suffix if process forks): `ls -la *.prof*`
-   - Analyze: `pprof --text <executable> <name>.prof | head -40`
-   - Generate SVGs for visualization
+## Phase 3: Optimization cycle
 
-3. **Identify optimization targets**
-   - List functions consuming >5% of total time
-   - Focus on the hottest code path first (highest flat%)
-   - Read and understand the hot code before optimizing
+For each attempt:
 
-## Phase 3: Optimization Cycle
-
-Repeat for each optimization attempt:
-
-### 3.1 Implement
-- Make ONE focused change at a time
-- Common patterns:
-  - **Branch elimination**: Restructure loops to avoid conditionals in hot paths
-  - **Hoist invariants**: Move repeated computations outside inner loops
-  - **Raw pointers**: Use `.data()` to avoid bounds checking in tight loops
-  - **Cache values**: Store frequently accessed array elements in locals
-  - **Reduce operations**: Precompute divisions, combine redundant lookups
-  - **Tolerance tuning**: For numerical algorithms, benchmark with different tolerances to find the performance/accuracy sweet spot
-
-### 3.2 Verify
-- **Build first**: `cmake --build build_prof`
-- **Run tests**: `ctest --test-dir build_prof -R <relevant_tests> -j 16`
-- Tests MUST pass before measuring performance
-- If tests fail, fix the bug or revert immediately
-
-### 3.3 Measure
-- Re-run profiler or microbenchmark with same workload
-- Compare timing to baseline/previous iteration
-- Compute improvement: `(old - new) / old * 100%`
-
-For microbenchmarks:
-```bash
-./build_prof/benchmarks/bench_<name> --benchmark_filter=<pattern> --benchmark_repetitions=5 --benchmark_report_aggregates_only=true
-```
-
-### 3.4 Decide
-- **If improvement (>3%)**: Commit with descriptive message, continue
-- **If regression**: Revert immediately, document what didn't work
-- **If neutral (<3%)**: Consider reverting for simplicity unless code is clearer
+1. **Implement** one focused change. Common patterns: branch elimination in inner loops, hoisting invariants, raw `.data()` pointers to skip bounds checks, caching frequently-accessed values, precomputing divisions, tolerance tuning for numerical algorithms.
+2. **Verify**: `cmake --build build_prof` then `ctest --test-dir build_prof -R <relevant> -j 16`. Tests must pass before measuring.
+3. **Measure**: re-profile with the same workload; compute `(old - new) / old * 100%`. For microbenchmarks: `--benchmark_repetitions=5 --benchmark_report_aggregates_only=true`.
+4. **Decide**:
+   - >3% gain → commit with descriptive message, continue
+   - regression → revert immediately
+   - <3% → revert unless code is clearly cleaner
 
 ## Phase 4: Wrap-up
 
-1. **Document results**
-   - Total speedup achieved: e.g., "19% faster (46s -> 38s)"
-   - List optimizations that worked
-   - Note approaches that were tried but didn't help
+1. Document final speedup and what worked vs. what didn't.
+2. Restore any temporary workload parameters.
+3. Generate final SVGs and note remaining hotspots for future work.
+4. Optional: run `/simpl` on the touched files to undo any clarity loss.
 
-2. **Review code clarity**
-   - Ensure optimized code remains readable
-   - Add comments explaining non-obvious optimizations
-   - Consider simplifying variable names if code became verbose
+## Stop when
 
-3. **Generate final profile**
-   - Create SVGs showing the optimized profile
-   - Identify remaining hotspots for future work
-
-4. **Restore benchmark parameters**
-   - Revert any temporary parameter changes made for profiling
-   - Commit only the actual optimizations
-
-## Phase 5: Cleanup (Optional)
-
-After optimization is complete, run `/simpl` on the optimized files to:
-- Remove temporary variables introduced during optimization
-- Improve readability without sacrificing performance
-- Extract helper functions if code became repetitive
-- Use structured bindings or other modern C++ features
-
-## Stopping Criteria
-
-Stop optimizing when:
-- **Diminishing returns**: Expected improvement <5%
-- **Memory-bound**: Hotspot is random memory access (cache misses)
-- **Algorithmic limit**: Complexity is inherent (e.g., O(3^n) recursion)
-- **External code**: Hotspot is in library code you don't control
-
-## Example Session Log
-
-```
-Baseline: 46.4s
-  calc_weights: 58% (27s)
-
-Optimization 1: Eliminate branch in inner loop
-  Tests: PASS
-  Timing: 38.2s (-18%)
-  Committed: a7c0469
-
-Optimization 2: Use lm[lower_bits] instead of lm[T]
-  Tests: PASS
-  Timing: 38.1s (no improvement)
-  Reverted: mathematical equivalence, no cache benefit
-
-Final: 38.2s (18% improvement)
-Remaining hotspot: calc_weights at 50% - memory-bound
-```
+- Expected next gain <5%
+- Hotspot is memory-bound (random access / cache misses)
+- Algorithmic limit reached
+- Hotspot is in third-party code you don't control

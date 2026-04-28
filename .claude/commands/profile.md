@@ -4,78 +4,44 @@ argument-hint: <executable|script>
 effort: medium
 ---
 
-Profile the executable or script ${ARGUMENTS}
+Profile ${ARGUMENTS} with gperftools.
 
-## Build Configuration
+## Build
 
-- Use the `build_prof` directory for profiling builds
-- Build with flags: `CXXFLAGS="-g -gdwarf-4 -fno-omit-frame-pointer -stdlib=libc++ -ffp-contract=fast -march=native"`
-- If TRIQS is required, use the profiled build at `$HOME/opt/triqs_prof`
+Use `build_prof/` configured with: `-g -gdwarf-4 -fno-omit-frame-pointer -stdlib=libc++ -ffp-contract=fast -march=native`. If TRIQS is needed, source the profiled build at `~/opt/triqs_prof/share/triqs/triqsvars.sh` — otherwise the profile lacks line-level info.
 
-## gperftools Setup
+## Capture
 
-Use the local gperftools installation at `~/opt/gperftools`.
-
-**Preferred: LD_PRELOAD** (simplest, no rebuild required)
+Preferred — LD_PRELOAD (no rebuild):
 ```bash
-LD_PRELOAD=~/opt/gperftools/lib/libprofiler.so CPUPROFILE=<name>.prof CPUPROFILE_FREQUENCY=50 ./<executable>
-```
-
-**For Python scripts using TRIQS** (must use triqs_prof for line-level info):
-```bash
-source ~/opt/triqs_prof/share/triqs/triqsvars.sh
 LD_PRELOAD=~/opt/gperftools/lib/libprofiler.so \
-  CPUPROFILE=<name>.prof CPUPROFILE_FREQUENCY=10 CPUPROFILE_REALTIME=1 \
-  python <script>
+  CPUPROFILE=<name>.prof CPUPROFILE_FREQUENCY=50 ./<executable>
 ```
 
-**Alternative: Link at build time**
+For Python+TRIQS use `CPUPROFILE_REALTIME=1 CPUPROFILE_FREQUENCY=10` to avoid signal-related crashes.
 
-Add to CMakeLists.txt:
+Alternative — link at build time:
 ```cmake
 find_library(PROFILER_LIB profiler HINTS $ENV{HOME}/opt/gperftools/lib NO_DEFAULT_PATH)
-set(PROFILER_INCLUDE $ENV{HOME}/opt/gperftools/include)
-if(PROFILER_LIB)
-  target_link_libraries(${TARGET} ${PROFILER_LIB})
-  target_include_directories(${TARGET} PRIVATE ${PROFILER_INCLUDE})
-endif()
+target_link_libraries(${TARGET} ${PROFILER_LIB})
+target_include_directories(${TARGET} PRIVATE $ENV{HOME}/opt/gperftools/include)
 ```
+Verify with `ldd <executable> | grep profiler`.
 
-Reconfigure, rebuild, and verify with: `ldd <executable> | grep profiler`
+## Gotchas
 
-## Important Notes
+- Forking processes (e.g. Google Benchmark) write `<name>.prof_<PID>` — `ls -la *.prof*`.
+- Confirm the profile came from the profiled build: `pprof --raw <bin> <prof> | grep "^108:"` should reference `triqs_prof`, not `triqs`.
 
-- **Signal issues**: Use `CPUPROFILE_FREQUENCY=50` (or lower) to avoid conflicts with debugging signals. For Python scripts, use `CPUPROFILE_REALTIME=1` and `CPUPROFILE_FREQUENCY=10` to avoid crashes
-- **TRIQS environment**: When profiling Python scripts that use TRIQS, you MUST source `~/opt/triqs_prof/share/triqs/triqsvars.sh` to load the profiled build. Otherwise, the profile will be captured from the non-profiled build and will lack line-level debug information
-- **Forking processes**: When the process forks (e.g., Google Benchmark), the profile may be written to `<name>.prof_<PID>` instead of `<name>.prof`. Check for these files: `ls -la *.prof*`
-- **Verify correct binary**: Check `pprof --raw <binary> <profile> | grep "^108:"` to confirm the profile was captured from the profiled build (paths should point to `triqs_prof`, not `triqs`)
+## Analyze
 
-## Profiling Workflow
+```bash
+pprof --text <bin> <name>.prof | head -40
+pprof --text --lines <bin> <name>.prof | head -50
 
-1. **Run with profiler**:
-   ```bash
-   CPUPROFILE=<name>.prof CPUPROFILE_FREQUENCY=50 ./<executable>
-   # Check for output files (may have PID suffix if process forked)
-   ls -la *.prof*
-   ```
+# Isolate a subsystem (regex matches call stack):
+pprof --text --focus='<regex>' <bin> <name>.prof | head -40
 
-2. **Text analysis** (quick hotspot identification):
-   ```bash
-   pprof --text <executable> <name>.prof | head -40
-   pprof --text --lines <executable> <name>.prof | head -50
-   ```
-
-3. **Focused analysis** (isolate a specific function and its callees):
-   ```bash
-   pprof --text --focus='<regex>' <executable> <name>.prof | head -40
-   pprof --text --lines --focus='<regex>' <executable> <name>.prof | head -50
-   ```
-   The `--focus=<regex>` flag filters the profile to only show samples where the call stack matches the regex. This is useful to isolate a specific subsystem (e.g. `--focus='M3ph_iw::accumulate'`) and ignore unrelated work like setup or initialization. Can be combined with `--svg` for focused callgraphs.
-
-4. **Generate visualizations** (redirect stderr to keep SVG clean):
-   ```bash
-   pprof --svg <executable> <name>.prof 2>/dev/null > <name>.prof.svg
-   pprof --svg --lines <executable> <name>.prof 2>/dev/null > <name>.prof.lines.svg
-   # Focused variant:
-   pprof --svg --lines --focus='<regex>' <executable> <name>.prof 2>/dev/null > <name>.prof.lines.svg
-   ```
+# SVG callgraph (redirect stderr to keep SVG clean):
+pprof --svg --lines [--focus='<regex>'] <bin> <name>.prof 2>/dev/null > <name>.svg
+```
