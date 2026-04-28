@@ -1,0 +1,77 @@
+---
+description: Iteratively improve a command prompt via testing
+argument-hint: <command-name> <repo-path> [repo-paths...]
+---
+
+Iteratively improve an existing command prompt by running it against example repositories and refining based on observed outcomes.
+
+## Prerequisites
+
+- This commands directory must be clean (`git status --porcelain`); abort if not.
+- Parse args: first = command name (no `.md`), rest = paths to example git repos.
+- Verify the command file exists here, and that each repo path exists, is a git repo, and has a clean working tree.
+- Read and store the current command prompt content.
+
+## Iteration loop
+
+Initialize iteration counter `N = 1`.
+
+### 1. Create test branches
+
+For each repo:
+```bash
+ORIGINAL_REF=$(git -C <repo> symbolic-ref --short HEAD 2>/dev/null || git -C <repo> rev-parse HEAD)
+BASE_COMMIT=$(git -C <repo> rev-parse HEAD)
+git -C <repo> checkout -b refine-<command>-iter-<N>
+```
+Track `(repo, ORIGINAL_REF, BASE_COMMIT)` for each.
+
+### 2. Run the command on each repo
+
+Launch one sub-agent per repo with the full command-prompt content, working directory set to the repo path, asked to report changes made, commits created, and any errors.
+
+Sub-agents must run in **foreground**, sequentially — background agents can't prompt for permissions and will fail on interactive approvals.
+
+Capture per-agent: full output, resulting changes (staged + unstaged), errors.
+
+### 3. Analyze
+
+For each repo:
+```bash
+git -C <repo> diff <BASE_COMMIT>
+git -C <repo> log --oneline <BASE_COMMIT>..HEAD
+```
+
+Compare across repos: types of changes made, consistency of style/approach, unexpected modifications, failures or edge cases. Identify ambiguous instructions, missing guidance, over-specific instructions that didn't generalize, and missing error/edge-case handling.
+
+### 4. Propose refinements
+
+Present:
+1. Per-repo summary — name, key changes, quality (good/problematic/failed).
+2. Cross-repo patterns — what worked, what was inconsistent, what failed.
+3. Proposed prompt edits — specific changes with rationale.
+
+Ask the user to: approve and apply → step 5; modify the proposal; accept current state → cleanup; abort → cleanup without saving.
+
+### 5. Apply
+
+Edit the command file with approved changes, then for each repo:
+```bash
+git -C <repo> checkout <ORIGINAL_REF>
+git -C <repo> branch -D refine-<command>-iter-<N>
+```
+Increment `N`, return to step 1.
+
+## Cleanup
+
+Restore each repo to its `ORIGINAL_REF` and delete the iteration branch (`branch -D ... 2>/dev/null || true`).
+
+If anything was applied, show the final `git diff <command>.md` and ask whether to commit.
+
+## Principles
+
+- **Generic prompts** — no repo-specific hardcoding; instructions should work across varied codebases.
+- **Preserve intent** — improve clarity and robustness, don't change purpose.
+- **Incremental** — focused edits per iteration, not wholesale rewrites.
+- **Branch naming** `refine-<command>-iter-<N>` to avoid collisions and simplify cleanup.
+- Track both branch name *and* commit hash for `ORIGINAL_REF` to handle detached HEAD.
