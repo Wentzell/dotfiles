@@ -23,7 +23,8 @@ input=$(cat)
 model=$(jq -r '.model.display_name' <<<"$input")
 effort=$(jq -r '.effort.level // empty' <<<"$input")
 dir=$(jq -r '.workspace.current_dir // empty' <<<"$input")
-pct=$(jq -r '.context_window.used_percentage // empty' <<<"$input")
+used_tokens=$(jq -r '(.context_window.current_usage // {}) | (.input_tokens // 0) + (.cache_creation_input_tokens // 0) + (.cache_read_input_tokens // 0)' <<<"$input")
+window=${CLAUDE_CODE_AUTO_COMPACT_WINDOW:-$(jq -r '.context_window.context_window_size // 0' <<<"$input")}
 lim5h=$(jq -r '.rate_limits.five_hour.used_percentage // empty' <<<"$input")
 lim7d=$(jq -r '.rate_limits.seven_day.used_percentage // empty' <<<"$input")
 rst5h=$(jq -r '.rate_limits.five_hour.resets_at // empty' <<<"$input")
@@ -31,6 +32,11 @@ rst7d=$(jq -r '.rate_limits.seven_day.resets_at // empty' <<<"$input")
 
 model=${model#Claude }
 [[ "$model" =~ ^(.*)\ \((.+)\ context\)$ ]] && model="${BASH_REMATCH[1]} (${BASH_REMATCH[2]})"
+
+# ctx % against the auto-compact threshold if set, else the model's full window
+# (+ window/2 rounds to nearest instead of truncating)
+pct=
+(( used_tokens > 0 && window > 0 )) && pct=$(( (used_tokens * 100 + window/2) / window ))
 
 repo=${dir:-$PWD}
 cwd=$(basename "$repo")
