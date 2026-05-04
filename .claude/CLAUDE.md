@@ -44,6 +44,7 @@
 
 ## Debugging
 - Use a sanitizer build (ASAN/UBSAN) for segfaults, memory errors, and NaN/Inf tracking — release builds give cryptic crashes; UBSAN's float-cast-overflow pinpoints where NaN is first produced
+- When sanitizer tests fail on code outside the branch's diff scope, run `git diff <base> -- <suspected-paths>` before debugging. Zero diff means the branch can't have caused it — look for stale build artifacts (Python `.cpython-*.so`, regenerated wrap files) or pre-existing bugs on the base branch.
 
 ## Test Reference Files
 - Tests compare against `.ref.h5` files in `test/`. CMake copies them to the build dir at configure time, so after editing a ref in the source tree, also copy it to build/ (or reconfigure)
