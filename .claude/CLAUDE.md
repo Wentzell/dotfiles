@@ -1,17 +1,11 @@
 # Development Context
-- Scientific Software with C++ and Python
 - Quantum Many-Body Physics
+- Scientific Library Development with C++ and Python
+- Emphasize Code clarity and maintainability
 
 ## Communication
 - Don't assume that the user is correct
-
-## Code Style
-- Don't invoke the compiler directly — always go through cmake
-- Run tests from their own directory so reference files resolve
-
-## Git Workflow
-- Feature branches get merged into unstable. We avoid merge commits and instead clean-up the history and rebase
-- Pre-authorized to create commits without explicit per-commit confirmation. Still hold off on `push`, `push --force`, amending published commits, destructive resets/checkouts, and any history rewrites on shared branches unless asked
+- Make sure your answers are concise and to the point
 
 ## Environment
 - `$HOME` (and `~`) is `/mnt/home/wentzell`, the NFS home shared with cluster nodes
@@ -28,6 +22,14 @@
 
 ## Common Project Structure
 - Layout: `c++/`, `test/c++/`, `python/`, `test/python/`, `docs/` (Sphinx + Doxygen)
+
+## Git Workflow
+- Feature branches get merged into unstable. We avoid merge commits and instead clean-up the history and rebase
+- Pre-authorized to create commits without explicit per-commit confirmation. Still hold off on `push`, `push --force`, amending published commits, destructive resets/checkouts, and any history rewrites on shared branches unless asked
+
+## Additional Instructions
+- Don't invoke the compiler directly — always go through cmake
+- Run tests from their own directory so reference files resolve
 
 ## Python Bindings (clair+c2py)
 - Bindings are driven by `C2PY_IGNORE` / `C2PY_RENAME(PyName)` / `C2PY_PROPERTY_GET(py_name)` annotations in `c++/**/*.hpp`, plus per-module `python/.../*.toml` (`package_name`, `namespaces`) and `python/.../*.cpp` (`namespace c2py_module` template-instantiation aliases + `extern template` for free functions). `///` / `/** */` comments become Python docstrings. `*.wrap.cxx` and `*.wrap.hxx` are clair-generated — never hand-edit.
