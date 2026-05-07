@@ -98,7 +98,7 @@ tmuxdev () {
   tmux neww -n DBG -c $HOME
   tmux neww -n DBG -c $HOME
   tmux send-keys -t 0:1 "cd Dropbox/Coding/triqs; clear" C-m
-  tmux send-keys -t 0:2 "cd Dropbox/Coding/triqs/build; clear" C-m
+  tmux send-keys -t 0:2 "cd Dropbox/Coding/triqs; clear" C-m
   tmux send-keys -t 0:3 "cd Dropbox/Coding; clear" C-m
   tmux send-keys -t 0:4 "cd Dropbox/Coding; clear" C-m
   tmux send-keys -t 0:5 "cd Dropbox/Coding; clear" C-m
