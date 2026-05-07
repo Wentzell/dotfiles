@@ -44,6 +44,10 @@
     "deny": [
       "Edit(~/.ssh/**)"
     ],
+    "ask": [
+      "Bash(git push)",
+      "Bash(git push *)"
+    ],
     "defaultMode": "auto",
     "additionalDirectories": [
       "/home/wentzell/Dropbox/Coding",
