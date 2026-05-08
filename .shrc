@@ -113,6 +113,7 @@ tmuxdev () {
   tmux send-keys -t 0:14 "cd Dropbox/Coding; source ~/opt/triqs_prof/share/triqs/triqsvars.sh; export CXXFLAGS=\"-g -gdwarf-4 -fno-omit-frame-pointer -stdlib=libc++ -ffp-contract=fast -march=native\"; clear" C-m
   tmux send-keys -t 0:15 "cd Dropbox/Coding; source ~/opt/triqs_dbg/share/triqs/triqsvars.sh; clear" C-m
   tmux send-keys -t 0:16 "cd Dropbox/Coding; source ~/opt/triqs_dbg/share/triqs/triqsvars.sh; clear" C-m
+  for w in 9 10 11 12 13 14 15 16; do tmux set-option -w -t 0:$w @locked_name on; done
   tmux selectw -t 1
   tmux attach
 }
