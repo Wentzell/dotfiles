@@ -1,6 +1,5 @@
 *.bib.bak
 .vim/bundle/*
 .vim/plugged/*
-.claude/*
 bin/*
 .jupyter/lab/workspaces/*
