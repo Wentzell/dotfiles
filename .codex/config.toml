@@ -1,0 +1,39 @@
+# Model / reasoning
+model_reasoning_effort  = "high"
+model_reasoning_summary = "auto"
+model_auto_compact_token_limit = 250000
+
+# Approval / sandbox
+approval_policy = "on-request"
+sandbox_mode    = "workspace-write"
+
+[sandbox_workspace_write]
+writable_roots = [
+    "/home/wentzell/Dropbox/Coding",
+    "/mnt/home/wentzell/opt",
+]
+network_access = true
+
+# Shell env injected into Codex-launched commands
+[shell_environment_policy]
+inherit = "all"
+
+[shell_environment_policy.set]
+EDITOR                        = "vim"
+PYTHONDONTWRITEBYTECODE       = "1"
+CMAKE_EXPORT_COMPILE_COMMANDS = "ON"
+CMAKE_COLOR_DIAGNOSTICS       = "ON"
+
+# Git
+commit_attribution = "Co-Authored-By: Codex <noreply@openai.com>"
+
+# Misc
+check_for_update_on_startup = true
+file_opener = "none"
+
+# --- project trust ---
+[projects."/home/wentzell/Simons Foundation Dropbox/Nils Wentzell/Coding/nda"]
+trust_level = "trusted"
+
+[projects."/home/wentzell/Simons Foundation Dropbox/Nils Wentzell/Coding"]
+trust_level = "trusted"
