@@ -25,7 +25,7 @@ CMAKE_EXPORT_COMPILE_COMMANDS = "ON"
 CMAKE_COLOR_DIAGNOSTICS       = "ON"
 
 # Git
-commit_attribution = "Co-Authored-By: Codex <noreply@openai.com>"
+commit_attribution = "Assisted-by: Codex <noreply@openai.com>"
 
 # Misc
 check_for_update_on_startup = true

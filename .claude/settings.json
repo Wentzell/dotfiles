@@ -10,7 +10,7 @@
     "CLAUDE_CODE_HIDE_CWD": "1"
   },
   "attribution": {
-    "commit": "Co-Authored-By: Claude <noreply@anthropic.com>"
+    "commit": "Assisted-by: Claude <noreply@anthropic.com>"
   },
   "permissions": {
     "allow": [
