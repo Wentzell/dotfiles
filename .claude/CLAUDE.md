@@ -5,7 +5,7 @@
 
 ## Communication
 - Don't assume that the user is correct
-- Make sure your answers are concise and to the point
+- Provide concise, focused responses. Skip non-essential context, and keep examples minimal.
 
 ## Environment
 - `$HOME` (and `~`) is `/mnt/home/wentzell`, the NFS home shared with cluster nodes
