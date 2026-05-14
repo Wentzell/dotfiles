@@ -1,37 +1,34 @@
 #!/bin/bash
-# Update tmux window marker for Claude Code session state.
-# Sets a per-window @claude user option rendered as a colored dot.
+# Update tmux window marker for an agent CLI session state.
+# Sets the per-window @<agent> tmux user option, rendered as a colored dot
+# by the status format in .tmux.conf. The agent name is inferred from the
+# grandparent directory of $0 (e.g. .claude/hooks/tmux-status.sh → "claude"),
+# so .codex/hooks/tmux-status.sh can be a symlink to this file.
 #
-# Caches pane ID and last state in /tmp to minimize overhead when
-# called frequently (e.g., generic PreToolUse on every tool call).
+# Invoked frequently (PreToolUse fires on every tool call), so this stays
+# cheap: resolve the pane once via $TMUX_PANE (or walk /proc parents as a
+# fallback), then issue a single tmux set-option.
 
 command -v tmux >/dev/null 2>&1 || exit 0
 
+agent=$(basename "$(dirname "$(dirname "$0")")")
+agent="${agent#.}"
 new="${1:-clear}"
-cache="/tmp/.claude-tmux-$PPID"
+[ -z "$agent" ] && exit 0
 
-# Read cache: first field = last state, second = pane ID
-if [ -f "$cache" ]; then
-    IFS=$'\t' read -r old pane < "$cache"
-    [ "$old" = "$new" ] && exit 0
-else
-    # First call — resolve pane
-    pane="$TMUX_PANE"
-    if [ -z "$pane" ]; then
-        pid=$$
-        while [ "$pid" -gt 1 ] 2>/dev/null; do
-            pane=$(tr '\0' '\n' < /proc/$pid/environ 2>/dev/null \
-                   | sed -n 's/^TMUX_PANE=//p')
-            [ -n "$pane" ] && break
-            pid=$(awk '{print $4}' /proc/$pid/stat 2>/dev/null) || break
-        done
-    fi
+pane="$TMUX_PANE"
+if [ -z "$pane" ]; then
+    pid=$$
+    while [ "$pid" -gt 1 ] 2>/dev/null; do
+        pane=$(tr '\0' '\n' < /proc/$pid/environ 2>/dev/null \
+               | sed -n 's/^TMUX_PANE=//p')
+        [ -n "$pane" ] && break
+        pid=$(awk '{print $4}' /proc/$pid/stat 2>/dev/null) || break
+    done
 fi
 [ -z "$pane" ] && exit 0
 
 case "$new" in
-    clear) tmux set-option -wqu -t "$pane" @claude 2>/dev/null
-           rm -f "$cache" ;;
-    *)     printf '%s\t%s' "$new" "$pane" > "$cache"
-           tmux set-option -wq  -t "$pane" @claude "$new" 2>/dev/null ;;
+    clear) tmux set-option -wqu -t "$pane" "@$agent" 2>/dev/null ;;
+    *)     tmux set-option -wq  -t "$pane" "@$agent" "$new" 2>/dev/null ;;
 esac
