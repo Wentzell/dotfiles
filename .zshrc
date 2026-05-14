@@ -154,6 +154,12 @@ export SAVEHIST=$HISTSIZE
 # === Mise (tool version manager)
 eval "$(mise activate zsh)"
 
+# Codex CLI wrapper: clear the tmux @codex marker when codex exits.
+# Codex has no SessionEnd hook, so the square would otherwise linger.
+codex() {
+    { command codex "$@" } always { ~/.codex/hooks/tmux-status.sh clear }
+}
+
 # Auto-rename tmux windows to git repo root directory name.
 # Windows with @locked_name set (e.g. the build-env panes from tmuxdev) are skipped.
 _tmux_auto_rename() {

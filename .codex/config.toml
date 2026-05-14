@@ -7,6 +7,35 @@ model_auto_compact_token_limit = 250000
 approval_policy = "on-request"
 sandbox_mode    = "workspace-write"
 
+# --- Lifecycle hooks: per-window tmux status square ---
+# Mirrors the Claude Code hook setup; sets the @codex tmux user option,
+# rendered by .tmux.conf as a colored ■ in the window status.
+
+[[hooks.SessionStart]]
+[[hooks.SessionStart.hooks]]
+type = "command"
+command = "~/.codex/hooks/tmux-status.sh done"
+
+[[hooks.UserPromptSubmit]]
+[[hooks.UserPromptSubmit.hooks]]
+type = "command"
+command = "~/.codex/hooks/tmux-status.sh busy"
+
+[[hooks.PreToolUse]]
+[[hooks.PreToolUse.hooks]]
+type = "command"
+command = "~/.codex/hooks/tmux-status.sh busy"
+
+[[hooks.PermissionRequest]]
+[[hooks.PermissionRequest.hooks]]
+type = "command"
+command = "~/.codex/hooks/tmux-status.sh input"
+
+[[hooks.Stop]]
+[[hooks.Stop.hooks]]
+type = "command"
+command = "~/.codex/hooks/tmux-status.sh done"
+
 [sandbox_workspace_write]
 writable_roots = [
     "/home/wentzell/Dropbox/Coding",

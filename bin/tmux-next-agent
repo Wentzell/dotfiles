@@ -1,0 +1,73 @@
+#!/bin/bash
+# Cycle through tmux panes running Claude Code or Codex CLI in the current session.
+# Usage: tmux-next-agent [--prev]
+#
+# claude is a native binary (direct child of the pane shell), while codex is
+# a Node.js wrapper that spawns a native binary (zsh -> node -> codex), so we
+# walk up the parent chain until we hit a pane PID rather than assuming a
+# one-level relationship.
+
+dir=1
+[ "$1" = "--prev" ] && dir=-1
+
+current_pane=$(tmux display-message -p '#{pane_id}')
+
+# Build pane_pid -> pane_id map and ordered pane list
+declare -A pid_to_pane
+declare -A pane_idx
+pane_ids=()
+cur_idx=-1
+idx=0
+while IFS=$'\t' read -r pane_id pane_pid; do
+    pid_to_pane[$pane_pid]=$pane_id
+    pane_ids+=("$pane_id")
+    pane_idx[$pane_id]=$idx
+    [ "$pane_id" = "$current_pane" ] && cur_idx=$idx
+    ((idx++))
+done < <(tmux list-panes -s -F '#{pane_id}	#{pane_pid}')
+
+# Walk up the parent chain from $1 until we find a process owned by a pane.
+pane_for_pid() {
+    local pid=$1 stat ppid
+    while [ "$pid" -gt 1 ] 2>/dev/null; do
+        [ "${pid_to_pane[$pid]+x}" ] && { echo "${pid_to_pane[$pid]}"; return; }
+        stat=$(< /proc/$pid/stat) 2>/dev/null || return
+        ppid=${stat#*) ? }      # strip "PID (comm) STATE "
+        ppid=${ppid%% *}
+        [[ $ppid =~ ^[0-9]+$ ]] || return
+        pid=$ppid
+    done
+}
+
+# Find panes whose process tree contains a claude or codex process
+declare -A agent_pane_set
+for pid in $(pgrep -x claude 2>/dev/null) $(pgrep -x codex 2>/dev/null); do
+    pane=$(pane_for_pid "$pid")
+    [ -n "$pane" ] && agent_pane_set[$pane]=1
+done
+
+# Preserve tmux pane order in the cycle list
+agent_panes=()
+for p in "${pane_ids[@]}"; do
+    [ "${agent_pane_set[$p]+x}" ] && agent_panes+=("${pane_idx[$p]}:$p")
+done
+
+nc=${#agent_panes[@]}
+[ "$nc" -eq 0 ] && { tmux display-message "No agent panes found"; exit 0; }
+
+# Find nearest agent pane in the chosen direction (wrap around)
+if [ "$dir" -eq 1 ]; then
+    target="${agent_panes[0]}"
+    for entry in "${agent_panes[@]}"; do
+        [ "${entry%%:*}" -gt "$cur_idx" ] && { target="$entry"; break; }
+    done
+else
+    target="${agent_panes[$((nc - 1))]}"
+    for ((k = nc - 1; k >= 0; k--)); do
+        [ "${agent_panes[$k]%%:*}" -lt "$cur_idx" ] && { target="${agent_panes[$k]}"; break; }
+    done
+fi
+
+pane="${target#*:}"
+tmux select-window -t "$pane"
+tmux select-pane -t "$pane"

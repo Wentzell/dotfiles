@@ -59,7 +59,7 @@ done
 
 # .codex: symlink individual entries (preserves runtime state files like auth.json, sessions/, history.jsonl)
 mkdir -p $HOME/.codex
-for F in config.toml AGENTS.md prompts; do
+for F in config.toml AGENTS.md prompts hooks; do
     rm -rf $HOME/.codex/$F
     ln -s $PWD/.codex/$F $HOME/.codex/$F
 done
