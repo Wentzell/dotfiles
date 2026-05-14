@@ -1,8 +1,8 @@
 # Build configuration
-RELEASE=gcc-13.2.0
+RELEASE=gcc-16.1.0
 INSTALL_DIR=$HOME/opt/${RELEASE}
 SRC_DIR=$PWD/${RELEASE}
-THREADS=60
+THREADS=30
 
 # Shallow clone of gcc
 git clone https://github.com/gcc-mirror/gcc --branch releases/$RELEASE --depth 1 ${SRC_DIR}
