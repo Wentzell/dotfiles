@@ -1,9 +1,8 @@
 #!/bin/bash
 # Update tmux window marker for an agent CLI session state.
 # Sets the per-window @<agent> tmux user option, rendered as a colored dot
-# by the status format in .tmux.conf. The agent name is inferred from the
-# grandparent directory of $0 (e.g. .claude/hooks/tmux-status.sh → "claude"),
-# so .codex/hooks/tmux-status.sh can be a symlink to this file.
+# by the status format in .tmux.conf. The agent name is passed explicitly so
+# .codex/hooks/tmux-status.sh can be a symlink to this file.
 #
 # Invoked frequently (PreToolUse fires on every tool call), so this stays
 # cheap: resolve the pane once via $TMUX_PANE (or walk /proc parents as a
@@ -11,10 +10,13 @@
 
 command -v tmux >/dev/null 2>&1 || exit 0
 
-dir="${0%/*}"; dir="${dir%/*}"
-agent="${dir##*/}"; agent="${agent#.}"
-new="${1:-clear}"
-[ -z "$agent" ] && exit 0
+agent="$1"
+new="${2:-clear}"
+
+case "$agent" in
+    claude|codex) ;;
+    *) exit 0 ;;
+esac
 
 pane="$TMUX_PANE"
 if [ -z "$pane" ]; then

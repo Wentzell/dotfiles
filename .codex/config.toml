@@ -26,27 +26,27 @@ fast_mode = false
 [[hooks.SessionStart]]
 [[hooks.SessionStart.hooks]]
 type = "command"
-command = "~/.codex/hooks/tmux-status.sh done"
+command = "~/.codex/hooks/tmux-status.sh codex done"
 
 [[hooks.UserPromptSubmit]]
 [[hooks.UserPromptSubmit.hooks]]
 type = "command"
-command = "~/.codex/hooks/tmux-status.sh busy"
+command = "~/.codex/hooks/tmux-status.sh codex busy"
 
 [[hooks.PreToolUse]]
 [[hooks.PreToolUse.hooks]]
 type = "command"
-command = "~/.codex/hooks/tmux-status.sh busy"
+command = "~/.codex/hooks/tmux-status.sh codex busy"
 
 [[hooks.PermissionRequest]]
 [[hooks.PermissionRequest.hooks]]
 type = "command"
-command = "~/.codex/hooks/tmux-status.sh input"
+command = "~/.codex/hooks/tmux-status.sh codex input"
 
 [[hooks.Stop]]
 [[hooks.Stop.hooks]]
 type = "command"
-command = "~/.codex/hooks/tmux-status.sh done"
+command = "~/.codex/hooks/tmux-status.sh codex done"
 
 [sandbox_workspace_write]
 writable_roots = [

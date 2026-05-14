@@ -60,7 +60,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/tmux-status.sh done"
+            "command": "~/.claude/hooks/tmux-status.sh claude done"
           }
         ]
       }
@@ -70,7 +70,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/tmux-status.sh error"
+            "command": "~/.claude/hooks/tmux-status.sh claude error"
           }
         ]
       }
@@ -80,7 +80,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/tmux-status.sh busy"
+            "command": "~/.claude/hooks/tmux-status.sh claude busy"
           }
         ]
       }
@@ -90,7 +90,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/tmux-status.sh done"
+            "command": "~/.claude/hooks/tmux-status.sh claude done"
           }
         ]
       }
@@ -100,7 +100,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/tmux-status.sh clear"
+            "command": "~/.claude/hooks/tmux-status.sh claude clear"
           }
         ]
       }
@@ -110,7 +110,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/tmux-status.sh input"
+            "command": "~/.claude/hooks/tmux-status.sh claude input"
           }
         ]
       }
@@ -120,7 +120,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/tmux-status.sh busy"
+            "command": "~/.claude/hooks/tmux-status.sh claude busy"
           }
         ]
       },
@@ -129,7 +129,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/tmux-status.sh input"
+            "command": "~/.claude/hooks/tmux-status.sh claude input"
           }
         ]
       }
@@ -140,7 +140,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/hooks/tmux-status.sh busy"
+            "command": "~/.claude/hooks/tmux-status.sh claude busy"
           }
         ]
       }
