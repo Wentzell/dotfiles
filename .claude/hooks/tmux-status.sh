@@ -11,8 +11,8 @@
 
 command -v tmux >/dev/null 2>&1 || exit 0
 
-agent=$(basename "$(dirname "$(dirname "$0")")")
-agent="${agent#.}"
+dir="${0%/*}"; dir="${dir%/*}"
+agent="${dir##*/}"; agent="${agent#.}"
 new="${1:-clear}"
 [ -z "$agent" ] && exit 0
 
