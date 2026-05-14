@@ -15,9 +15,9 @@ check_for_update_on_startup = true
 file_opener = "none"
 personality = "pragmatic"
 
-# Opt out of Codex auto-enabling fast mode at startup (still toggleable per session).
-[notices]
-fast_default_opt_out = true
+# Disable Codex fast mode by default (still toggleable per session via /fast).
+[features]
+fast_mode = false
 
 # --- Lifecycle hooks: per-window tmux status square ---
 # Mirrors the Claude Code hook setup; sets the @codex tmux user option,
