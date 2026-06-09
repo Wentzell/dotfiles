@@ -6,7 +6,7 @@
     "PYTHONDONTWRITEBYTECODE": "1",
     "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
     "CMAKE_COLOR_DIAGNOSTICS": "ON",
-    "CLAUDE_CODE_AUTO_COMPACT_WINDOW": "250000",
+    "CLAUDE_CODE_AUTO_COMPACT_WINDOW": "300000",
     "CLAUDE_CODE_HIDE_CWD": "1"
   },
   "attribution": {
@@ -42,12 +42,11 @@
       "Bash(gh issue view *)"
     ],
     "deny": [
-      "Edit(~/.ssh/**)"
-    ],
-    "ask": [
+      "Edit(~/.ssh/**)",
       "Bash(git push)",
       "Bash(git push *)"
     ],
+    "ask": [],
     "defaultMode": "auto",
     "additionalDirectories": [
       "/home/wentzell/Dropbox/Coding",
@@ -163,5 +162,6 @@
   "autoUpdatesChannel": "latest",
   "theme": "dark-ansi",
   "editorMode": "vim",
-  "skipAutoPermissionPrompt": true
+  "skipAutoPermissionPrompt": true,
+  "model": "claude-fable-5[1m]"
 }
