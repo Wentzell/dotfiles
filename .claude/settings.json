@@ -158,7 +158,7 @@
     "enabled": false
   },
   "alwaysThinkingEnabled": true,
-  "effortLevel": "high",
+  "effortLevel": "xhigh",
   "autoUpdatesChannel": "latest",
   "theme": "dark-ansi",
   "editorMode": "vim",
