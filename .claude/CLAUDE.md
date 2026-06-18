@@ -12,6 +12,7 @@
 - `/home/wentzell` is local disk; `~/Dropbox` is a symlink into it, so `~/Dropbox/Coding` lives on local disk despite the `~` prefix
 - Most sources are located in repository directories under `~/Dropbox/Coding`
 - Be mindful of NFS traffic: avoid large recursive `find` / `grep` / `rg` sweeps over `~` or other NFS paths. Scope searches to a specific subdirectory, prefer the local-disk Dropbox copy when available, and lean on indexed tools (git grep inside a repo) over filesystem walks
+- Do not strain the Network Filesystem (NFS) at `/`, `/mnt/home` and `/mnt/ceph` with broad searches using, .e.g using `find`, `bfs` or `grep`
 
 ## Software Stack
 - LMod modules; default env: `module show devenv9/clang-py3-mkl`
@@ -19,6 +20,8 @@
 
 ## Tools
 - Compiler: Clang (preferred) or GCC. Build: Ninja (preferred) or Make
+- Our workstation has 16 physical cores and 500GB of RAM
+- Be mindful to not oversubscribe our hardware with too many parallel builds
 
 ## Common Project Structure
 - Layout: `c++/`, `test/c++/`, `python/`, `test/python/`, `docs/` (Sphinx + Doxygen)
@@ -42,7 +45,11 @@
 - Test: `ctest --test-dir build -j 16` — always use ctest. `python test.py` silently loads the installed module instead of the build version. To run a test manually: `PYTHONPATH=<project>/build/python:$PYTHONPATH python ...`
 
 ## Build Variants
-- Variants: `build_dbg` → `~/opt/triqs_dbg`; `build_san` → `~/opt/triqs_san`; `build_prof` → `~/opt/triqs_prof`
+- Variants: `build_dbg` → `~/opt/triqs_dbg`; `build_san` → `~/opt/triqs_san`; `build_prof` → `~/opt/triqs_prof`; `build_genoa` → `~/opt/triqs_genoa`
+
+## Genoa Cluster Builds (AMD EPYC Zen 4)
+- Target the Genoa compute nodes: 96 cores, ~1.5 TB RAM, Slurm constraint `-C genoa`
+- Cross-compile with `-march=znver4` (Zen 4)
 
 ## Debugging
 - Use a sanitizer build (ASAN/UBSAN) for segfaults, memory errors, and NaN/Inf tracking — release builds give cryptic crashes; UBSAN's float-cast-overflow pinpoints where NaN is first produced
