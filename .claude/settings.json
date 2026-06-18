@@ -6,7 +6,7 @@
     "PYTHONDONTWRITEBYTECODE": "1",
     "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
     "CMAKE_COLOR_DIAGNOSTICS": "ON",
-    "CLAUDE_CODE_AUTO_COMPACT_WINDOW": "300000",
+    "CLAUDE_CODE_AUTO_COMPACT_WINDOW": "400000",
     "CLAUDE_CODE_HIDE_CWD": "1"
   },
   "attribution": {
@@ -44,7 +44,18 @@
     "deny": [
       "Edit(~/.ssh/**)",
       "Bash(git push)",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "Bash(find / *)",
+      "Bash(find /mnt *)",
+      "Bash(find /mnt/home *)",
+      "Bash(find /mnt/ceph *)",
+      "Bash(find ~ *)",
+      "Bash(bfs / *)",
+      "Bash(bfs /mnt *)",
+      "Bash(bfs /mnt/home *)",
+      "Bash(bfs /mnt/ceph *)",
+      "Bash(grep -r * /)",
+      "Bash(grep -R * /)"
     ],
     "ask": [],
     "defaultMode": "auto",
@@ -162,6 +173,5 @@
   "autoUpdatesChannel": "latest",
   "theme": "dark-ansi",
   "editorMode": "vim",
-  "skipAutoPermissionPrompt": true,
-  "model": "claude-fable-5[1m]"
+  "skipAutoPermissionPrompt": true
 }
