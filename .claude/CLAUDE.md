@@ -11,6 +11,7 @@
 - `$HOME` (and `~`) is `/mnt/home/wentzell`, the NFS home shared with cluster nodes
 - `/home/wentzell` is local disk; `~/Dropbox` is a symlink into it, so `~/Dropbox/Coding` lives on local disk despite the `~` prefix
 - Most sources are located in repository directories under `~/Dropbox/Coding`
+- Build directories (`build*`) are commonly soft links onto the local disk to keep build files out of Dropbox sync. Never remove a build dir itself (`rm -rf build`) — clear its contents instead (`rm -rf build/*`)
 - Be mindful of NFS traffic: avoid large recursive `find` / `grep` / `rg` sweeps over `~` or other NFS paths. Scope searches to a specific subdirectory, prefer the local-disk Dropbox copy when available, and lean on indexed tools (git grep inside a repo) over filesystem walks
 - Do not strain the Network Filesystem (NFS) at `/`, `/mnt/home` and `/mnt/ceph` with broad searches using, .e.g using `find`, `bfs` or `grep`
 
@@ -66,6 +67,8 @@
 - If no paired .py exists: `jupytext --to py:percent <file>.ipynb`
 - Edit the .py with normal tools, then `jupytext --to ipynb --update <file>.py` (preserves outputs)
 - Execute in place: `jupyter nbconvert --execute --inplace <file>.ipynb`
+- nbconvert 7.x / nbclient no longer coalesce stream outputs by default, so code that flushes stdout per line (e.g. TRIQS `mpi.report`) produces many separate `stream` blocks per cell → noisy diffs. Merge them back into one block per stream with `jupyter nbconvert --coalesce-streams --inplace <file>.ipynb` (run WITHOUT `--execute` to coalesce existing outputs without re-running)
+- Re-executing injects environment-specific meta noise: per-cell `execution` timestamps (`iopub.*`), a `language_info.version` bump, and volatile run-time lines. Strip/reset these before committing so the diff is only the substantive change
 
 ## DLR (Discrete Lehmann Representation)
 - The DLR representation is only valid for Green's-function-like objects that have a spectral (Lehmann) representation. Never apply DLR operations (make_gf_dlr, mesh conversions, evaluation at Matsubara frequencies/imaginary times) to quantities without a spectral representation, such as error bars or uncertainties.
