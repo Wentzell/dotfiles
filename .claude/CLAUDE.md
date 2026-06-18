@@ -47,7 +47,7 @@ For multi-step tasks, state a brief plan with a verify check per step. Strong su
 
 ---
 
-# Project-Specific Instructions
+# Environment & Workflow
 
 ## Environment
 - `$HOME` (and `~`) is `/mnt/home/wentzell`, the NFS home shared with cluster nodes
