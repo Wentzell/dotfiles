@@ -102,8 +102,16 @@ If it isn't present locally, fetch it from upstream as the porting guide documen
 wget https://raw.githubusercontent.com/TRIQS/triqs/unstable/porting_tools/port_to_triqs<N>
 chmod u+x port_to_triqs<N> && ./port_to_triqs<N>
 ```
-(For pure-Python apps the same script rewrites the `.py` sources.) Review the diff — it should be
-mechanical renames only. This must be committed before Phase B, which needs a clean tree.
+(For pure-Python apps the same script rewrites the `.py` sources.)
+
+**Guard:** the script walks the *entire* tree (`os.walk(getcwd())`, ignoring only `.git`), so a
+populated **`build/`** dir in the source tree makes it crash with `PermissionError` on read-only
+generated files (e.g. `build/_deps/<x>-subbuild/CMakeLists.txt`). Run porting on a checkout whose
+build dir is a symlink pointing outside the tree (the usual setup) or temporarily move a real
+in-tree `build/` aside first; renaming it *within* the repo is not enough (it's still walked).
+
+Review the diff — it should be mechanical renames only. This must be committed before Phase B,
+which needs a clean tree.
 
 ### Phase B — Merge the app4triqs skeleton
 `→ /merge-app4triqs`. Applies to **both** apps and core-libs (both carry `app4triqs-remote`).
