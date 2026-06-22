@@ -48,8 +48,14 @@ if __name__ == "__main__":
     # not recoverable here -- cross-check contributors manually for a release.
     raw_authors = run("git log -i -E --no-merges --pretty=format:%an {}..HEAD".format(start_commit))
     coauthor_lines = run("git log -i -E --no-merges --pretty=format:%(trailers:key=Co-authored-by,valueonly) {}..HEAD".format(start_commit))
-    raw_authors += [re.sub(r'\s*<.*?>\s*$', '', ln) for ln in coauthor_lines if ln and 'anthropic' not in ln.lower()]
-    authors = sorted(set(filter_name(author) for author in raw_authors if author), key=lambda x: (x.split() or [x])[-1])
+    # Drop any AI assistant (claude / anthropic in the trailer name or email) before
+    # stripping the email, then add the co-author name.
+    raw_authors += [re.sub(r'\s*<.*?>\s*$', '', ln) for ln in coauthor_lines
+                    if ln and not any(b in ln.lower() for b in ('claude', 'anthropic'))]
+    # Also drop copy-right/clang-format bots and any claude/anthropic %an name.
+    bots = ('clang_format', 'gen_copyright')
+    keep = lambda a: a and a not in bots and not any(b in a.lower() for b in ('claude', 'anthropic'))
+    authors = sorted({filter_name(a) for a in raw_authors if keep(a)}, key=lambda x: (x.split() or [x])[-1])
 
     # App4Triqs Commit Messages (exclude these)
     app4triqs_branches = []
@@ -74,10 +80,6 @@ if __name__ == "__main__":
                 mdict[m.group(1)] = [m.group(2)]
         else:
             mdict["General"].append(line)
-
-    # Filter out copy-right, clang-format, and Claude (co-author) authors
-    for s in ['clang_format', 'gen_copyright', 'Claude']:
-        if s in authors: authors.remove(s)
 
     sys.stdout.write("\n\nWe thank all contributors: " + ", ".join(authors) + "\n")
     sys.stdout.write("\nFind below an itemized list of changes in this release.\n")
