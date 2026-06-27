@@ -6,13 +6,19 @@ allowed-tools: Bash, Read, Edit, Glob, Grep
 ---
 
 Pull generic improvements from the [app4triqs](https://github.com/triqs/app4triqs) skeleton
-(`unstable` branch) into the **current** TRIQS application repo, resolving conflicts with
-judgment and leaving a clean two-parent merge commit. Run this from inside the target app's
-repo. This follows the "Merging app4triqs skeleton updates" procedure in app4triqs's
-`README.md`, but resolves conflicts intelligently instead of blanket `-X ours`.
+into the **current** TRIQS application repo, resolving conflicts with judgment and leaving a
+clean two-parent merge commit. Run this from inside the target app's repo. This follows the
+"Merging app4triqs skeleton updates" procedure in app4triqs's `README.md`, but resolves
+conflicts intelligently instead of blanket `-X ours`.
+
+**The skeleton has several branches — `unstable` is rarely the right one.** Pick the branch
+that matches the app (Step 0): `notriqs`/`cpp_only_notriqs` for apps that have dropped the
+TRIQS dependency, `unstable` only for classic TRIQS+cpp2py apps. Merging `unstable` into a
+no-TRIQS app silently drags the `find_package(TRIQS)` dependency back in — exactly what the app
+removed.
 
 The end result should look like the existing history, e.g.
-`Merge remote-tracking branch 'app4triqs-remote/unstable' into unstable`.
+`Merge remote-tracking branch 'app4triqs-remote/notriqs' into unstable`.
 
 ## Argument
 
@@ -22,26 +28,59 @@ omitted, derive it (see Step 0).
 ## Step 0 — Preflight & classify the app
 
 - `git rev-parse --is-inside-work-tree` — confirm we're in a git repo. Abort otherwise.
-- `git status --porcelain` — the working tree **must be clean**. If dirty, stop and tell the
-  user to commit or stash first.
+- `git status --porcelain` — **tracked** files must be clean: if any tracked file is modified
+  or staged, stop and tell the user to commit or stash first. **Untracked** files (`??`) do
+  *not* block the merge, but they are a trap — `git add -A` later (Steps 5/6) would sweep the
+  user's scratch files into the merge commit. Note any now and, if present, stage only resolved
+  paths explicitly throughout (never blanket `git add -A`).
 - Record `BRANCH=$(git rev-parse --abbrev-ref HEAD)` and `BASE=$(git rev-parse HEAD)` for the
   final summary/diff.
 - Determine **appname**: use `$ARGUMENTS` if given; otherwise infer from the single
   app-specific dir under `c++/` (e.g. `c++/cthyb` → `cthyb`) or `python/`, falling back to
   the repo directory name. Confirm the chosen name in your report.
-- **Classify the app — this single fact drives most conflict resolution.** Check whether the
-  app actually compiles C++:
-  - `c++/<appname>/` with real sources **and** `add_subdirectory(c++` in the root
-    `CMakeLists.txt` → **C++/hybrid app**.
-  - Otherwise (no `c++/` sources, `__init__.py` imports only `.py` modules) → **pure-Python
-    app** (e.g. hartree_fock, maxent, solid_dmft).
+- **Classify the app — this single fact drives the branch choice (Step 0b) and most conflict
+  resolution.** Two orthogonal axes: (i) does it compile C++? (ii) does it depend on TRIQS?
+  - C++ sources in `c++/<appname>/` **and** `add_subdirectory(c++` in the root `CMakeLists.txt`
+    → compiles C++. Else (only `.py` under `python/`) → **pure-Python app** (e.g. hartree_fock,
+    maxent, solid_dmft).
+  - `find_package(TRIQS` present in the root `CMakeLists.txt` → **TRIQS-dependent**; absent →
+    **no-TRIQS** (the core-libs mpi/itertools/h5/nda dropped it).
+
+  Then place the app in one of these classes (it determines the Python policy below):
+  - **pure-Python** — reject *all* C++/binding scaffolding; keep the app's slimmed version.
+  - **C++ + bindings** — compiles C++ *and* generates Python bindings (has `module.cpp` /
+    `module.toml` / `c2py_add_module` / a `python/<pkg>/` module). Adopt the clair/c2py
+    machinery.
+  - **C++ + converter-headers-only** (e.g. **nda**) — compiles C++, keeps a `PythonSupport`
+    option and ships c2py *converter headers* (e.g. `c++/<app>/c2py/*.hpp`, `python/<pkg>/*.hpp`)
+    but does **not** generate bindings and does **not** depend on clair-c2py. **Keep**
+    `PythonSupport` and the converter headers/package; **reject** binding-generation machinery
+    (clair CI regen, `Update_Python_Bindings`, `module.cpp`/`*.wrap.*`). Do *not* strip
+    `PythonSupport` the way you would for a C++-only app.
+  - **C++-only** (e.g. **mpi**, **itertools**) — no Python at all; strip `PythonSupport`
+    entirely.
 
   This matters because the merge base is the old "Track app4triqs skeleton" squash, so a
   skeleton that has since gained C++/binding machinery (clair/c2py port, doxygen, sanitizer
-  builds) will replay *all* of it as conflicts. A pure-Python app stripped that machinery long
-  ago, so for it nearly every C++ conflict resolves the same way: **reject the C++ scaffolding,
-  keep the app's slimmed version.** Record the classification and apply the matching policy in
-  Step 4.
+  builds) will replay *all* of it as conflicts. Record the classification and apply the matching
+  policy in Step 4.
+
+## Step 0b — Pick the skeleton branch to merge
+
+The skeleton maintains a branch per class. Choosing wrong silently re-adds (or strips) a whole
+dependency, so set `BR=<branch>` here and use it in Steps 1b/2/3:
+
+- **TRIQS-dependent** app → `unstable` (the classic skeleton, with `find_package(TRIQS)` +
+  cpp2py).
+- **no-TRIQS, C++ + bindings** → `notriqs` (TRIQS removed, clair/c2py binding generation kept).
+- **no-TRIQS, C++ converter-headers-only or C++-only** → `cpp_only_notriqs` (TRIQS + Python
+  module generation both stripped). **nda, mpi, itertools, h5 all use this.**
+- **pure-Python** → `python_only` / `python_only_pip`.
+
+Confirm the branch exists (`git branch -r --list '*/<branch>'` after Step 1's fetch) and state
+your choice in the report. When the app keeps a feature the chosen branch *strips* (e.g.
+`cpp_only_notriqs` strips `PythonSupport`, but a converter-headers-only app keeps it), expect
+Step 4 to override those skeleton removals — see Step 4b's "strip-out" warning.
 
 ## Step 1 — Locate (or create) the app4triqs remote, refresh everything
 
@@ -68,8 +107,9 @@ We must merge skeleton changes into a current branch, not a stale one.
 
 ## Step 2 — Summarize incoming changes (before touching anything)
 
-- `git log --oneline <remote>/unstable ^HEAD` — skeleton commits not yet in this app.
-- `git diff --stat HEAD...<remote>/unstable` — preview the file footprint.
+- `git log --oneline <remote>/$BR ^HEAD` — skeleton commits not yet in this app (`$BR` from
+  Step 0b).
+- `git diff --stat HEAD...<remote>/$BR` — preview the file footprint.
 - If there is nothing to merge, report **"already up to date"** and stop.
 - **Scan for tool/framework migrations** — the rare, high-impact changes that need the
   deliberate handling in Step 4c. Flag any of these in the incoming log/footprint and tell
@@ -82,7 +122,7 @@ We must merge skeleton changes into a current branch, not a stale one.
 ## Step 3 — Merge
 
 ```bash
-git merge <remote>/unstable -m "Merge remote-tracking branch '<remote>/unstable' into $BRANCH"
+git merge <remote>/$BR -m "Merge remote-tracking branch '<remote>/$BR' into $BRANCH"
 ```
 
 No `-X ours` — let conflicts surface so they can be resolved on their merits. **Do not use
@@ -128,8 +168,18 @@ For the remaining real conflicts, read each one:
   `${PROJECT_NAME}_warnings`, `${PROJECT_NAME}_python_modules`, `add_subdirectory(c++…)`). When
   in doubt, compare a resolved build file against `git show HEAD:<file>` (the app's pre-merge
   version) — Step 5b catches leaks too.
+- **The reverse trap: auto-merges that *strip* a feature the app keeps.** When the chosen branch
+  removed something the app retains (e.g. `cpp_only_notriqs` strips `PythonSupport`, but a
+  converter-headers-only app like nda keeps it), git replays that removal as a *clean* deletion —
+  no conflict marker — silently gutting the app's wiring. Real example: the PythonSupport block
+  in `share/CMakeLists.txt` and the `@EXPORT_PYTHON_PATH@` / `@MODFILE_PYTHON_PATH@` placeholders
+  in `share/*vars.sh.in` / `share/*.modulefile.in` vanished from nda. After resolving, `git diff
+  HEAD -- share/CMakeLists.txt share/*.in` and confirm nothing the app needs was deleted; restore
+  it if so (using the *current* variable names, e.g. `PYTHON_LIB_DEST_ROOT`, not a stale
+  `CPP2PY_PYTHON_LIB_DEST_ROOT`).
 
-After resolving each file: `git add <file>`. **Do not commit yet.**
+After resolving each file: `git add <file>` (the specific path — not `git add -A` if untracked
+files are present; see Step 0). **Do not commit yet.**
 
 ## Step 4c — Tool/framework migrations (handle each as its own sub-task)
 
@@ -160,9 +210,15 @@ Known migrations and how they land:
   (`Cpp2Py`→`c2py`), `python/**/CMakeLists.txt` (`add_cpp2py_module`→`c2py_add_module`), adds
   `module.cpp`/`module.toml`/`*.wrap.{cxx,hxx}`, `set(CMAKE_CXX_SCAN_FOR_MODULES OFF)`, a
   "Build & Install clair" CI step, `regenPlatforms`, and a `libclang`/`llvm-*-dev`/
-  `python3-clang*` toolchain. **C++/hybrid app:** adopt it (keep+normalize the new files).
+  `python3-clang*` toolchain. **C++ + bindings app:** adopt it (keep+normalize the new files).
   **Pure-Python app:** reject *all* of it — there are no bindings to generate (see Step 5b's
-  CI grep).
+  CI grep). **C++ converter-headers-only app (nda):** reject the binding-*generation* parts
+  (clair CI regen, `regenPlatforms`, `Update_Python_Bindings`, `module.cpp`/`*.wrap.*`) but
+  **keep** `set(CMAKE_CXX_SCAN_FOR_MODULES OFF)` and `PythonSupport` — the app still compiles
+  C++ and clair-c2py may consume its `compile_commands.json`, which the modmap flags break.
+  **C++-only app (mpi/itertools):** reject all of it like pure-Python. Note: pre-existing clair
+  regen machinery already in the app's `jenkins/Jenkinsfile` is *not* a merge conflict — flag it
+  for the user rather than silently stripping it.
 
 - **k8s Jenkins framework** (top-level `Jenkinsfile` → new `jenkins/Jenkinsfile` +
   `jenkins/Dockerfile`). The new file is a **replacement**, so git won't conflict it against the
@@ -192,8 +248,10 @@ git ls-files '*app4triqs*'
 ```
 
 Fix each hit by hand (`appname` for `app4triqs`, `APPNAME` for `APP4TRIQS`; `git mv` any
-misnamed file), then `git add -A`. In practice this is one or two files — typically
-`projectName = "app4triqs"` in a freshly added `jenkins/Jenkinsfile`.
+misnamed file), then stage the fixed paths (`git add <path>…`; **only** use `git add -A` if you
+confirmed in Step 0 there are no untracked files). In practice this is one or two files —
+typically `projectName = "app4triqs"` in a freshly added `jenkins/Jenkinsfile`, plus the
+`packaging/<app>-foss-*.eb.in` rename leaving diff3 markers.
 
 ## Step 5b — Verify nothing leaked (pure-Python apps especially)
 

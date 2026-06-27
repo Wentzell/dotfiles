@@ -34,7 +34,7 @@ Confirm the resulting commit count is sane before proceeding.
 - Reachable tag (`git describe` — often WRONG base, see Arguments): !`git describe --tags --abbrev=0 2>/dev/null || echo "(no tag)"`
 - Released versions (version-sorted): !`git tag --sort=-v:refname | head -5`
 - Working tree: !`git status --porcelain | head`
-- Existing porting scripts: !`ls porting_tools/ 2>/dev/null`
+- Existing porting scripts: !`ls porting_tools/ 2>/dev/null || true`
 - ChangeLog header (1st non-blank line — reveals MyST vs Doxygen): !`grep -m1 . doc/ChangeLog.md 2>/dev/null`
 - Prior opening sentence (to mirror tone): !`grep -m1 -iE 'is a .*release' doc/ChangeLog.md 2>/dev/null`
 
