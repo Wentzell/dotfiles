@@ -25,6 +25,7 @@ accumulate silently until someone looks. This skill is that look.
 - Warning flags: !`grep -nE '_warnings\b|-Wall|-Wextra|-Wfloat-conversion|-Wpedantic|-Werror' CMakeLists.txt | head`
 - `find_package(TRIQS …)`: !`grep -m1 -iE "find_package\(TRIQS" CMakeLists.txt || echo "(none — core-lib, builds standalone)"`
 - Working tree: !`git status --porcelain | head`
+- Build dir (default `build`) resolves: !`bd=build; if [ -d "$bd" ]; then echo "ok ($bd)"; elif [ -L "$bd" ]; then echo "DANGLING SYMLINK ($bd → $(readlink "$bd")) — recreate the target dir before configuring"; else echo "absent (fresh configure)"; fi`
 
 If **no `c++/`** (pure-Python app — `maxent`, `dft_tools`, …): there is nothing to compile and
 no warnings to fix. Report that and stop.
@@ -32,6 +33,10 @@ no warnings to fix. Report that and stop.
 ## Phase 1 — Build, capturing warnings
 
 **Prefer the repo's existing build dir** (it already carries the repo-specific configure flags).
+If the build dir is a **dangling symlink** (its local-disk target was deleted — see Context),
+recreate the target first (`mkdir -p "$(readlink <build-dir>)"`); configuring into a dangling
+symlink fails with a confusing `Unable to (re)create the private pkgRedirects directory` error
+rather than an obvious "missing directory".
 If you must configure fresh, use the repo's normal flags, not a bare command — some repos need
 `-DCMAKE_INSTALL_PREFIX=…` (FATAL_ERROR otherwise, e.g. `h5`), apps need a matching TRIQS install
 on `CMAKE_PREFIX_PATH` / `PYTHONPATH` (the `find_package(TRIQS major.minor)` check FATAL_ERRORs
@@ -99,3 +104,8 @@ counts should be only the out-of-scope dependency warnings.
 - Remaining **dependency** warnings (out of scope) — file + flag, grouped.
 - Reminder: **edits are uncommitted, and this skill does not run `ctest`** — build & test (a
   `/commit` follow-up runs clang-format + tests) before relying on the changes. Push is yours.
+- **clang-format caution:** if the repo's sources are **not** already clang-format-clean (some, e.g.
+  `tprf`, aren't), a blanket `/commit` format pass reformats whole files and **buries your surgical
+  warning fix under hundreds of unrelated reformatting lines** — violating surgical-changes. Format
+  only the changed lines (e.g. `git clang-format` against the pre-edit state) or skip formatting;
+  never whole-file reformat a non-conformant file just to land a few-line fix.

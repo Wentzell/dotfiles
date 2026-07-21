@@ -109,7 +109,11 @@ We must merge skeleton changes into a current branch, not a stale one.
 
 - `git log --oneline <remote>/$BR ^HEAD` — skeleton commits not yet in this app (`$BR` from
   Step 0b).
-- `git diff --stat HEAD...<remote>/$BR` — preview the file footprint.
+- `git diff --stat HEAD...<remote>/$BR` — preview the file footprint. **Caveat:** if a *prior*
+  cycle hand-applied skeleton changes (cherry-picked or re-typed them) instead of merging, this
+  diff **overstates** the real surface — it still shows additions/deletions the app already applied,
+  so it can look like thousands of lines when little is genuinely outstanding. The `git log …
+  ^HEAD` commit count above is the authoritative measure of what's left, **not** the diff stat.
 - If there is nothing to merge, report **"already up to date"** and stop.
 - **Scan for tool/framework migrations** — the rare, high-impact changes that need the
   deliberate handling in Step 4c. Flag any of these in the incoming log/footprint and tell
@@ -164,10 +168,14 @@ For the remaining real conflicts, read each one:
 - **App source / tests / docs content** under `c++/<appname>/`, `python/<appname>/`, `test/`,
   `doc/*.rst`: **keep the app's version**; skeleton example content is not wanted.
 - **Watch the auto-merged hunks, not just the conflicts.** A clean auto-merge can still pull in
-  references to C++ CMake targets a pure-Python app doesn't define (`${PROJECT_NAME}_c`,
-  `${PROJECT_NAME}_warnings`, `${PROJECT_NAME}_python_modules`, `add_subdirectory(c++…)`). When
-  in doubt, compare a resolved build file against `git show HEAD:<file>` (the app's pre-merge
-  version) — Step 5b catches leaks too.
+  references to CMake targets this app doesn't define — not only the C++ ones a **pure-Python** app
+  lacks (`${PROJECT_NAME}_c`, `${PROJECT_NAME}_warnings`, `${PROJECT_NAME}_python_modules`,
+  `add_subdirectory(c++…)`), but also **skeleton-introduced targets a C++ app may still not define**
+  (e.g. an `add_dependencies(… ${PROJECT_NAME}_docs_example_output)` line, when the app dropped
+  example-output generation — taking the skeleton side then references an undefined target and breaks
+  the doc build). Before adopting any skeleton `add_dependencies(… <target>)`, confirm the app
+  actually defines `<target>`. When in doubt, compare a resolved build file against
+  `git show HEAD:<file>` (the app's pre-merge version) — Step 5b catches leaks too.
 - **The reverse trap: auto-merges that *strip* a feature the app keeps.** When the chosen branch
   removed something the app retains (e.g. `cpp_only_notriqs` strips `PythonSupport`, but a
   converter-headers-only app like nda keeps it), git replays that removal as a *clean* deletion —
@@ -281,8 +289,10 @@ also Step 4b's `regenPlatforms = []` / drop-`sanitize` edits.)
 
 Any hits on a pure-Python app mean a conflict was resolved the wrong way (or an auto-merged
 hunk pulled C++ in) — go back and fix it. Then re-check no conflict markers remain (match only
-the unambiguous markers — a bare `=======` false-matches RST heading underlines):
-`git grep -nE '^(<<<<<<<|>>>>>>>)' || echo clean`.
+the unambiguous markers — a bare `=======` false-matches RST heading underlines — but **include
+the diff3 base marker `|||||||`**, which leaks past a `<<<<<<<`/`>>>>>>>`-only check whenever
+`merge.conflictStyle=diff3` is set, as it is in some of these repos):
+`git grep -nE '^(<<<<<<<|>>>>>>>|\|\|\|\|\|\|\|)' || echo clean`.
 
 ## Step 6 — Complete the merge commit
 

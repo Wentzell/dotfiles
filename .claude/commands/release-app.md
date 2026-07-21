@@ -34,7 +34,7 @@ If omitted, infer from the version bump and branch, and confirm in Phase 0.
 - app4triqs remote: !`git remote -v | grep -i app4triqs | head -1 || echo "(none)"`
 - Has `c++/`: !`test -d c++ && echo yes || echo "no (pure-Python)"`
 - Binding style — c2py toml: !`git ls-files '*.toml' | grep -c 'python/'` · cpp2py desc: !`git ls-files '*_desc.py' | wc -l`
-- TRIQS porting scripts (major app releases — checked across local triqs checkouts): !`ls /home/wentzell/Dropbox/Coding/triqs*/porting_tools/port_to_triqs* 2>/dev/null || echo "(none found locally)"`
+- TRIQS porting scripts (major app releases — each hit annotated with its checkout's branch; use the one on **unstable**, not a feature branch): !`for s in /home/wentzell/Dropbox/Coding/triqs*/porting_tools/port_to_triqs*; do [ -e "$s" ] || continue; d=${s%/porting_tools/*}; echo "$s ($(git -C "$d" branch --show-current 2>/dev/null))"; done 2>/dev/null || echo "(none found locally)"`
 - Resume markers:
   - most recent app4triqs merge (tag-independent): !`git log -1 --format='%h %cs %s' --grep='Merge.*app4triqs' 2>/dev/null || echo "(no app4triqs merge in history)"`
   - ChangeLog target-version section: (checked in Phase 0: `grep -n "## Version <target>" doc/ChangeLog.md`)
@@ -48,9 +48,16 @@ If omitted, infer from the version bump and branch, and confirm in Phase 0.
 |---|---|---|---|---|---|
 | **core-lib c2py** (`h5`, `nda`) | no | no | yes | yes | yes (c2py) |
 | **core-lib header-only** (`itertools`) | no | no | yes | yes | no |
-| **c2py app** (`cthyb`, `ctseg`) | yes | yes (major) | yes | yes | yes (c2py) |
-| **cpp2py app** (`tprf`) | yes | yes (major) | yes | yes | no (auto at build) |
+| **c2py app** (`cthyb`, `ctseg`, `tprf`) | yes | yes (major) | yes | yes | yes (c2py) |
+| **cpp2py app** (legacy, `*_desc.py`) | yes | yes (major) | yes | yes | no (auto at build) |
 | **pure-Python app** (`maxent`, `dft_tools`) | maybe | yes (major) | yes | no | no |
+
+**Don't classify by the example app names above — they rot as apps migrate** (e.g. `tprf` moved
+cpp2py→c2py mid-cycle, so a stale matrix would wrongly skip its Phase E). Determine the binding
+style from the **Context** probe, which is authoritative: `python/*.toml` count > 0 ⇒ **c2py**
+(Phase E applies); `*_desc.py` count > 0 ⇒ **cpp2py** (Phase E is a no-op — auto-regens at build);
+has `c++/` but neither ⇒ **header-only** (no Phase E); no `c++/` ⇒ **pure-Python** (skip D and E).
+`/regen-bindings` and `/merge-app4triqs` use the same probe.
 
 Determine the **release type** (arg or infer; ask if ambiguous) and **target version**.
 - **If patch** → stop and hand off: `/backport-release <target-version>` cuts a patch by
@@ -70,15 +77,19 @@ Determine the **release type** (arg or infer; ask if ambiguous) and **target ver
 4. **c2py repo**: `clair-c2py` available (`command -v clair-c2py`) for Phase E.
 
 **Derive resume state** from git/files (no state file). The robust signals:
-- **Changelog (F)**: `grep -n "## Version <target>" doc/ChangeLog.md` — present ⇒ done.
+- **Changelog (F)**: `grep -n "## Version <target>" doc/ChangeLog.md` — present ⇒ done. Use the
+  **full** `X.Y.Z` (e.g. `## Version 4.0.0`), not the two-component `X.Y` form, or the probe false-negatives.
 - **Version bump**: the `project(...)` line already shows `<target>` ⇒ done (this is part of the
   manual hand-off, not a phase, but note it).
-- **app4triqs merge (B)**: use the **tag-independent** marker in Context (the most recent
-  `Merge … app4triqs …` commit + its date). Don't compute "since the last tag" from
-  `git tag … | head -1` — the tag ordering is unreliable (see Context note). Instead judge by the
-  merge's **date**: if it post-dates the last real release, B is likely already done this cycle;
-  if it's old (a prior release's merge), B is still pending. When unsure, say so and let the user
-  confirm rather than silently skipping B.
+- **app4triqs merge (B)**: the **authoritative** check is whether the skeleton has commits not yet
+  in HEAD — `git log --oneline <remote>/<branch> ^HEAD` (run `git remote update` first; `<branch>`
+  is the app's skeleton branch — `unstable` for TRIQS+c2py apps, `python_only` for pure-Python, etc.
+  — exactly `/merge-app4triqs` Step 2). A **non-empty** list ⇒ B is pending, *regardless of any prior
+  merge's date*. The merge **date** alone is only a weak hint and gives **false positives** (observed:
+  a 2-day-old merge with 9 still-unmerged skeleton commits). Also inspect *which ref* the Context
+  marker's merge subject names: a pure-Python app whose last merge was of `…/unstable` rather than
+  `…/python_only` merged the **wrong branch**, so B likely needs redoing this cycle. Don't compute
+  "since the last tag" from `git tag … | head -1` — the tag ordering is unreliable (see Context note).
 
 **Present the tailored plan** — the ordered list of phases that apply to *this* repo type and
 release type, with the skipped ones called out and why, and any already-done phases from the
@@ -105,10 +116,15 @@ chmod u+x port_to_triqs<N> && ./port_to_triqs<N>
 (For pure-Python apps the same script rewrites the `.py` sources.)
 
 **Guard:** the script walks the *entire* tree (`os.walk(getcwd())`, ignoring only `.git`), so a
-populated **`build/`** dir in the source tree makes it crash with `PermissionError` on read-only
-generated files (e.g. `build/_deps/<x>-subbuild/CMakeLists.txt`). Run porting on a checkout whose
-build dir is a symlink pointing outside the tree (the usual setup) or temporarily move a real
-in-tree `build/` aside first; renaming it *within* the repo is not enough (it's still walked).
+populated build dir in the source tree makes it crash with `PermissionError` on read-only generated
+files (e.g. `build/_deps/<x>-subbuild/CMakeLists.txt`). This is **not** limited to a top-level
+`build/` — agents have hit `build_llvm19/`, `build_prof/`, and a *nested* `test/python/build/`.
+Before running, enumerate every build dir anywhere in the tree (`find . -type d -name 'build*'`) and
+handle each: a **symlink** pointing outside the tree (the usual setup, including the `build_dbg` /
+`build_san` / `build_prof` / `build_genoa` variants) is skipped by `os.walk` and is fine; a **real
+populated** dir must be moved aside first — move it **to a sibling directory of the repo** (e.g.
+`mv build ../<repo>_build_moved`) and restore it after. Moving it to an arbitrary external path can
+trip an autonomous-mode sandbox, and renaming it *within* the repo is not enough (it's still walked).
 
 Review the diff — it should be mechanical renames only. This must be committed before Phase B,
 which needs a clean tree.
@@ -126,9 +142,18 @@ the rest. Checkpoint: what was fixed, what's deferred.
 `→ /fix-warnings`. Skip if the repo has no `c++/`.
 
 ### Phase E — Regenerate bindings (c2py repos only)
-`→ /regen-bindings`. No-op for cpp2py (auto-regens at build) and for header-only/pure-Python —
-the skill detects and reports that. Runs **after** Phase D so the bindings are generated from the
-warning-fixed sources (avoids a double regeneration). Review the `*.wrap.*` diff.
+`→ /regen-bindings`, which **detects the actual binding style itself** (from the toml/desc probes —
+don't pre-decide from the Phase-0 matrix, whose example names rot). It is a no-op for cpp2py
+(auto-regens at build) and for header-only/pure-Python, and reports which case applies. Runs
+**after** Phase D so the bindings are generated from the warning-fixed sources (avoids a double
+regeneration). Review the `*.wrap.*` diff.
+
+### Validation gate — run the full test suite (after the last code-changing phase)
+Once the code-affecting phases that apply (A–E) are done, **run `ctest --test-dir <build-dir> -jN`
+and report pass/fail.** No individual phase owns this — `/fix-warnings` and `/regen-bindings` both
+end with "this skill does not run ctest" — so the orchestrator must. This is the test gate the
+closing "build & test before pushing" reminder refers to; F (changelog) and G (overview) are
+doc-only and don't need a build.
 
 ### Phase F — Prepare the changelog
 `→ /release-changelog`. Curates `doc/ChangeLog.md` for the target version (it handles the

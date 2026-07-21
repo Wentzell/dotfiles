@@ -18,13 +18,15 @@ The `parse_commits` tool produces the *raw* material. Your job is to curate it i
 
 - `<from-ref>` (optional) — the tag/commit the changelog starts *after*. Passed to `parse_commits -tag`.
 
-**Choosing the base ref (do not rely on `git describe`).** On a long-lived branch like `unstable`, `git describe --tags --abbrev=0` (what `parse_commits` uses by default) returns the most recent *reachable* tag, which is often an ancient `*-rc1`, **not** the last release — release tags live on `X.Y.x` branches that aren't reachable. If `<from-ref>` is not given, derive it instead:
-- highest released version: `git tag --sort=-v:refname | head` (pick the last real release, skipping rc/pre tags), or
-- the split point from the prior release branch: `git merge-base HEAD origin/<prior>.x`.
+**Choosing the base ref (do not rely on `git describe`).** On a long-lived branch like `unstable`, `git describe --tags --abbrev=0` (what `parse_commits` uses by default) returns the most recent *reachable* tag, which is often an ancient `*-rc1`, **not** the last release — release tags live on `X.Y.x` branches that aren't reachable. If `<from-ref>` is not given, derive it as follows (**most robust first**):
+- **Find the commit that added the changelog's current top `## Version` entry** (the previous release): `grep -m1 '## Version' doc/ChangeLog.md` to read its `X.Y.Z`, then `git log -S "Version <X.Y.Z>" --oneline -- doc/ChangeLog.md | head -1`, and use that commit as the base. This bounds the range to "commits since the last *documented* release" and is robust even when the release tag is unreachable from `unstable` and when the `X.Y.x` branch split long before the release — the two failure modes that break the methods below.
+- **Release tag (cross-check, don't trust blindly):** `git tag --sort=-v:refname | head` (pick the last *real* release, skipping rc/pre tags), then verify with `git rev-list --count <tag>..HEAD`. Use it to sanity-check the count from the method above; the tag is often unreachable from `unstable`, in which case it won't work at all.
+- **First release (no tags / empty changelog stub):** there is no prior release — base on the app4triqs initialization (the `Adjust app4triqs skeleton for <app>` commit, or the first app-specific commit), and open the entry as a feature release (highlights list), not a compatibility bump.
+- **Avoid `git merge-base HEAD origin/<prior>.x` as the primary method:** when the release branch split early it overshoots massively (observed 510 and 936 commits vs a correct ~90–130). Last resort only, and always verify the count.
 
-Confirm the resulting commit count is sane before proceeding.
+**Confirm the resulting commit count is sane before proceeding.** If the changelog's top `## Version` entry is *older* than the latest `X.Y.x` release branch (some releases shipped without a changelog entry — seen in `ctint`), flag that gap to the user rather than assuming the changelog is authoritative for the base.
 
-**Ensure HEAD is the release tip.** `parse_commits` is hardwired to `<from-ref>..HEAD`. If the working checkout is a feature branch, the list will wrongly include unreleased feature commits. Check out the release tip first (e.g. `git checkout origin/unstable`) or otherwise confirm HEAD is what you intend to release.
+**Ensure HEAD is the release tip.** `parse_commits` is hardwired to `<from-ref>..HEAD`. If the working checkout is a feature branch, the list will wrongly include unreleased feature commits. Check out the release tip first (e.g. `git checkout origin/unstable`) or otherwise confirm HEAD is what you intend to release. **Exception — running inside `/release-app`:** the porting and app4triqs-merge commits made earlier in that pipeline are committed locally but **not yet pushed**, and they *belong* in this release. There, local `HEAD` *is* the release tip — do **not** `git checkout origin/unstable`, which would silently drop those prep commits from the range. Only reset to the pushed tip when HEAD carries *unrelated* feature work.
 
 ## Context
 
@@ -65,7 +67,7 @@ Rewrite the raw list into a user-facing changelog. Apply, in order:
 **Opening paragraph** — mirror the prior entry's phrasing for *this* repo (see Context):
 - Patch: "<NAME> Version X.Y.Z is a patch-release that introduces minor fixes …".
 - **Application compatibility release** (the common app case): "<NAME> version X.Y.Z is a compatibility release for TRIQS version X.Y.Z …".
-- Major / feature-rich: open with a `*`-bulleted highlights list of the headline changes (cf. `## Version 3.0.0` in triqs, `## Version 2.0.0` in nda), ending with "* Fixes several library issues".
+- Major / feature-rich: open with a `*`-bulleted highlights list of the headline changes (cf. `## Version 3.0.0` in triqs, `## Version 2.0.0` in nda), ending with "* Fixes several library issues". **For apps, "major" here means the *app's own* content is feature-rich — not merely that it tracks a major TRIQS bump.** An app release that is in substance just a TRIQS-compatibility bump (porting + skeleton update, no headline app features) keeps the **compatibility-release** opening below even though its version number bumps major; don't switch to a highlights list on the strength of the TRIQS major alone.
 
 **Standard application practice** (apps only): mention the app4triqs skeleton update and TRIQS compatibility. **Follow the prior entry's form** — recent cthyb entries fold this into the *opening prose* ("… a compatibility release for TRIQS version X.Y.Z including an update to the latest app4triqs skeleton"), not a bullet. Add a `* Use the latest app4triqs/X.Y.x skeleton` bullet only if the repo's prior entries do. After a real TRIQS API break, add `* Run port_to_triqs<N> script for <…> changes`.
 

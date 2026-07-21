@@ -28,6 +28,7 @@ a reconfigure is needed.
 - Existing wrap files: !`git ls-files '*.wrap.cxx' '*.wrap.hxx' | head`
 - `clair-c2py` available: !`command -v clair-c2py || echo "(NOT on PATH)"`
 - Working tree: !`git status --porcelain | head`
+- Build dir (default `build`) resolves: !`bd=build; if [ -d "$bd" ]; then echo "ok ($bd)"; elif [ -L "$bd" ]; then echo "DANGLING SYMLINK ($bd → $(readlink "$bd")) — recreate the target dir before configuring"; else echo "absent (fresh configure)"; fi`
 
 ## Phase 1 — Detect the binding style
 
@@ -68,8 +69,11 @@ file`).
 
 **Prefer flipping the flag on the repo's existing build dir** — it already carries the
 repo-specific configure flags (some repos, e.g. `h5`, FATAL_ERROR without `-DCMAKE_INSTALL_PREFIX`;
-apps need a matching TRIQS install on `CMAKE_PREFIX_PATH`/`PYTHONPATH`). Reconfiguring just adds
-the two flags:
+apps need a matching TRIQS install on `CMAKE_PREFIX_PATH`/`PYTHONPATH`). If that dir is a **dangling
+symlink** (its local-disk target was deleted — see Context), recreate the target first
+(`mkdir -p "$(readlink <build-dir>)"`); configuring into a dangling symlink fails with a confusing
+`Unable to (re)create the private pkgRedirects directory` error, not an obvious "missing directory".
+Reconfiguring just adds the two flags:
 
 ```bash
 cmake <build-dir> -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DUpdate_Python_Bindings=ON   # reuse existing config

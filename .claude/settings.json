@@ -20,6 +20,7 @@
       "Bash(cloc *)",
       "Bash(cmake *)",
       "Bash(ctest *)",
+      "Bash(curl *)",
       "Bash(ldd *)",
       "Bash(module *)",
       "Bash(nm *)",
@@ -43,8 +44,6 @@
     ],
     "deny": [
       "Edit(~/.ssh/**)",
-      "Bash(git push)",
-      "Bash(git push *)",
       "Bash(find / *)",
       "Bash(find /mnt *)",
       "Bash(find /mnt/home *)",
@@ -64,6 +63,7 @@
       "~/opt"
     ]
   },
+  "model": "opus",
   "hooks": {
     "Stop": [
       {

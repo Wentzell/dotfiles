@@ -1,39 +1,50 @@
 ---
-description: Query the TRIQS Jenkins CI for build status and failure analysis (token-efficient drill-down)
+description: Query the TRIQS Jenkins CI for build status and failure analysis via the Jenkins MCP server
 ---
 
-Query the public TRIQS Jenkins at https://jenkins.flatironinstitute.org/job/TRIQS/ via `WebFetch` (no auth). Drill down only as far as needed to answer the question.
+Query the TRIQS Jenkins (the `CCQ/TRIQS` folder on `jenkins-new.flatironinstitute.org`)
+using the **`jenkins-fi` MCP server** tools (`mcp__jenkins-fi__*`). They are authenticated
+and token-efficient — prefer them over `curl`/`WebFetch`. Drill down only as far as needed.
+
+If `jenkins-fi` is not connected in this session (check `claude mcp list`), fall back to
+anonymous `curl -sSg -m 30` against the same `.../api/json` endpoints (read-only).
 
 ## Argument
 
 `$ARGUMENTS`:
-- empty → summarize last build on each branch + open PRs of the current repo
-- `<N>` or `PR-<N>` → triqs PR #N
-- branch name (`unstable`, `3.3.x`, ...) → that branch's latest build
-- `<repo> <N|branch>` → other top-level Jenkins job (`nda 42`, `h5 unstable`). Default repo is `triqs`.
+- empty → summarize the last build on each branch of the current repo, flag any failures
+- `<branch>` (`unstable`, `3.3.x`, …) → that branch's latest build
+- `PR-<N>` or `<N>` → PR #N of the current repo
+- `<repo> <branch|N>` → another repo (`nda unstable`, `h5 42`). Default repo is `triqs`.
 
-## URLs (triqs)
+## Job paths (the `jobFullName` argument)
 
-- Top-level: `.../job/TRIQS/job/triqs/`
-- Branch:    `.../job/<branch>/`
-- PR:        `.../view/change-requests/job/PR-<N>/` (note: PR builds live under `view/change-requests/`, not directly under `job/`)
+Folder: `CCQ/TRIQS`
 
-Other flatironinstitute/TRIQS repos: `.../job/TRIQS/job/<repo>/` with the same sub-structure.
+- Branch build: `CCQ/TRIQS/<repo>/<branch>`   (e.g. `CCQ/TRIQS/inchworm/unstable`)
+- PR build:     `CCQ/TRIQS/<repo>/PR-<N>`      (PR branches are child jobs of the multibranch project)
 
-## Drill-down (stop at first useful answer)
+Repos under `CCQ/TRIQS`: triqs, app4triqs, nda, h5, itertools, mpi, cthyb, ctint, ctseg,
+inchworm, tprf, dft_tools, solid_dmft, maxent, hartree_fock, hubbardI,
+nrgljubljana_interface, omegamaxent_interface, Nevanlinna, dftkit, modest, xca.
 
-Always pass `?tree=` to `/api/json` to limit fields.
+## Drill-down (stop at the first useful answer)
 
-1. **Status** — `.../api/json?tree=lastBuild[number,result,building,timestamp,duration]`. Tiny. SUCCESS → done.
-2. **Stage summary** (on FAILURE) — `.../<N>/wfapi/describe`. Per-stage name/status/duration/nodeId. Find the failing stage(s).
-3. **Per-stage log** — `.../<N>/execution/node/<nodeId>/wfapi/log`. Much smaller than the full console. If unavailable, fall back to (4) but narrow the WebFetch prompt to the failing stage banner.
-4. **Full console** (last resort) — `.../<N>/consoleText`.
-
-## WebFetch tips
-
-- Demand verbatim error lines: *"Quote the last 15 lines before the first 'error' or 'FAILED' marker. Do NOT summarize."*
-- When multiple stages fail with the same root cause, fully fetch one, then verify the others with a single small prompt: *"are the last error lines of stages X, Y identical to: <paste>?"* — avoids N full-log fetches.
+1. **Status** — `getBuild` with `tree=number,result,building,duration,timestamp`
+   (omit `buildNumber` for the last build). SUCCESS → done.
+2. **Failing tests** — on FAILURE, `getTestResults` with `onlyFailingTests=true`.
+   Names the failing ctest(s) directly.
+3. **Log search** — `searchBuildLog` with `useRegex=true` and a pattern such as
+   `error:|CMake Error|fatal error|The following tests FAILED|\*\*\*(Failed|Exception|Timeout)|ERROR:`,
+   plus `contextLines` for surrounding lines. Pinpoints compile/doc/link failures without
+   dumping the log into context.
+4. **Log paging** — `getBuildLog` with `limit`/`skip`/`cursor` when you need a specific
+   region (negative `limit` reads from the end; reuse `nextCursor` to resume). Never dump
+   the whole console.
+5. **Flaky check** — `getFlakyFailures` when a test looks intermittent.
+6. **Rerun** — `rebuildBuild` / `replayBuild` only when explicitly asked (these mutate CI).
 
 ## Output
 
-Branch/PR + build number + result + duration. For failures: which stages failed and, per distinct root cause, the 2–5 most relevant verbatim lines. End with a recommended next action.
+Branch/PR + build number + result + duration. For failures: which stage/tests failed and,
+per distinct root cause, the 2–5 most relevant verbatim lines. End with a recommended next action.

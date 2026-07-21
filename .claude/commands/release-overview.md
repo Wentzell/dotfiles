@@ -45,7 +45,9 @@ gh pr list --repo TRIQS/<name> --state open --limit 200 \
   --json number,title,additions,deletions,changedFiles,reviewDecision,isDraft,updatedAt,author
 ```
 
-Note the counts. Also get the last release's date/commit so you can cross-check "addressed since":
+Note the counts. **If both are empty (0 open issues and 0 PRs), report "nothing to triage" and stop
+— skip Phases 2–4; do not write a near-empty document.** Otherwise, also get the last release's
+date/commit so you can cross-check "addressed since":
 `git show -s --format=%ci $(git tag --sort=-v:refname | head -1)`.
 
 ## Phase 2 — Classify the issues
