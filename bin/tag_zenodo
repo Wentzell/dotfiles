@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+
+# Replay a GitHub "release published" webhook delivery to Zenodo, so it archives
+# a release and mints a DOI. Needed when the repo's Zenodo hook was created after
+# the release was published, as GitHub then never delivered the event.
+#
+# Requires admin rights on the repo, to read the hook's tokenized payload URL.
+#
+# Usage: tag_zenodo [--allow-prerelease] <repo|owner/repo> <tag>
+
+set -euo pipefail
+
+usage="usage: ${0##*/} [--allow-prerelease] <repo|owner/repo> <tag>"
+
+allow_prerelease=0
+if [[ ${1-} == --allow-prerelease ]]; then
+  allow_prerelease=1
+  shift
+fi
+REPO=${1:?$usage}
+TAG=${2:?$usage}
+
+# A bare name is a TRIQS app. Git remotes are deliberately not consulted: in some
+# app checkouts `origin` is a personal fork and only `upstream` is the org repo.
+[[ $REPO == */* ]] || REPO=TRIQS/$REPO
+
+# Anchor on the production host: a substring match would also accept
+# sandbox.zenodo.org, whose DOIs are throwaway.
+hook_urls=$(gh api "repos/$REPO/hooks" --paginate --jq \
+  '.[] | select(.active and ((.config.url // "") | startswith("https://zenodo.org/api/hooks/receivers/github"))) | .config.url')
+[[ -n $hook_urls ]] || { echo "no active zenodo.org hook on $REPO" >&2; exit 1; }
+mapfile -t hooks <<<"$hook_urls"
+((${#hooks[@]} == 1)) || { echo "found ${#hooks[@]} zenodo hooks on $REPO; refusing to guess" >&2; exit 1; }
+
+# Assign before use: a failed gh api prints its error body as valid JSON, which
+# --argjson would happily accept. Only an assignment propagates the exit status.
+release=$(gh api "repos/$REPO/releases/tags/$TAG")
+repository=$(gh api "repos/$REPO")
+
+# Zenodo archives prereleases like any other release, and a DOI is permanent.
+if [[ $(jq -r '.prerelease' <<<"$release") == true && $allow_prerelease == 0 ]]; then
+  echo "$REPO $TAG is a prerelease; pass --allow-prerelease to archive it anyway" >&2
+  exit 1
+fi
+
+# Build the payload before opening the connection, so a jq failure cannot leave
+# curl POSTing an empty body down the pipe.
+payload=$(jq -n --argjson release "$release" --argjson repository "$repository" \
+  '{action:"published", release:$release, repository:$repository}')
+
+delivery=$(uuidgen)
+body=$(mktemp)
+trap 'rm -f "$body"' EXIT
+
+# The hook URL carries an access_token, so pass it via --config to keep it out of
+# the world-readable /proc/<pid>/cmdline.
+code=$(printf '%s' "$payload" | curl -sS \
+  --config <(printf 'url = "%s"\n' "${hooks[0]}") \
+  -H 'Content-Type: application/json' \
+  -H 'X-GitHub-Event: release' \
+  -H "X-GitHub-Delivery: $delivery" \
+  -H 'Expect:' \
+  --connect-timeout 10 --max-time 60 \
+  --data-binary @- -o "$body" -w '%{http_code}')
+
+cat "$body"
+echo
+
+# 202 is accepted-and-queued; archiving is async, so confirm the record on Zenodo.
+# 409 already received or repo not enabled, 403 access, 404 repo not connected,
+# 415 bad content type, 400 invalid body, 401 bad token.
+[[ $code == 202 ]] || { echo "unexpected HTTP $code for $REPO $TAG" >&2; exit 1; }
