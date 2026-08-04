@@ -52,7 +52,7 @@ ln -s $PWD/.config/nvim $HOME/.config/nvim
 
 # .claude: symlink individual tracked entries (preserves runtime state)
 mkdir -p $HOME/.claude
-for F in CLAUDE.md settings.json statusline.sh commands hooks; do
+for F in CLAUDE.md settings.json statusline.sh skills hooks; do
     rm -rf $HOME/.claude/$F
     ln -s $PWD/.claude/$F $HOME/.claude/$F
 done
@@ -62,4 +62,13 @@ mkdir -p $HOME/.codex
 for F in config.toml AGENTS.md prompts hooks; do
     rm -rf $HOME/.codex/$F
     ln -s $PWD/.codex/$F $HOME/.codex/$F
+done
+
+# .codex/skills: per-skill symlinks into the shared .claude/skills set. Must stay a real
+# directory: codex keeps its own bundled skills in $HOME/.codex/skills/.system/
+mkdir -p $HOME/.codex/skills
+for D in $PWD/.claude/skills/*/; do
+    N=$(basename $D)
+    rm -rf $HOME/.codex/skills/$N
+    ln -s $PWD/.claude/skills/$N $HOME/.codex/skills/$N
 done

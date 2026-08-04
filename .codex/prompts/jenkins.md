@@ -1,0 +1,1 @@
+../../.claude/skills/jenkins/SKILL.md

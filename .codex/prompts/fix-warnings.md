@@ -1,0 +1,1 @@
+../../.claude/skills/fix-warnings/SKILL.md

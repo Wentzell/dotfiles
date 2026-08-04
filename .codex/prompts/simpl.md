@@ -1,0 +1,1 @@
+../../.claude/skills/simpl/SKILL.md
