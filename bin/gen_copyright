@@ -17,6 +17,7 @@ parser = argparse.ArgumentParser(description="""
 A script to generate GPL Copyright headers for a list of files based on their git history
 """)
 parser.add_argument('-license', nargs=None, default='Apache', help="The License to use (Apache [default] or GPL")
+parser.add_argument('-project', nargs=None, help="The project name")
 parser.add_argument('-cea', action='store_true', help='Add cea copyright')
 parser.add_argument('-cnrs', action='store_true', help='Add cnrs copyright')
 args, additional_args = parser.parse_known_args()
@@ -46,8 +47,21 @@ license_header = {
 // GNU General Public License for more details.
 //
 // You may obtain a copy of the License at
-//     https://www.gnu.org/licenses/gpl-3.0.txt"""
+//     https://www.gnu.org/licenses/gpl-3.0.txt""",
 
+    "GPL-Minimal"    :  """// Copyright (c) {start_year}--present, The Simons Foundation
+// This file is part of {project} and is licensed under the terms of GPLv3 or later.
+// SPDX-License-Identifier: GPL-3.0-or-later
+// See LICENSE in the root of this distribution for details.
+
+""",
+
+    "Apache-Minimal" : """// Copyright (c) {start_year}--present, The Simons Foundation
+// This file is part of {project} and is licensed under the Apache License, Version 2.0.
+// SPDX-License-Identifier: Apache-2.0
+// See LICENSE in the root of this distribution for details.
+
+""",
 }
 
 name_filter = {
@@ -170,50 +184,57 @@ for f in additional_args:
         author_name = filter_name(author_name)
         authors.update([author_name])
         years.update(author_years)
-    if any(s in f for s in ["triqs/archive", "triqs/atom_diag", "triqs/det_manip", "triqs/dos", "triqs/gf", "triqs/hilbert_space", "triqs/lattice", "triqs/mc_tools", "triqs/operators", "triqs/plot", "triqs/statistics", "triqs/sumk"]):
-        authors.update(["Michel Ferrero"])
-    authors = sorted(authors, key = lambda x: x.split()[-1])
-    
-    if args.cea or args.cnrs:
-        years_gt_2017 = [y for y in years if int(y) > 2017]
-        years_lt_2019 = [y for y in years if int(y) < 2019]
 
-        # For <2019 we add a copyright note for CEA / CNRS
-        if len(years_lt_2019) > 0:
-            if args.cea: header = header + "// Copyright (c) %s Commissariat à l'énergie atomique et aux énergies alternatives (CEA)\n" % (pretty_years(years_lt_2019))
-            if args.cnrs: header = header + "// Copyright (c) %s Centre national de la recherche scientifique (CNRS)\n" % (pretty_years(years_lt_2019))
-
-        # For >2017 we add a copyright note for The Simons foundation
-        if len(years_gt_2017) > 0:
-            header = header + "// Copyright (c) %s Simons Foundation\n" % (pretty_years(years_gt_2017))
-
+    if "Minimal" in args.license:
+        header = license_header[args.license].format(start_year=min(years), project=args.project)
     else:
-        header = header + "// Copyright (c) %s Simons Foundation\n" % (pretty_years(years))
+        if any(s in f for s in ["triqs/archive", "triqs/atom_diag", "triqs/det_manip", "triqs/dos", "triqs/gf", "triqs/hilbert_space", "triqs/lattice", "triqs/mc_tools", "triqs/operators", "triqs/plot", "triqs/statistics", "triqs/sumk"]):
+            authors.update(["Michel Ferrero"])
+        authors = sorted(authors, key = lambda x: x.split()[-1])
+        
+        if args.cea or args.cnrs:
+            years_gt_2017 = [y for y in years if int(y) > 2017]
+            years_lt_2019 = [y for y in years if int(y) < 2019]
 
-    # Specific author contribution
-    for author_name, author_mail, author_years in copyright:
-        if "Krivenko" in author_name:
-            igor_years = [year for year in author_years if year < 2018]
-            if len(igor_years) > 0:
-                header = header + "// Copyright (c) %s Igor Krivenko\n" % (pretty_years(igor_years))
-        if "Hugo" in author_name:
-            hugo_years = [year for year in author_years if year < 2018 or year > 2020]
-            if len(hugo_years) > 0:
-                header = header + "// Copyright (c) %s Hugo U.R. Strand\n" % (pretty_years(hugo_years))
+            # For <2019 we add a copyright note for CEA / CNRS
+            if len(years_lt_2019) > 0:
+                if args.cea: header = header + "// Copyright (c) %s Commissariat à l'énergie atomique et aux énergies alternatives (CEA)\n" % (pretty_years(years_lt_2019))
+                if args.cnrs: header = header + "// Copyright (c) %s Centre national de la recherche scientifique (CNRS)\n" % (pretty_years(years_lt_2019))
 
-    header = header + "//\n" + license_header[args.license]
+            # For >2017 we add a copyright note for The Simons foundation
+            if len(years_gt_2017) > 0:
+                header = header + "// Copyright (c) %s Simons Foundation\n" % (pretty_years(years_gt_2017))
 
-    header = header + "\n//\n// Authors: " + ", ".join(authors) + "\n\n"
+        else:
+            header = header + "// Copyright (c) %s Simons Foundation\n" % (pretty_years(years))
+
+        # Specific author contribution
+        for author_name, author_mail, author_years in copyright:
+            if "Krivenko" in author_name:
+                igor_years = [year for year in author_years if year < 2018]
+                if len(igor_years) > 0:
+                    header = header + "// Copyright (c) %s Igor Krivenko\n" % (pretty_years(igor_years))
+            if "Hugo" in author_name:
+                hugo_years = [year for year in author_years if year < 2018 or year > 2020]
+                if len(hugo_years) > 0:
+                    header = header + "// Copyright (c) %s Hugo U.R. Strand\n" % (pretty_years(hugo_years))
+            if "Nikita" in author_name:
+                nikita_years = [year for year in author_years if year > 2023]
+                if len(nikita_years) > 0:
+                    header = header + "// Copyright (c) %s Nikita Kavokine\n" % (pretty_years(nikita_years))
+
+        header = header + "//\n" + license_header[args.license]
+        header = header + "\n//\n// Authors: " + ", ".join(authors) + "\n\n"
 
     if f.endswith('.py') or f.endswith('.txt'): header = re.sub(r"//", "#", header)
 
     with open(f, "r") as fin: dat = fin.read()
     # Regular expression to match existing copyright headers
     head_res = {
-            'py': [r"^\n?#{10}.*?\n.*?#{10}\n", "^# Copyright.*License.\n\n", "^# Copyright.*gpl-3.0.txt\n\n", "^# Copyright.*Authors: .*?\n\n"],
-            'txt': [r"^\n?#{10}.*?\n.*?#{10}\n", "^# Copyright.*License.\n\n", "^# Copyright.*gpl-3.0.txt\n\n", "^# Copyright.*Authors: .*?\n\n"],
-            'cpp': [r"^\n?/\*{10}.*?\n.*?\*{10}/\n", "^// Copyright.*License.\n\n", "^// Copyright.*gpl-3.0.txt\n\n", "^// Copyright.*Authors: .*?\n\n"],
-            'hpp': [r"^\n?/\*{10}.*?\n.*?\*{10}/\n", "^// Copyright.*License.\n\n", "^// Copyright.*gpl-3.0.txt\n\n", "^// Copyright.*Authors: .*?\n\n"]
+            'py': [r"^\n?#{10}.*?\n.*?#{10}\n", "^# Copyright.*License.\n\n", "^# Copyright.*for details.\n\n", "^# Copyright.*gpl-3.0.txt\n\n", "^# Copyright.*Authors: .*?\n\n"],
+            'txt': [r"^\n?#{10}.*?\n.*?#{10}\n", "^# Copyright.*License.\n\n", "^# Copyright.*for details.\n\n", "^# Copyright.*gpl-3.0.txt\n\n", "^# Copyright.*Authors: .*?\n\n"],
+            'cpp': [r"^\n?/\*{10}.*?\n.*?\*{10}/\n", "^// Copyright.*License.\n\n", "^// Copyright.*for details.\n\n", "^// Copyright.*gpl-3.0.txt\n\n", "^// Copyright.*Authors: .*?\n\n"],
+            'hpp': [r"^\n?/\*{10}.*?\n.*?\*{10}/\n", "^// Copyright.*License.\n\n", "^// Copyright.*for details.\n\n", "^// Copyright.*gpl-3.0.txt\n\n", "^// Copyright.*Authors: .*?\n\n"]
             }
     file_ending = f.split(".")[-1]
     for head_re in head_res[file_ending]:
