@@ -64,6 +64,23 @@
     ]
   },
   "model": "opus",
+  "skillOverrides": {
+    "artifact-capabilities": "user-invocable-only",
+    "artifact-design": "user-invocable-only",
+    "artifact-diagramming": "user-invocable-only",
+    "claude-api": "user-invocable-only",
+    "claude-in-chrome": "user-invocable-only",
+    "dataviz": "user-invocable-only",
+    "fewer-permission-prompts": "user-invocable-only",
+    "init": "user-invocable-only",
+    "keybindings-help": "user-invocable-only",
+    "loop": "user-invocable-only",
+    "review": "user-invocable-only",
+    "run": "user-invocable-only",
+    "schedule": "user-invocable-only",
+    "security-review": "user-invocable-only",
+    "simplify": "user-invocable-only"
+  },
   "hooks": {
     "Stop": [
       {
@@ -162,16 +179,17 @@
   },
   "enabledPlugins": {
     "clangd-lsp@claude-plugins-official": true,
-    "pyright-lsp@claude-plugins-official": true,
-    "commit-commands@claude-plugins-official": true
+    "pyright-lsp@claude-plugins-official": true
   },
   "sandbox": {
     "enabled": false
   },
   "alwaysThinkingEnabled": true,
   "effortLevel": "xhigh",
+  "showClearContextOnPlanAccept": true,
   "autoUpdatesChannel": "latest",
   "theme": "dark-ansi",
   "editorMode": "vim",
-  "skipAutoPermissionPrompt": true
+  "skipAutoPermissionPrompt": true,
+  "skipWorkflowUsageWarning": true
 }
