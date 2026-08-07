@@ -3,7 +3,7 @@ name: commit
 description: Run clang-format and commit pending changes
 effort: medium
 allowed-tools: Bash, Read, Glob, Grep
-disable-model-invocation: true
+disable-model-invocation: false
 ---
 
 ## Context

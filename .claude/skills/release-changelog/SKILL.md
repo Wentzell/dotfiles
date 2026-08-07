@@ -4,7 +4,7 @@ description: Prepare a release changelog (and, for TRIQS core, the porting scrip
 argument-hint: [<from-ref>]
 effort: xhigh
 allowed-tools: Bash, Read, Edit, Write, Glob, Grep
-disable-model-invocation: true
+disable-model-invocation: false
 ---
 
 Prepare the `doc/ChangeLog.md` entry for the next release of the current repository. Works for TRIQS core and any core-lib (`h5`, `mpi`, `itertools`, `nda`, `cppdlr`, …) or application — they share the layout: `CMakeLists.txt` with `project(<NAME> VERSION X.Y.Z ...)`, `doc/ChangeLog.md`, `c++/` + `python/` + `test/`.
