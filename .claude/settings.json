@@ -186,6 +186,7 @@
   },
   "alwaysThinkingEnabled": true,
   "effortLevel": "xhigh",
+  "outputStyle": "Terse",
   "showClearContextOnPlanAccept": true,
   "autoUpdatesChannel": "latest",
   "theme": "dark-ansi",

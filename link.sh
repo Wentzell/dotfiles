@@ -52,7 +52,7 @@ ln -s $PWD/.config/nvim $HOME/.config/nvim
 
 # .claude: symlink individual tracked entries (preserves runtime state)
 mkdir -p $HOME/.claude
-for F in CLAUDE.md settings.json statusline.sh skills hooks; do
+for F in CLAUDE.md settings.json statusline.sh skills hooks output-styles; do
     rm -rf $HOME/.claude/$F
     ln -s $PWD/.claude/$F $HOME/.claude/$F
 done
