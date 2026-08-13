@@ -4,7 +4,7 @@ description: Merge upstream app4triqs skeleton changes into the current TRIQS ap
 argument-hint: [appname]
 effort: high
 allowed-tools: Bash, Read, Edit, Glob, Grep
-disable-model-invocation: true
+disable-model-invocation: false
 ---
 
 Pull generic improvements from the [app4triqs](https://github.com/triqs/app4triqs) skeleton
