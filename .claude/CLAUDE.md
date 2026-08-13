@@ -25,11 +25,16 @@
 - Test: `ctest --test-dir build -j 16` — always use ctest. `python test.py` silently loads the installed module instead of the build version. To run a test manually: `PYTHONPATH=<project>/build/python:$PYTHONPATH python ...`
 - Variants: `build_dbg` → `~/opt/triqs_dbg`; `build_san` → `~/opt/triqs_san`; `build_prof` → `~/opt/triqs_prof`; `build_genoa` → `~/opt/triqs_genoa` (cross-compiled `-march=znver4` for Genoa nodes)
 
+## Code Comments
+- Prefer no comment over one that restates the code
+- Keep comments short, avoid redundant information like possible failure scenarios
+- Never narrate the reasoning that led to the code, that belongs in the commit message
+
 ## Debugging
 - Use a sanitizer build (ASAN/UBSAN) for segfaults, memory errors, and NaN/Inf tracking — release builds give cryptic crashes; UBSAN's float-cast-overflow pinpoints where NaN is first produced
 
 ## Test Reference Files
 - Run tests from their own directory so reference files resolve
-- Tests compare against `.ref.h5` files in `test/`. CMake copies them to the build dir at configure time, so after editing a ref in the source tree, also copy it to build/ (or reconfigure)
+- Some tests compare against `.ref.h5` files in `test/`. CMake copies them to the build dir at configure time, so after editing a ref in the source tree, also copy it to build/ (or reconfigure)
 - To regenerate: run the test (writes `.out.h5`), copy `.out.h5` over `.ref.h5` in both source and build trees, verify pass + diff only expected quantities — anything else is a bug, not stale refs
 - CRITICAL: commit regenerated refs in the same commit as the code change, with the reason in the message (e.g. "alpha clipping changed MC trajectory for multi-orbital test")
