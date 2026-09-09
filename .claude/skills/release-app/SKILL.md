@@ -1,6 +1,6 @@
 ---
 name: release-app
-description: Orchestrate a TRIQS application or core-lib release end-to-end, sequencing the porting/merge/CI/warnings/bindings/changelog/overview steps with a human checkpoint between each phase
+description: Orchestrate a TRIQS application or core-lib release end-to-end, sequencing the porting/merge/CI/warnings/bindings/changelog/triage steps with a human checkpoint between each phase
 argument-hint: [major|compat|patch] [<target-version>]
 effort: xhigh
 allowed-tools: Bash, Read, Edit, Glob, Grep
@@ -154,7 +154,7 @@ regeneration). Review the `*.wrap.*` diff.
 Once the code-affecting phases that apply (A–E) are done, **run `ctest --test-dir <build-dir> -jN`
 and report pass/fail.** No individual phase owns this — `/fix-warnings` and `/regen-bindings` both
 end with "this skill does not run ctest" — so the orchestrator must. This is the test gate the
-closing "build & test before pushing" reminder refers to; F (changelog) and G (overview) are
+closing "build & test before pushing" reminder refers to; F (changelog) and G (triage) are
 doc-only and don't need a build.
 
 ### Phase F — Prepare the changelog
@@ -162,9 +162,10 @@ doc-only and don't need a build.
 core-lib vs app phrasing, the `Run port_to_triqs<N>` / `Use latest app4triqs skeleton` bullets,
 and the contributor line). Checkpoint.
 
-### Phase G — Release-readiness overview
-`→ /release-overview`. Read-only triage of open issues/PRs into a local document
-(already-addressed / must-fix / easy-PR). No code dependency on A–F — safe to run anytime.
+### Phase G — Issue & PR triage
+`→ /gh-triage --release <target-version>`. Read-only triage of open issues/PRs into a local
+document (closeable / severity+effort / PR review state / path forward). No code dependency on
+A–F — safe to run anytime.
 
 ## Phase H — Hand-off
 
@@ -182,6 +183,6 @@ rather than doing it here.
 - Repo type + release type + target version, and the tailored phase list with each phase marked
   **done / skipped (why) / deferred-to-user**.
 - A consolidated list of what still needs the user: deferred CI items, must-fix issues from the
-  overview, the manual bump/tag/push.
+  triage, the manual bump/tag/push.
 - Standing reminder: **build & test (`ctest`) before pushing; nothing here has been pushed or
   tagged.**
