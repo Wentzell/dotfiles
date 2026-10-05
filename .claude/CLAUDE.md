@@ -25,6 +25,9 @@
 - Test: `ctest --test-dir build -j 16` — always use ctest. `python test.py` silently loads the installed module instead of the build version. To run a test manually: `PYTHONPATH=<project>/build/python:$PYTHONPATH python ...`
 - Variants: `build_dbg` → `~/opt/triqs_dbg`; `build_san` → `~/opt/triqs_san`; `build_prof` → `~/opt/triqs_prof`; `build_genoa` → `~/opt/triqs_genoa` (cross-compiled `-march=znver4` for Genoa nodes)
 
+## Pull Requests
+- Never add the "🤖 Generated with Claude Code" footer to PR bodies
+
 ## Code Comments
 - Prefer no comment over one that restates the code
 - Keep comments short, avoid redundant information like possible failure scenarios

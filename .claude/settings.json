@@ -6,7 +6,7 @@
     "PYTHONDONTWRITEBYTECODE": "1",
     "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
     "CMAKE_COLOR_DIAGNOSTICS": "ON",
-    "CLAUDE_CODE_AUTO_COMPACT_WINDOW": "400000",
+    "CLAUDE_CODE_AUTO_COMPACT_WINDOW": "500000",
     "CLAUDE_CODE_HIDE_CWD": "1"
   },
   "attribution": {
@@ -179,18 +179,19 @@
   },
   "enabledPlugins": {
     "clangd-lsp@claude-plugins-official": true,
-    "pyright-lsp@claude-plugins-official": true
+    "pyright-lsp@claude-plugins-official": true,
+    "mattpocock-skills@claude-plugins-official": true,
+    "lua-lsp@claude-plugins-official": true
   },
   "sandbox": {
     "enabled": false
   },
   "alwaysThinkingEnabled": true,
   "effortLevel": "xhigh",
-  "outputStyle": "Terse",
   "showClearContextOnPlanAccept": true,
   "autoUpdatesChannel": "latest",
+  "skipWorkflowUsageWarning": true,
   "theme": "dark-ansi",
   "editorMode": "vim",
-  "skipAutoPermissionPrompt": true,
-  "skipWorkflowUsageWarning": true
+  "skipAutoPermissionPrompt": true
 }

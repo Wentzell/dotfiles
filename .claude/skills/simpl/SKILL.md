@@ -3,7 +3,7 @@ name: simpl
 description: Iteratively simplify code while keeping functionality
 argument-hint: <file|directory|commit|range>
 effort: high
-disable-model-invocation: true
+disable-model-invocation: false
 ---
 
 Iteratively simplify ${ARGUMENTS} without changing behavior. Requires a clean working tree
