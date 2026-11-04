@@ -63,7 +63,7 @@
       "~/opt"
     ]
   },
-  "model": "opus",
+  "model": "fable",
   "skillOverrides": {
     "artifact-capabilities": "user-invocable-only",
     "artifact-design": "user-invocable-only",
@@ -180,14 +180,22 @@
   "enabledPlugins": {
     "clangd-lsp@claude-plugins-official": true,
     "pyright-lsp@claude-plugins-official": true,
-    "mattpocock-skills@claude-plugins-official": true,
+    "mattpocock-skills@mattpocock": true,
     "lua-lsp@claude-plugins-official": true
+  },
+  "extraKnownMarketplaces": {
+    "mattpocock": {
+      "source": {
+        "source": "github",
+        "repo": "mattpocock/skills"
+      }
+    }
   },
   "sandbox": {
     "enabled": false
   },
   "alwaysThinkingEnabled": true,
-  "effortLevel": "xhigh",
+  "effortLevel": "medium",
   "showClearContextOnPlanAccept": true,
   "autoUpdatesChannel": "latest",
   "skipWorkflowUsageWarning": true,
